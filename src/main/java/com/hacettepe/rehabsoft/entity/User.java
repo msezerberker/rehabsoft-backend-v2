@@ -6,42 +6,34 @@ import javax.persistence.*;
 import java.util.Set;
 
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+@SequenceGenerator(name = "idgen", sequenceName = "users_seq", initialValue = 1, allocationSize = 1)
+public class User  extends BaseEntity{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    @Column(name = "uname", length = 100, unique = true)
+    @Column(name = "username", unique = true)
     private String username;
 
-    @Column(name = "pwd", length = 200)
+    @Column(name = "user_password")
     private String password;
 
-    @Column(name = "firstname", length = 200)
+    @Column(name = "firstname")
     private String firstName;
 
-    @Column(name = "surname", length = 200)
+    @Column(name = "surname")
     private String surname;
 
-    @Column(name = "email", length = 100,unique=true)
+    @Column(name = "email", unique=true)
     private String email;
 
     @ManyToOne
-    @JoinTable(name = "USER_ROLES", joinColumns = {
-            @JoinColumn(name = "USER_ID") }, inverseJoinColumns = {
-            @JoinColumn(name = "ROLE_ID") })
+    @JoinTable(name = "user_roles", joinColumns = {
+            @JoinColumn(name = "user_id") }, inverseJoinColumns = {
+            @JoinColumn(name = "role_id") })
     private Role role;
-
-    public User(Long id){
-        this.id = id;
-    }
-
-
 
 }
