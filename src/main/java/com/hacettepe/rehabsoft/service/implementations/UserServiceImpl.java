@@ -97,7 +97,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             //Password'u bcrypt ile sifreleyip kaydediyoruz
             user.setPassword(bCryptPasswordEncoder.encode(registrationRequest.getPassword()));
             user.setUsername(registrationRequest.getUsername());
-            user.setRole(roleRepository.findByName("USER"));
+            Role role = roleRepository.findByName("USER");
+            System.out.println(role.getName());
+            user.setRole(role);
             userRepository.save(user);
             return Boolean.TRUE;
         } catch (Exception e) {
