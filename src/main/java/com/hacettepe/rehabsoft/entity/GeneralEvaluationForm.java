@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -103,4 +104,43 @@ public class GeneralEvaluationForm extends BaseEntity {
 
     @OneToOne(cascade = javax.persistence.CascadeType.ALL,mappedBy = "generalEvaluationForm")
     private DiseaseOfMotherPregnancy diseaseOfMotherPregnancy;
+
+    @OneToOne(cascade = javax.persistence.CascadeType.ALL,mappedBy = "generalEvaluationForm")
+    private Hyperbilirubinemia hyperbilirubinemia;
+
+    @OneToOne(cascade = javax.persistence.CascadeType.ALL,mappedBy = "generalEvaluationForm")
+    private AfterBirthReasonCerebralPalsy afterBirthReasonCerebralPalsy;
+
+    @OneToOne(cascade = javax.persistence.CascadeType.ALL,mappedBy = "generalEvaluationForm")
+    private BotoxTreatment botoxTreatment;
+
+    @ManyToMany
+    @JoinTable(name = "applied_surgery_general_evaluation_form", joinColumns = {
+            @JoinColumn(name = "general_evaluation_form_id") }, inverseJoinColumns = {
+            @JoinColumn(name = "applied_surgery_id") })
+    private Collection<AppliedSurgery> appliedSurgeryCollection;
+
+    @OneToMany(mappedBy = "generalEvaluationForm", cascade = CascadeType.ALL)
+    private Collection<OrthesisInfo> orthesisInfoCollection;
+
+    @OneToMany(mappedBy = "generalEvaluationForm", cascade = CascadeType.ALL)
+    private Collection<OtherOrthesisInfo> otherOrthesisInfoCollection;
+
+    @OneToMany(mappedBy = "generalEvaluationForm", cascade = CascadeType.ALL)
+    private Collection<UsedMedicine> usedMedicineCollection;
+
+    @ManyToMany
+    @JoinTable(name = "general_evaluation_form_coexisting_disease", joinColumns = {
+            @JoinColumn(name = "general_evaluation_form_id") }, inverseJoinColumns = {
+            @JoinColumn(name = "coexisting_disease_id") })
+    private Collection<CoexistingDiseases> coexistingDiseasesCollection;
+
+    @OneToOne(cascade = javax.persistence.CascadeType.ALL,mappedBy = "generalEvaluationForm")
+    private VisualImpairment visualImpairment;
+
+    @OneToOne(cascade = javax.persistence.CascadeType.ALL,mappedBy = "generalEvaluationForm")
+    private HearingImpairment hearingImpairment;
+
+    @OneToMany(mappedBy = "generalEvaluationForm", cascade = CascadeType.ALL)
+    private Collection<ExpectationsAboutProgram> expectationsAboutProgramCollection;
 }
