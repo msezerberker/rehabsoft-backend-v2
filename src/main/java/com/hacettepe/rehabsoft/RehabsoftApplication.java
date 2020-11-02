@@ -23,6 +23,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class RehabsoftApplication {
 
 	public static void main(String[] args) {
+		int a;
 		ApplicationContext context =  SpringApplication.run(RehabsoftApplication.class, args);
 		DatabasePopulator databasePopulator = (DatabasePopulator) context.getBean("databasePopulator");
 	}
