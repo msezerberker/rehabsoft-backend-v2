@@ -25,4 +25,7 @@ public class Exercise extends BaseEntity{
 
     @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL)
     private Collection<ExerciseVideo> exerciseVideoCollection;
+
+    @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL)
+    private Collection<ExerciseImage> exerciseImageCollection;
 }
