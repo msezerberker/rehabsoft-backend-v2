@@ -143,4 +143,7 @@ public class GeneralEvaluationForm extends BaseEntity {
 
     @OneToMany(mappedBy = "generalEvaluationForm", cascade = CascadeType.ALL)
     private Collection<ExpectationsAboutProgram> expectationsAboutProgramCollection;
+
+    @OneToOne(mappedBy = "generalEvaluationForm", cascade = CascadeType.ALL)
+    private Patient patient;
 }
