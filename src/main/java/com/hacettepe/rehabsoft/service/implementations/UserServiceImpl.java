@@ -75,6 +75,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
+    @Transactional
     public UserDto save(UserDto user) {
         //Transforms UserDto to the User object and save it
         User tempUser = modelMapper.map(user, User.class);
