@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.Entity;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -17,4 +14,9 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @SequenceGenerator(name = "idgen", sequenceName = "form_template_seq", initialValue = 1, allocationSize = 1)
 public class FormTemplate extends BaseEntity {
+
+    @OneToOne
+    @JoinColumn(name = "form_dynamic_id")
+    private FormDynamic formDynamic;
+
 }

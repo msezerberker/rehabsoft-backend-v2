@@ -4,10 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.Entity;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Collection;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -17,4 +15,18 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @SequenceGenerator(name = "idgen", sequenceName = "assigned_form_seq", initialValue = 1, allocationSize = 1)
 public class AssignedForm extends BaseEntity {
+
+    @ManyToOne
+    @JoinColumn(name = "form_dynamic_id")
+    private FormDynamic formDynamic;
+
+    @OneToOne
+    @JoinColumn(name = "patient_id")
+    private Patient patient;
+
+    @Column(name = "is_answered")
+    private boolean isAnswered;
+
+    @OneToMany(mappedBy = "assignedForm", cascade = CascadeType.ALL)
+    private Collection<FormAnswers> formAnswersCollection;
 }

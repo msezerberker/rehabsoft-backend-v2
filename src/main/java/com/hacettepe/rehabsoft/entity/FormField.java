@@ -4,10 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import javax.persistence.*;
+import java.util.Collection;
 
-import javax.persistence.Entity;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -17,6 +16,19 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @SequenceGenerator(name = "idgen", sequenceName = "form_field_seq", initialValue = 1, allocationSize = 1)
 public class FormField extends BaseEntity{
+
+    @Column(name = "form_field_name")
+    private String formFieldName;
+
+    @Column(name = "field_type")
+    private String fieldType;
+
+    @ManyToOne
+    @JoinColumn(name = "form_dynamic_id")
+    private FormDynamic formDynamic;
+
+    @OneToMany(mappedBy = "formField", cascade = CascadeType.ALL)
+    private Collection<FormFieldDefaultValue> formFieldDefaultValueList;
 
 
 }

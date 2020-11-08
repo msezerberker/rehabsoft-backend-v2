@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.Entity;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -17,5 +14,16 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @SequenceGenerator(name = "idgen", sequenceName = "form_answers_seq", initialValue = 1, allocationSize = 1)
 public class FormAnswers extends BaseEntity {
+
+    @Column(name = "answer")
+    private String answer;
+
+    @ManyToOne
+    @JoinColumn(name = "assigned_form_id")
+    private AssignedForm assignedForm;
+
+    @OneToOne
+    @JoinColumn(name = "form_field_id")
+    private FormField formField;
 
 }

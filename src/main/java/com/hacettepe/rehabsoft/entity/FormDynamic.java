@@ -4,11 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Collection;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -22,6 +19,15 @@ public class FormDynamic extends BaseEntity{
     @Column(name = "title")
     private String title;
 
-    @Column(name = "explanaiton")
+    @Column(name = "explanation")
     private String explanation;
+
+    @OneToMany(mappedBy = "formDynamic" , cascade =  CascadeType.ALL)
+    private Collection<FormField> formFieldList;
+
+    @OneToOne(mappedBy = "formDynamic", cascade = CascadeType.ALL)
+    private FormTemplate formTemplate;
+
+    @OneToMany(mappedBy = "formDynamic", cascade = CascadeType.ALL)
+    private Collection<AssignedForm> assignedFormCollection;
 }
