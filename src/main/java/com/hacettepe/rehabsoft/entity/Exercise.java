@@ -28,4 +28,8 @@ public class Exercise extends BaseEntity{
 
     @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL)
     private Collection<ExerciseImage> exerciseImageCollection;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
