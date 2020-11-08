@@ -1,5 +1,6 @@
 package com.hacettepe.rehabsoft.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -26,6 +27,7 @@ public class AppliedSurgery extends BaseEntity {
     @Column(name = "epicrisis_image_url")
     private String epicrisisImageUrl;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "applying_date")
-    private LocalDateTime appliyingDate;
+    private LocalDateTime applyingDate;
 }

@@ -17,10 +17,10 @@ import javax.persistence.*;
 
 public class VisualImpairment extends BaseEntity{
 
-    @Column(name = "information")
-    private String information;
-
     @OneToOne
     @JoinColumn( name="general_evaluation_form_id")
     private GeneralEvaluationForm generalEvaluationForm;
+
+    @Column(name = "information")
+    private String information;
 }

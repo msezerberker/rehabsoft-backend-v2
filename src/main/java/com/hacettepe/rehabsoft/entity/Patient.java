@@ -23,11 +23,10 @@ public class Patient extends BaseEntity{
     @Column(name = "address")
     private String address;
 
-    @OneToOne
-    @JoinColumn( name="general_evaluation_form_id")
+    @OneToOne(mappedBy = "patient", cascade = CascadeType.ALL)
     private GeneralEvaluationForm generalEvaluationForm;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn( name="users_id")
     private User user;
 
@@ -37,4 +36,5 @@ public class Patient extends BaseEntity{
             joinColumns = @JoinColumn(name = "patient_id"),
             inverseJoinColumns = @JoinColumn(name = "parent_id"))
     private Collection<Parent> parentCollection;
+
 }
