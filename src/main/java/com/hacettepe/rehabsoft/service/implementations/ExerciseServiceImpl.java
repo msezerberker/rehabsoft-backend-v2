@@ -22,7 +22,6 @@ public class ExerciseServiceImpl implements ExerciseSevice {
     @Autowired
     private ExerciseRepository exerciseRepository;
 
-
     @Override
     public List<ExerciseDto> getAll(){
         List<Exercise> exercises = exerciseRepository.findAll();
