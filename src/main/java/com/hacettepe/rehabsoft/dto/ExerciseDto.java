@@ -1,11 +1,11 @@
 package com.hacettepe.rehabsoft.dto;
 
+import com.hacettepe.rehabsoft.entity.User;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Collection;
@@ -34,4 +34,7 @@ public class ExerciseDto {
 
     @ApiModelProperty(required = true, value = "ExerciseVideos")
     private Collection<ExerciseVideoDto> exerciseVideoCollection;
+
+    @ApiModelProperty(required = true, value = "ExerciseOwner")
+    private User user;
 }
