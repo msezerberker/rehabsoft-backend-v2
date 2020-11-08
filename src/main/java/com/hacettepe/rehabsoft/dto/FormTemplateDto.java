@@ -1,0 +1,24 @@
+package com.hacettepe.rehabsoft.dto;
+
+import com.hacettepe.rehabsoft.entity.FormDynamic;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import javax.validation.constraints.NotEmpty;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ApiModel(value = "Data Transfer Object for Form Template")
+public class FormTemplateDto {
+
+    @ApiModelProperty(required = true,value = "ID")
+    private Long id;
+
+    @NotEmpty
+    @ApiModelProperty(required = true, value = "formDynamic")
+    private FormDynamic formDynamic;
+
+}
