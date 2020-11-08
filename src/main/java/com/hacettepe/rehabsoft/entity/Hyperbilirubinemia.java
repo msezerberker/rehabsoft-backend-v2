@@ -15,7 +15,9 @@ import javax.persistence.*;
 @AllArgsConstructor
 @SequenceGenerator(name = "idgen", sequenceName = "hyperbilirubinemia_seq", initialValue = 1, allocationSize = 1)
 public class Hyperbilirubinemia extends BaseEntity {
-    @OneToOne
+    @OneToOne(
+            fetch = FetchType.LAZY
+    )
     @JoinColumn( name="general_evaluation_form_id")
     private GeneralEvaluationForm generalEvaluationForm;
 
