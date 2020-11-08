@@ -1,5 +1,6 @@
 package com.hacettepe.rehabsoft.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,6 +20,7 @@ public class Phone extends BaseEntity{
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn( name="parent_id")
     private Parent parent;

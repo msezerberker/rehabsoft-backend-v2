@@ -1,5 +1,6 @@
 package com.hacettepe.rehabsoft.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,6 +21,7 @@ public class UsedMedicine extends BaseEntity{
     @Column(name = "medicine_name")
     private String medicineName;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn( name="general_evaluation_form_id")
     private GeneralEvaluationForm generalEvaluationForm;

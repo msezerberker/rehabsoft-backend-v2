@@ -90,6 +90,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Transactional
     public Boolean register(RegistrationRequest registrationRequest) {
         try {
+
+            User isRegistered= userRepository.findByUsername(registrationRequest.getUsername());
+            if(isRegistered != null){
+                throw new Exception("Kullanıcı adı zaten kayıtlı!");
+            }
             User user = new User();
             user.setEmail(registrationRequest.getEmail());
             user.setFirstName(registrationRequest.getFirstName());
@@ -103,7 +108,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             userRepository.save(user);
             return Boolean.TRUE;
         } catch (Exception e) {
-            log.error("REGISTRATION=>", e);
+            log.error("REGISTRATION Failed=>", e);
             return Boolean.FALSE;
         }
     }

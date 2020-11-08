@@ -12,9 +12,10 @@ public class ApiPaths {
         public static final String CTRL = BASE_PATH + "/patient/generalevaluationform";
     }
 
-    public static final class DenemePath {
-        public static final String CTRL = BASE_PATH + "/deneme";
+    public static final class PatientFormPath {
+        public static final String CTRL = BASE_PATH + "/patient";
     }
+
 
 
 }

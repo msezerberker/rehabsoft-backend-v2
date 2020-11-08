@@ -1,5 +1,7 @@
 package com.hacettepe.rehabsoft.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -99,6 +101,7 @@ public class GeneralEvaluationForm extends BaseEntity {
     @Column(name = "is_oxygen_support")
     private Boolean oxygenSupport;
 
+
     @Column(name = "is_intensive_care")
     private Boolean intensiveCare;
 
@@ -114,18 +117,23 @@ public class GeneralEvaluationForm extends BaseEntity {
     @OneToOne(cascade = javax.persistence.CascadeType.ALL,mappedBy = "generalEvaluationForm")
     private BotoxTreatment botoxTreatment;
 
+
+    //@JsonManagedReference
     @ManyToMany
     @JoinTable(name = "applied_surgery_general_evaluation_form", joinColumns = {
             @JoinColumn(name = "general_evaluation_form_id") }, inverseJoinColumns = {
             @JoinColumn(name = "applied_surgery_id") })
     private Collection<AppliedSurgery> appliedSurgeryCollection;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "generalEvaluationForm", cascade = CascadeType.ALL)
     private Collection<OrthesisInfo> orthesisInfoCollection;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "generalEvaluationForm", cascade = CascadeType.ALL)
     private Collection<OtherOrthesisInfo> otherOrthesisInfoCollection;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "generalEvaluationForm", cascade = CascadeType.ALL)
     private Collection<UsedMedicine> usedMedicineCollection;
 
@@ -135,15 +143,20 @@ public class GeneralEvaluationForm extends BaseEntity {
             @JoinColumn(name = "coexisting_disease_id") })
     private Collection<CoexistingDiseases> coexistingDiseasesCollection;
 
+
     @OneToOne(cascade = javax.persistence.CascadeType.ALL,mappedBy = "generalEvaluationForm")
     private VisualImpairment visualImpairment;
 
     @OneToOne(cascade = javax.persistence.CascadeType.ALL,mappedBy = "generalEvaluationForm")
     private HearingImpairment hearingImpairment;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "generalEvaluationForm", cascade = CascadeType.ALL)
     private Collection<ExpectationsAboutProgram> expectationsAboutProgramCollection;
 
-    @OneToOne(mappedBy = "generalEvaluationForm", cascade = CascadeType.ALL)
+
+    @OneToOne
+    @JoinColumn( name="patient_id")
     private Patient patient;
+
 }
