@@ -10,6 +10,7 @@ import com.hacettepe.rehabsoft.service.ParentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 
@@ -30,6 +31,7 @@ public class ParentServiceImpl implements ParentService {
     }
 
     @Override
+    @Transactional
     public Parent saveParent(Parent parent) {
 
         log.warn("Parent servisine girdi:Save:");

@@ -29,12 +29,16 @@ public class PatientController {
             //zaten kayıtlıysa tekrar save etmesini engelledik
             return false;
         }
-
         patientService.savePatient(patientDto);
         return true;
-
     }
 
+    @RequestMapping(value="/ispatientexist", method = RequestMethod.GET)
+    public boolean isPatientSaved(){
+        log.warn("Patient isPatientSaved Controllerına girdi");
+
+        return patientService.isPatientSaved();
+    }
 
 
 }

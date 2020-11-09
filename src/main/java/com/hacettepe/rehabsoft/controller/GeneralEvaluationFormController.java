@@ -27,13 +27,18 @@ public class GeneralEvaluationFormController {
     @RequestMapping(value="/create", method = RequestMethod.POST)
     public GeneralEvaluationFormDto saveGeneralForm(@RequestBody GeneralEvaluationFormDto gefd){
 
-
-
         log.warn("GeneralEval. Controllerına girdi");
 
         generalEvaluationFormService.save(gefd);
         return  gefd;
 
+    }
+
+    @RequestMapping(value="/isgeneralevaluationformexist", method = RequestMethod.GET)
+    public boolean isGeneralEvaluationFormExist(){
+        log.warn("GeneralEval isGeneralEvaluationFormExist Controllerına girdi");
+
+        return generalEvaluationFormService.isGeneralEvaluationFormExist();
     }
 
 }

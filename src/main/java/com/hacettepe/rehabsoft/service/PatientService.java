@@ -12,4 +12,5 @@ public interface PatientService {
 
     public boolean isAlreadySaved(String tcKimlik);
 
+    boolean isPatientSaved();
 }

@@ -1,19 +1,25 @@
 package com.hacettepe.rehabsoft.service.implementations;
 
+import com.hacettepe.rehabsoft.dto.ParentDto;
+import com.hacettepe.rehabsoft.dto.PhoneDto;
 import com.hacettepe.rehabsoft.dto.RegistrationRequest;
 import com.hacettepe.rehabsoft.dto.UserDto;
-import com.hacettepe.rehabsoft.entity.Role;
-import com.hacettepe.rehabsoft.entity.User;
+import com.hacettepe.rehabsoft.entity.*;
+import com.hacettepe.rehabsoft.repository.PatientRepository;
 import com.hacettepe.rehabsoft.repository.RoleRepository;
 import com.hacettepe.rehabsoft.repository.UserRepository;
+import com.hacettepe.rehabsoft.service.ParentService;
+import com.hacettepe.rehabsoft.service.PatientService;
 import com.hacettepe.rehabsoft.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -26,6 +32,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 @Service(value = "userService")
 public class UserServiceImpl implements UserDetailsService, UserService {
 
+
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -35,6 +42,13 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private PatientRepository patientRepository;
+
+    @Autowired
+    private ParentService parentService;
+    @Autowired
+    private PatientService patientService;
 
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -103,10 +117,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             //Password'u bcrypt ile sifreleyip kaydediyoruz
             user.setPassword(bCryptPasswordEncoder.encode(registrationRequest.getPassword()));
             user.setUsername(registrationRequest.getUsername());
-            Role role = roleRepository.findByName("USER");
+            final Role role = roleRepository.findByName("USER");
             System.out.println(role.getName());
             user.setRole(role);
             userRepository.save(user);
+
             return Boolean.TRUE;
         } catch (Exception e) {
             log.error("REGISTRATION Failed=>", e);

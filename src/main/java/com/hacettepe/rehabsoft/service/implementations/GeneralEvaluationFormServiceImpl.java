@@ -126,5 +126,16 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
         return gefd;
     }
 
+    @Override
+    public boolean isGeneralEvaluationFormExist() {
+
+        Patient patientByUser = patientRepository.getPatientByUser(userRepository.findByUsername(securityHelper.getUsername()));
+        if(patientByUser.getGeneralEvaluationForm() != null){//already saved in DB
+            return true;
+        }
+        else
+            return false;
+    }
+
 
 }
