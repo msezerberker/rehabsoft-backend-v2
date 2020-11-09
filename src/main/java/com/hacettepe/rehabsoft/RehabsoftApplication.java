@@ -32,8 +32,8 @@ public class RehabsoftApplication {
 	public ModelMapper getModelMapper(){
 		ModelMapper modelMapper = new ModelMapper();
 		modelMapper.getConfiguration().setAmbiguityIgnored(true);
+		//modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT); HATA OLURSA BUNA GEC
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
-		//modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT)
 		return modelMapper;
 	}
 /*

@@ -68,4 +68,15 @@ public class PatientServiceImpl implements PatientService {
             return false;
     }
 
+    @Override
+    public boolean isPatientSaved() {
+
+        Patient alreadySaved = patientRepository.getPatientByUser(userRepository.findByUsername(securityHelper.getUsername()));
+        if(alreadySaved != null){//already saved in DB
+            return true;
+        }
+        else
+            return false;
+    }
+
 }

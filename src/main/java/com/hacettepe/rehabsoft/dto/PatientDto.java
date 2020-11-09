@@ -22,5 +22,5 @@ public class PatientDto {
 
     // private User user; // Biz serviste login yapmıs user'ın user objesine set edecegiz
 
-    private Collection<Parent> parentCollection;
+    private Collection<ParentDto> parentCollection;
 }
