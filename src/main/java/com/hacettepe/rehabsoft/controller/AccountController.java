@@ -2,6 +2,7 @@ package com.hacettepe.rehabsoft.controller;
 import com.hacettepe.rehabsoft.dto.LoginRequest;
 import com.hacettepe.rehabsoft.dto.RegistrationRequest;
 import com.hacettepe.rehabsoft.dto.TokenResponse;
+import com.hacettepe.rehabsoft.entity.User;
 import com.hacettepe.rehabsoft.repository.UserRepository;
 import com.hacettepe.rehabsoft.security.JwtTokenUtil;
 import com.hacettepe.rehabsoft.service.implementations.UserServiceImpl;
@@ -48,10 +49,10 @@ public class AccountController {
         final String token = jwtTokenUtil.generateToken(authentication);
 
         //BU ROLE KULLANICININ ROLU OLARAK DINAMIK YAZILACAK!!!!!!!!!!!! DEGİSTİRMEYİ UNUTMA
-        String role = userRepository.findByUsername(loginRequest.getUsername()).getRole().getName();
+        User userFromDB = userRepository.findByUsername(loginRequest.getUsername());
 
         //Burada sorun olabilir:Bunu yaz:         return ResponseEntity.ok(new AuthToken(token));
-        return ResponseEntity.ok(new TokenResponse(loginRequest.getUsername(),role,token));
+        return ResponseEntity.ok(new TokenResponse(loginRequest.getUsername(),userFromDB.getFirstName(), userFromDB.getSurname(), userFromDB.getRole().getName(),token));
     }
 
 
