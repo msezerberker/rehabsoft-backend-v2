@@ -5,6 +5,8 @@ import com.hacettepe.rehabsoft.dto.TokenResponse;
 import com.hacettepe.rehabsoft.entity.User;
 import com.hacettepe.rehabsoft.repository.UserRepository;
 import com.hacettepe.rehabsoft.security.JwtTokenUtil;
+import com.hacettepe.rehabsoft.service.GeneralEvaluationFormService;
+import com.hacettepe.rehabsoft.service.PatientService;
 import com.hacettepe.rehabsoft.service.implementations.UserServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,6 +38,11 @@ public class AccountController {
     @Autowired
     private UserServiceImpl userService;
 
+    @Autowired
+    private PatientService patientService;
+    @Autowired
+    private GeneralEvaluationFormService generalEvaluationFormService;
+
     @RequestMapping(method = RequestMethod.POST) //LoginRequest'i DTO kısmında olusturduk.Front-end'den gelen login objesi gibi düsün
     @ApiOperation(value = "Login Operation", response = TokenResponse.class)
     public ResponseEntity<TokenResponse> login(@RequestBody LoginRequest loginRequest) throws AuthenticationException {
@@ -51,8 +58,11 @@ public class AccountController {
         //BU ROLE KULLANICININ ROLU OLARAK DINAMIK YAZILACAK!!!!!!!!!!!! DEGİSTİRMEYİ UNUTMA
         User userFromDB = userRepository.findByUsername(loginRequest.getUsername());
 
+        boolean isPatientSaved = patientService.isPatientSaved();
+        boolean isGeneralInformationSaved = generalEvaluationFormService.isGeneralEvaluationFormExist();
+
         //Burada sorun olabilir:Bunu yaz:         return ResponseEntity.ok(new AuthToken(token));
-        return ResponseEntity.ok(new TokenResponse(loginRequest.getUsername(),userFromDB.getFirstName(), userFromDB.getSurname(), userFromDB.getRole().getName(),token));
+        return ResponseEntity.ok(new TokenResponse(loginRequest.getUsername(),userFromDB.getFirstName(), userFromDB.getSurname(), userFromDB.getRole().getName(),token,isPatientSaved,isGeneralInformationSaved));
     }
 
 
