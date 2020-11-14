@@ -71,6 +71,9 @@ public class GeneralEvaluationForm extends BaseEntity {
     @Column(name = "birth_type")
     private String birthType;
 
+    @Column(name = "birth_weight")
+    private Integer birthWeight;
+
     @Column(name = "birth_head_around_cm")
     private Long birthHeadAroundCm;
 
@@ -82,6 +85,9 @@ public class GeneralEvaluationForm extends BaseEntity {
 
     @Column(name = "is_birth_empurpling")
     private Boolean isBirthEmpurpling;
+
+    @Column(name = "is_birth_crying")
+    private Boolean isBirthCrying;
 
     @Column(name = "is_high_blood_pressor_pregnancy")
     private Boolean isHighBloodPressorPregnancy;

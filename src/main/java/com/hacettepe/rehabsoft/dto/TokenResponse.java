@@ -19,4 +19,6 @@ public class TokenResponse {
     private String surname;
     private String role;
     private String token;
+    private boolean isPatientSaved;
+    private boolean isGeneralInformationSaved;
 }

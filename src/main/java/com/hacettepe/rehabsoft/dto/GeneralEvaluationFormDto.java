@@ -57,6 +57,8 @@ public class GeneralEvaluationFormDto {
 
     private String birthType;
 
+    private Integer birthWeight;
+
     private Long birthHeadAroundCm;
 
     private Integer apgarScore;
@@ -64,6 +66,8 @@ public class GeneralEvaluationFormDto {
     private Boolean isBirthAnoxia;
 
     private Boolean isBirthEmpurpling;
+
+    private Boolean isBirthCrying;
 
     private Boolean isHighBloodPressorPregnancy;
 

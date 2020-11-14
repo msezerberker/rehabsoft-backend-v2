@@ -30,6 +30,10 @@ public class Patient extends BaseEntity{
     @JoinColumn( name="users_id")
     private User user;
 
+    @ManyToOne
+    @JoinColumn( name="doctor_id")
+    private Doctor doctor;
+
     @ManyToMany
     @JoinTable(
             name = "parent_patient",
