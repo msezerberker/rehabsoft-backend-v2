@@ -29,9 +29,6 @@ import static com.hacettepe.rehabsoft.util.Constants.HEADER_STRING;
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter{
 
-    //public static final String TOKEN_PREFIX = "Bearer ";
-    //public static final String HEADER_STRING = "Authorization";
-
     @Qualifier("userService")
     @Autowired
     private UserDetailsService userDetailsService;

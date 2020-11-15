@@ -17,10 +17,13 @@ import java.util.List;
 @Service(value = "exerciseService")
 public class ExerciseServiceImpl implements ExerciseSevice {
 
-    @Autowired
-    private ModelMapper modelMapper;
-    @Autowired
-    private ExerciseRepository exerciseRepository;
+    private final ModelMapper modelMapper;
+    private final ExerciseRepository exerciseRepository;
+
+    public ExerciseServiceImpl(ModelMapper modelMapper, ExerciseRepository exerciseRepository) {
+        this.modelMapper = modelMapper;
+        this.exerciseRepository = exerciseRepository;
+    }
 
     @Override
     public List<ExerciseDto> getAll(){

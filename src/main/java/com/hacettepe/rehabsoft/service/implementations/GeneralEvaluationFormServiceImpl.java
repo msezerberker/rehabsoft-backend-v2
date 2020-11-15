@@ -8,7 +8,6 @@ import com.hacettepe.rehabsoft.service.GeneralEvaluationFormService;
 import com.hacettepe.rehabsoft.service.PatientService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -18,7 +17,27 @@ import java.util.Collection;
 @Slf4j
 public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormService {
 
-    private void fillExpectationsAboutProgram(Collection<ExpectationsAboutProgram> exps,GeneralEvaluationForm tempForm){
+    private final ModelMapper modelMapper;
+    private final GeneralEvaluationFormRepository generalEvaluationFormRepository;
+    private final AppliedSurgeryRepository appliedSurgeryRepository;
+    private final CoexistingDiseasesRepository coexistingDiseasesRepository;
+    private final PatientRepository patientRepository;
+    private final UserRepository userRepository;
+    private final SecurityHelper securityHelper;
+
+    public GeneralEvaluationFormServiceImpl(ModelMapper modelMapper, GeneralEvaluationFormRepository generalEvaluationFormRepository, AppliedSurgeryRepository appliedSurgeryRepository, CoexistingDiseasesRepository coexistingDiseasesRepository, PatientRepository patientRepository, UserRepository userRepository, SecurityHelper securityHelper, PatientService patientService) {
+        this.modelMapper = modelMapper;
+        this.generalEvaluationFormRepository = generalEvaluationFormRepository;
+        this.appliedSurgeryRepository = appliedSurgeryRepository;
+        this.coexistingDiseasesRepository = coexistingDiseasesRepository;
+        this.patientRepository = patientRepository;
+        this.userRepository = userRepository;
+        this.securityHelper = securityHelper;
+    }
+
+
+
+    private void fillExpectationsAboutProgram(Collection<ExpectationsAboutProgram> exps, GeneralEvaluationForm tempForm){
         for(ExpectationsAboutProgram e:exps){
             e.setGeneralEvaluationForm(tempForm);
         }
@@ -42,31 +61,6 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
         }
     }
 
-
-    @Autowired
-    private ModelMapper modelMapper;
-
-
-    @Autowired
-    private GeneralEvaluationFormRepository generalEvaluationFormRepository;
-
-    @Autowired
-    private AppliedSurgeryRepository appliedSurgeryRepository;
-
-    @Autowired
-    private CoexistingDiseasesRepository coexistingDiseasesRepository;
-
-    @Autowired
-    PatientRepository patientRepository;
-
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    SecurityHelper securityHelper;
-
-    @Autowired
-    PatientService patientService;
 
 
     @Override
@@ -125,6 +119,9 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
 */
         return gefd;
     }
+
+
+
 
     @Override
     public boolean isGeneralEvaluationFormExist() {

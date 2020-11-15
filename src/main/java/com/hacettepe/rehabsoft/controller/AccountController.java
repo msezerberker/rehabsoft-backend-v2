@@ -3,6 +3,7 @@ import com.hacettepe.rehabsoft.dto.LoginRequest;
 import com.hacettepe.rehabsoft.dto.RegistrationRequest;
 import com.hacettepe.rehabsoft.dto.TokenResponse;
 import com.hacettepe.rehabsoft.entity.User;
+import com.hacettepe.rehabsoft.helper.RegistrationHelper;
 import com.hacettepe.rehabsoft.repository.UserRepository;
 import com.hacettepe.rehabsoft.security.JwtTokenUtil;
 import com.hacettepe.rehabsoft.service.GeneralEvaluationFormService;
@@ -20,6 +21,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 
 
 @Slf4j
@@ -29,23 +31,30 @@ import org.springframework.web.bind.annotation.*;
 @Api(value = "/api/token")
 public class AccountController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private UserServiceImpl userService;
 
     @Autowired
-    private PatientService patientService;
-    @Autowired
-    private GeneralEvaluationFormService generalEvaluationFormService;
+    RegistrationHelper registrationHelper;
+
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenUtil jwtTokenUtil;
+    private final UserRepository userRepository;
+    private final UserServiceImpl userService;
+    private final PatientService patientService;
+    private final GeneralEvaluationFormService generalEvaluationFormService;
+
+    public AccountController(AuthenticationManager authenticationManager,JwtTokenUtil jwtTokenUtil,UserRepository userRepository,UserServiceImpl userService,PatientService patientService,GeneralEvaluationFormService generalEvaluationFormService){
+        this.userService = userService;
+        this.patientService = patientService;
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenUtil = jwtTokenUtil;
+        this.userRepository = userRepository;
+        this.generalEvaluationFormService = generalEvaluationFormService;
+
+    }
 
     @RequestMapping(method = RequestMethod.POST) //LoginRequest'i DTO kısmında olusturduk.Front-end'den gelen login objesi gibi düsün
     @ApiOperation(value = "Login Operation", response = TokenResponse.class)
-    public ResponseEntity<TokenResponse> login(@RequestBody LoginRequest loginRequest) throws AuthenticationException {
+    public ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginRequest loginRequest) throws AuthenticationException {
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getUsername(),
@@ -55,7 +64,6 @@ public class AccountController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         final String token = jwtTokenUtil.generateToken(authentication);
 
-        //BU ROLE KULLANICININ ROLU OLARAK DINAMIK YAZILACAK!!!!!!!!!!!! DEGİSTİRMEYİ UNUTMA
         User userFromDB = userRepository.findByUsername(loginRequest.getUsername());
 
         boolean isPatientSaved = patientService.isPatientSaved();
@@ -66,13 +74,34 @@ public class AccountController {
     }
 
 
-    //KAYIT ICIN
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ApiOperation(value="Register Operation",response = Boolean.class)
-    public ResponseEntity<Boolean> register(@RequestBody RegistrationRequest registrationRequest) throws AuthenticationException {
+    public ResponseEntity<String> register(@Valid @RequestBody RegistrationRequest registrationRequest) throws AuthenticationException {
+
         log.warn("Kayıt controllerına girdi");
+
+        String validationMessage = registrationHelper.registrationValidator(registrationRequest);
+        if(validationMessage!=null){
+            return ResponseEntity.ok().body(validationMessage);
+        }
+
         Boolean response = userService.register(registrationRequest);
-        return ResponseEntity.ok(response);
+
+        if(!response){
+                return ResponseEntity.badRequest().body("Kayıt sırasında bir hata meydana geldi.Lütfen tekrar deneyiniz");
+            }
+
+        return ResponseEntity.ok().body("Basariyla kaydoldunuz!");
+
+
+
+
+
+
+
+
+
+
     }
 }

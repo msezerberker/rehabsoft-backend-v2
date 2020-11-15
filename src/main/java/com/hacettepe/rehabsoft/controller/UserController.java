@@ -5,12 +5,11 @@ import com.hacettepe.rehabsoft.service.UserService;
 import com.hacettepe.rehabsoft.util.ApiPaths;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -22,9 +21,11 @@ import java.util.List;
 @Api(value = "/api/users")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
+    public UserController(UserService userService){
+        this.userService = userService;
+    }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<UserDto> getOne(@PathVariable(value = "id") Long id){
@@ -42,10 +43,14 @@ public class UserController {
     }
 
 
-    @RequestMapping(value="/signup", method = RequestMethod.POST)
-    public UserDto saveUser(@RequestBody UserDto user){
-        return userService.save(user);
+    @RequestMapping(value = "/update",method = RequestMethod.POST)
+    public ResponseEntity<String> updateUser(@Valid @RequestBody UserDto userDto){
+        log.warn("update controllerına girdi");
+        String updateMsg = userService.updateUser(userDto);
+        return ResponseEntity.ok(updateMsg);
     }
+
+
 
 
 

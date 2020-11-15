@@ -1,27 +1,18 @@
 package com.hacettepe.rehabsoft.service.implementations;
 
-import com.hacettepe.rehabsoft.dto.ParentDto;
-import com.hacettepe.rehabsoft.dto.PhoneDto;
 import com.hacettepe.rehabsoft.dto.RegistrationRequest;
 import com.hacettepe.rehabsoft.dto.UserDto;
 import com.hacettepe.rehabsoft.entity.*;
-import com.hacettepe.rehabsoft.repository.PatientRepository;
 import com.hacettepe.rehabsoft.repository.RoleRepository;
 import com.hacettepe.rehabsoft.repository.UserRepository;
-import com.hacettepe.rehabsoft.service.ParentService;
-import com.hacettepe.rehabsoft.service.PatientService;
 import com.hacettepe.rehabsoft.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.*;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -39,34 +30,24 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     private ModelMapper modelMapper;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-
     @Autowired
     private RoleRepository roleRepository;
-    @Autowired
-    private PatientRepository patientRepository;
-
-    @Autowired
-    private ParentService parentService;
-    @Autowired
-    private PatientService patientService;
 
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
         if(user == null){
-            throw new UsernameNotFoundException("Invalid username or password.");
+            throw new UsernameNotFoundException("Invalid username");
         }
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), getAuthority(user));
     }
 
 
-    //DEGISTI
     private Set<SimpleGrantedAuthority> getAuthority(User user) {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
         Role role = user.getRole();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
         return authorities;
-        //return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
     }
 
 
@@ -82,16 +63,48 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return Arrays.asList(modelMapper.map(data, UserDto[].class));
     }
 
+
     @Override
-    public UserDto getByUsername(String username) {
-        User tempUser = userRepository.findByUsername(username);
-        return modelMapper.map(tempUser, UserDto.class);
+    public String updateUser(UserDto tempUser){
+        log.warn("user update is on");
+        User dbUser = userRepository.getOne(tempUser.getId());
+
+        if(!dbUser.getEmail().equals(tempUser.getEmail()) ){ //email değişmişse, yeni e-mailin zaten başka biri tarafından kullanıldığını check ediyor
+            if(this.isEmailExists(tempUser.getEmail())){
+                return "E-mail zaten kullanılıyor.Lütfen başka bir e-mail adresi seçin";
+            }
+        }
+
+        dbUser.setSurname(tempUser.getSurname());
+        dbUser.setFirstName(tempUser.getFirstName());
+        dbUser.setEmail(tempUser.getEmail());
+        userRepository.save(dbUser);
+        return "Degisiklikler başarıyla kaydedildi!";
+
+    }
+
+    @Override
+    public Boolean isUsernameExists(String username) {
+        if(userRepository.findByUsername(username)==null){
+            return false;
+        }
+        return true;
+    }
+
+
+
+
+    @Override
+    public Boolean isEmailExists(String email) {
+        if(userRepository.findByEmail(email)==null){
+            return false;
+        }
+        return true;
     }
 
     @Override
     @Transactional
     public UserDto save(UserDto user) {
-        //Transforms UserDto to the User object and save it
         User tempUser = modelMapper.map(user, User.class);
         tempUser = userRepository.save(tempUser);
         user.setId(tempUser.getId());
@@ -100,29 +113,23 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
 
 
-    //DİGER KONTROLLERİ DE YAP!!! USERNAME ZATEN VAR GİBİ VS
-    //Gelen registerDto'sunu veritabanına kaydediyoruz
     @Transactional
     public Boolean register(RegistrationRequest registrationRequest) {
         try {
-
-            User isRegistered= userRepository.findByUsername(registrationRequest.getUsername());
-            if(isRegistered != null){
-                throw new Exception("Kullanıcı adı zaten kayıtlı!");
-            }
+            log.warn("Register'a giriyor");
             User user = new User();
             user.setEmail(registrationRequest.getEmail());
             user.setFirstName(registrationRequest.getFirstName());
             user.setSurname(registrationRequest.getSurname());
-            //Password'u bcrypt ile sifreleyip kaydediyoruz
             user.setPassword(bCryptPasswordEncoder.encode(registrationRequest.getPassword()));
             user.setUsername(registrationRequest.getUsername());
             final Role role = roleRepository.findByName("USER");
             System.out.println(role.getName());
             user.setRole(role);
             userRepository.save(user);
-
             return Boolean.TRUE;
+
+
         } catch (Exception e) {
             log.error("REGISTRATION Failed=>", e);
             return Boolean.FALSE;
