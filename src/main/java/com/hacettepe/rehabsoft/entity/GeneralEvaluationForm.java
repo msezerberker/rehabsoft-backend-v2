@@ -177,10 +177,8 @@ public class GeneralEvaluationForm extends BaseEntity {
     @JoinColumn( name="patient_id")
     private Patient patient;
 
-    @ManyToMany
-    @JoinTable(name = "general_evaluation_form_epilepsy", joinColumns = {
-            @JoinColumn(name = "general_evaluation_form_id") }, inverseJoinColumns = {
-            @JoinColumn(name = "epilepsy_id") })
-    private Collection<Epilepsy> epilepsyCollection;
+
+    @OneToOne(cascade = javax.persistence.CascadeType.ALL,mappedBy = "generalEvaluationForm")
+    private Epilepsy epilepsy;
 
 }
