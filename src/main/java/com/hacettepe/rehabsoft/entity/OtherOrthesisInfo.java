@@ -20,6 +20,9 @@ public class OtherOrthesisInfo extends BaseEntity{
     @Column(name = "orthesis_name")
     private String orthesisName;
 
+    @Column(name = "orthesis_url")
+    private String orthesisUrl;
+
     @JsonBackReference
     @ManyToOne
     @JoinColumn( name="general_evaluation_form_id")
