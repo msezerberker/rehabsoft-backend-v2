@@ -13,8 +13,12 @@ public interface UserService {
 
     List<UserDto> getAll();
 
-    UserDto getByUsername(String username);
+    Boolean isUsernameExists(String username);
+
+    Boolean isEmailExists(String email);
 
     Boolean register(RegistrationRequest registrationRequest);
+
+    String updateUser(UserDto user);
 
 }

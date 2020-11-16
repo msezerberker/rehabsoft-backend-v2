@@ -1,35 +1,33 @@
 package com.hacettepe.rehabsoft.dto;
 
 import lombok.Data;
+import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.Column;
 import javax.persistence.UniqueConstraint;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Data
+@Valid
 public class RegistrationRequest {
     //Register olurken istenen bilgilerin DTOsu
 
-    @NotNull
-    @NotEmpty
+    @NotBlank(message = "Ad alanı boş bırakılamaz")
     private String firstName;
 
-    @NotNull
-    @NotEmpty
+    @NotBlank(message = "Soyad alanı boş bırakılamaz")
     private String surname;
 
-    @NotNull
-    @NotEmpty
+    @NotBlank(message = "Kullanıcı adı alanı boş bırakılamaz")
     private String username;
 
-    @NotNull
-    @NotEmpty
+    @NotBlank(message = "Şifre alanı boş bırakılamaz")
     private String password;
 
     //private String passwordconfirmPassword;
-    @Column(unique = true)
-    @NotNull
-    @NotEmpty
+    @NotBlank(message = "E-mail alanı boş bırakılamaz")
     private String email;
 }

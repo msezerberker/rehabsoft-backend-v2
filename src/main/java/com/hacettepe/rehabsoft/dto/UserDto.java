@@ -16,16 +16,16 @@ public class UserDto {
     @ApiModelProperty(required = true,value = "ID")
     private Long id;
 
-    @NotEmpty
+    @NotBlank(message = "Lütfen adinizi giriniz")
     @ApiModelProperty(required = true,value = "FirstName")
     private String firstName;
 
-    @NotEmpty
+    @NotBlank(message = "Lütfen soyadinizi giriniz")
     @ApiModelProperty(required = true,value = "Surname")
     private String surname;
 
     @Email
-    @NotEmpty
+    @NotBlank(message = "Lütfen e-mailinizi giriniz")
     @ApiModelProperty(required = true,value = "E-Mail")
     private String email;
 

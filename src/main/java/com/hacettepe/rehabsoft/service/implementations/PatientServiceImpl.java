@@ -21,22 +21,19 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class PatientServiceImpl implements PatientService {
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
+    private final SecurityHelper securityHelper;
+    private final UserRepository userRepository;
+    private final ParentService parentService;
+    private final PatientRepository patientRepository;
 
-    @Autowired
-    SecurityHelper securityHelper;
-
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    ParentService parentService;
-
-    @Autowired
-    PatientRepository patientRepository;
-
-
+    public PatientServiceImpl(ModelMapper modelMapper, SecurityHelper securityHelper, UserRepository userRepository, ParentService parentService, PatientRepository patientRepository) {
+        this.modelMapper = modelMapper;
+        this.securityHelper = securityHelper;
+        this.userRepository = userRepository;
+        this.parentService = parentService;
+        this.patientRepository = patientRepository;
+    }
 
     @Override
     public PatientDto savePatient(PatientDto patientDto){
