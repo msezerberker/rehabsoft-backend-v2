@@ -5,10 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -20,4 +17,10 @@ import javax.persistence.Table;
 public class Epilepsy extends BaseEntity{
     @Column(name = "epilepsy_situation")
     private String epilepsySituation;
+
+    @OneToOne(
+            fetch = FetchType.LAZY
+    )
+    @JoinColumn( name="general_evaluation_form_id")
+    private GeneralEvaluationForm generalEvaluationForm;
 }
