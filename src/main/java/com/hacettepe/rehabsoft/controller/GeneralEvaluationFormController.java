@@ -5,6 +5,7 @@ import com.hacettepe.rehabsoft.service.GeneralEvaluationFormService;
 import com.hacettepe.rehabsoft.util.ApiPaths;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -27,12 +28,16 @@ public class GeneralEvaluationFormController {
 
 
     @RequestMapping(value="/create", method = RequestMethod.POST)
-    public GeneralEvaluationFormDto saveGeneralForm(@RequestBody GeneralEvaluationFormDto gefd){
-
+    public ResponseEntity<String> saveGeneralForm(@RequestBody GeneralEvaluationFormDto gefd){
         log.warn("GeneralEval. Controllerına girdi");
 
+
+        if(generalEvaluationFormService.isGeneralEvaluationFormExist())
+            return ResponseEntity.badRequest().body("Daha önce zaten bir form doldurdunuz");
+
+
         generalEvaluationFormService.save(gefd);
-        return  gefd;
+        return  ResponseEntity.badRequest().body("Formunuz başarı ile kaydedildi!");
 
     } 
 

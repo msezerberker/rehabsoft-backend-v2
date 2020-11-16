@@ -65,22 +65,29 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
 
     @Override
     public GeneralEvaluationFormDto save(GeneralEvaluationFormDto gefd){
-        log.warn("GeneralEval. servisine girdi:Tarih:" + gefd.getLastBotoxDate());
+        log.warn("GeneralEval. servisine girdi:Tarih:" );
         GeneralEvaluationForm tempForm = modelMapper.map(gefd, GeneralEvaluationForm.class);
 
+        log.warn("GeneralEval: Mapleme başarılı" );
 
+ /*
         tempForm.getDiseaseOfMotherPregnancy().setGeneralEvaluationForm(tempForm);
+
         tempForm.getHyperbilirubinemia().setGeneralEvaluationForm(tempForm);
         tempForm.getAfterBirthReasonCerebralPalsy().setGeneralEvaluationForm(tempForm);
         tempForm.getBotoxTreatment().setGeneralEvaluationForm(tempForm);
         tempForm.getVisualImpairment().setGeneralEvaluationForm(tempForm);
         tempForm.getHearingImpairment().setGeneralEvaluationForm(tempForm);
-
+        tempForm.getEpilepsy().setGeneralEvaluationForm(tempForm);
+        */
+        log.warn("Gen. Ev. Form- One-To-one Bitti. servisine girdi" );
 
         fillExpectationsAboutProgram(tempForm.getExpectationsAboutProgramCollection(),tempForm);
         fillOrthesisInfoCollection(tempForm.getOrthesisInfoCollection(),tempForm);
         fillOtherOrthesisInfo(tempForm.getOtherOrthesisInfoCollection(),tempForm);
         fillUsedMedicine(tempForm.getUsedMedicineCollection(),tempForm);
+
+        log.warn("Gen. Ev. Form- Many-to-One Bitti. servisine girdi" );
 
         for(AppliedSurgery a:tempForm.getAppliedSurgeryCollection()){
             appliedSurgeryRepository.save(a);
@@ -90,36 +97,17 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
             coexistingDiseasesRepository.save(a);
         }
 
-            /*
-        log.warn("before-save-patient");
-        tempForm.setPatient(null);
-        GeneralEvaluationForm generalEvaluationForm = generalEvaluationFormRepository.save(tempForm);
-        log.warn("after-save-patient. GEF id:" + generalEvaluationForm.getId());
-
-*/
-
-        //Patient'i general evaluation form'a baglıyor
-        //Once username kullanarak mevcut user objesi getiriliyor
-        //bu user objesi kullanılarak patient objesi getiriliyor
-
+        log.warn("Gen. Ev. Form- Many-to-Many Bitti. servisine girdi" );
 
         //Calisan kısım
         tempForm.setPatient(patientRepository.getPatientByUser(userRepository.findByUsername(securityHelper.getUsername())));
-
         log.warn("Son kayit islemi : ");
+
 
         generalEvaluationFormRepository.save(tempForm);
 
-/*
-        GeneralEvaluationForm savedForm = generalEvaluationFormRepository.save(tempForm);
-        Patient patient = patientRepository.getPatientByUser(userRepository.findByUsername(securityHelper.getUsername()));
-        patient.setGeneralEvaluationForm(savedForm);
-        patientRepository.save(patient);
-
-*/
         return gefd;
     }
-
 
 
 

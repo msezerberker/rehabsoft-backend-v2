@@ -8,9 +8,11 @@ import com.hacettepe.rehabsoft.entity.Patient;
 public interface PatientService {
 
 
-    public PatientDto savePatient(PatientDto patientDto);
+    PatientDto savePatient(PatientDto patientDto);
 
-    public boolean isAlreadySaved(String tcKimlik);
+    Boolean isPatientAlreadySaved();
 
-    boolean isPatientSaved();
+    Boolean isIdentityNoExists(String tcKimlikNo);
+
+
 }

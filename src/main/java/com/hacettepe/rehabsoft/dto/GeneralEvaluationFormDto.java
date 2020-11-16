@@ -10,10 +10,6 @@ import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
@@ -95,28 +91,27 @@ public class GeneralEvaluationFormDto {
     private Boolean isHypoglycaemia;
 
     //DiseaseOfMotherPregnancy
-    private String diseaseName;
+    //private String diseaseName;
+    private DiseaseOfMotherPregnancy diseaseOfMotherPregnancy;
+
 
     //Hyperbilirubinemia
-    private Boolean isPhototeraphy;
-    private Integer hospitalDayTime;
+    //private Boolean isPhototeraphy;
+    //private Integer hospitalDayTime;
+    private Hyperbilirubinemia hyperbilirubinemia;
 
 
     //AfterBirthReasonCerebralPalsy
-    private Integer occuringMonth;
-    private String cause;
-    private String causeInfo;
+    //private Integer occuringMonth;
+    //private String cause;
+    //private String causeInfo;
+    private AfterBirthReasonCerebralPalsy afterBirthReasonCerebralPalsy;
 
     //Botox_Treatment
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime lastBotoxDate;
     private String botoxRecordUrl;
-
-    /*
-
-    Many to Many ve.ş Many-To-Onelar buraya geecek
-     */
 
     //Many To Many
     private Collection<AppliedSurgery> appliedSurgeryCollection;
@@ -133,15 +128,19 @@ public class GeneralEvaluationFormDto {
 
 
     //VisualImpairement
-    private String information;
+    //private String information;
+    private VisualImpairment visualImpairment;
 
     //OneTomany
 
     //HearingImpairment
-    private Boolean isUseHearingAid;
+    //private Boolean isUseHearingAid;
+    private HearingImpairment hearingImpairment;
 
     //ExpectationsAboutProgram
     private Collection<ExpectationsAboutProgram> expectationsAboutProgramCollection;
 
     private Epilepsy epilepsy;
+
+
 }

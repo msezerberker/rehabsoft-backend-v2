@@ -66,7 +66,7 @@ public class AccountController {
 
         User userFromDB = userRepository.findByUsername(loginRequest.getUsername());
 
-        boolean isPatientSaved = patientService.isPatientSaved();
+        boolean isPatientSaved = patientService.isPatientAlreadySaved();
         boolean isGeneralInformationSaved = generalEvaluationFormService.isGeneralEvaluationFormExist();
 
         //Burada sorun olabilir:Bunu yaz:         return ResponseEntity.ok(new AuthToken(token));

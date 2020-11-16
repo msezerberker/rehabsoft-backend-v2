@@ -177,7 +177,6 @@ public class GeneralEvaluationForm extends BaseEntity {
     @JoinColumn( name="patient_id")
     private Patient patient;
 
-
     @OneToOne(cascade = javax.persistence.CascadeType.ALL,mappedBy = "generalEvaluationForm")
     private Epilepsy epilepsy;
 

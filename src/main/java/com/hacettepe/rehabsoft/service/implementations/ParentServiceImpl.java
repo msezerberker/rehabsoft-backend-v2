@@ -1,8 +1,7 @@
 package com.hacettepe.rehabsoft.service.implementations;
 
 
-import com.hacettepe.rehabsoft.entity.ExpectationsAboutProgram;
-import com.hacettepe.rehabsoft.entity.GeneralEvaluationForm;
+
 import com.hacettepe.rehabsoft.entity.Parent;
 import com.hacettepe.rehabsoft.entity.Phone;
 import com.hacettepe.rehabsoft.repository.ParentRepository;
