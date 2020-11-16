@@ -108,8 +108,20 @@ public class GeneralEvaluationForm extends BaseEntity {
     private Boolean oxygenSupport;
 
 
-    @Column(name = "is_intensive_care")
-    private Boolean intensiveCare;
+    @Column(name = "intensive_care")
+    private Integer intensiveCare;
+
+    @Column(name = "is_newborn_retinopathy")
+    private Boolean isNewbornRetinopathy;
+
+    @Column(name = "is_bronchopulmonary_dysplasia")
+    private Boolean isBronchopulmonaryDysplasia;
+
+    @Column(name = "is_respiratuvar_distress_syndrom")
+    private Boolean isRespiratuvarDistressSyndrom;
+
+    @Column(name = "is_hypoglycaemia")
+    private Boolean isHypoglycaemia;
 
     @OneToOne(cascade = javax.persistence.CascadeType.ALL,mappedBy = "generalEvaluationForm")
     private DiseaseOfMotherPregnancy diseaseOfMotherPregnancy;
@@ -164,5 +176,11 @@ public class GeneralEvaluationForm extends BaseEntity {
     @OneToOne
     @JoinColumn( name="patient_id")
     private Patient patient;
+
+    @ManyToMany
+    @JoinTable(name = "general_evaluation_form_epilepsy", joinColumns = {
+            @JoinColumn(name = "general_evaluation_form_id") }, inverseJoinColumns = {
+            @JoinColumn(name = "epilepsy_id") })
+    private Collection<Epilepsy> epilepsyCollection;
 
 }

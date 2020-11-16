@@ -84,7 +84,15 @@ public class GeneralEvaluationFormDto {
 
     private Long id;//ilk olarak bos olacak.Servisin save metodunda atama yapılacak
 
-    private Boolean intensiveCare;
+    private Integer intensiveCare;
+
+    private Boolean isNewbornRetinopathy;
+
+    private Boolean isRespiratuvarDistressSyndrom;
+
+    private Boolean isBronchopulmonaryDysplasia;
+
+    private Boolean isHypoglycaemia;
 
     //DiseaseOfMotherPregnancy
     private String diseaseName;
@@ -136,5 +144,7 @@ public class GeneralEvaluationFormDto {
     private Collection<ExpectationsAboutProgram> expectationsAboutProgramCollection;
 
 
+    //Many To Many
+    private Collection<Epilepsy> epilepsyCollection;
 
 }
