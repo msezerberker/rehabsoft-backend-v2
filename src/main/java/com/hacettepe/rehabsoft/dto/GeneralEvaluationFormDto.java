@@ -144,5 +144,7 @@ public class GeneralEvaluationFormDto {
     private Collection<ExpectationsAboutProgram> expectationsAboutProgramCollection;
 
 
+    //Many To Many
+    private Collection<Epilepsy> epilepsyCollection;
 
 }
