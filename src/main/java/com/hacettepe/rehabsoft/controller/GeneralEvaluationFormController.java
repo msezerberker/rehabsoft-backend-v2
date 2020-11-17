@@ -36,8 +36,12 @@ public class GeneralEvaluationFormController {
             return ResponseEntity.badRequest().body("Daha önce zaten bir form doldurdunuz");
 
 
-        generalEvaluationFormService.save(gefd);
-        return  ResponseEntity.badRequest().body("Formunuz başarı ile kaydedildi!");
+        Boolean success = generalEvaluationFormService.save(gefd);
+        if(!success){
+            return ResponseEntity.badRequest().body("Formunuzun kaydı sırasında beklenmedik bir hata meydana geldi.Lütfen tekrar deneyin");
+        }
+
+        return  ResponseEntity.ok("Formunuz başarı ile kaydedildi!");
 
     } 
 
