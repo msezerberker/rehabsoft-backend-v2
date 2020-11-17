@@ -108,10 +108,11 @@ public class GeneralEvaluationFormDto {
     private AfterBirthReasonCerebralPalsy afterBirthReasonCerebralPalsy;
 
     //Botox_Treatment
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime lastBotoxDate;
-    private String botoxRecordUrl;
+    //private LocalDateTime lastBotoxDate;
+    //private String botoxRecordUrl;
+    private BotoxTreatment botoxTreatment;
+
+
 
     //Many To Many
     private Collection<AppliedSurgery> appliedSurgeryCollection;

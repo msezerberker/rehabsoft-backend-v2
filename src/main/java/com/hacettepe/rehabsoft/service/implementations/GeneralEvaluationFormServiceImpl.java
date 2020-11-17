@@ -38,75 +38,121 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
 
 
     private void fillExpectationsAboutProgram(Collection<ExpectationsAboutProgram> exps, GeneralEvaluationForm tempForm){
-        for(ExpectationsAboutProgram e:exps){
-            e.setGeneralEvaluationForm(tempForm);
+        if(exps!=null){
+            for(ExpectationsAboutProgram e:exps){
+                e.setGeneralEvaluationForm(tempForm);
+            }
         }
     }
 
     private void fillOrthesisInfoCollection(Collection<OrthesisInfo> exps,GeneralEvaluationForm tempForm){
-        for(OrthesisInfo e:exps){
-            e.setGeneralEvaluationForm(tempForm);
+        if(exps !=null){
+            for(OrthesisInfo e:exps){
+                e.setGeneralEvaluationForm(tempForm);
+            }
         }
     }
 
     private void fillOtherOrthesisInfo(Collection<OtherOrthesisInfo> exps,GeneralEvaluationForm tempForm){
-        for(OtherOrthesisInfo e:exps){
-            e.setGeneralEvaluationForm(tempForm);
+        if(exps!=null){
+            for(OtherOrthesisInfo e:exps){
+                e.setGeneralEvaluationForm(tempForm);
+            }
         }
     }
 
     private void fillUsedMedicine(Collection<UsedMedicine> exps,GeneralEvaluationForm tempForm){
+        if(exps!=null){
         for(UsedMedicine e:exps){
             e.setGeneralEvaluationForm(tempForm);
-        }
+        }}
     }
 
 
+    private void setBidirectionalOneToOne(GeneralEvaluationForm tempForm){
+        if(tempForm.getDiseaseOfMotherPregnancy() !=null){
+            tempForm.getDiseaseOfMotherPregnancy().setGeneralEvaluationForm(tempForm);
+        }
+
+        if(tempForm.getHyperbilirubinemia() != null){
+            tempForm.getHyperbilirubinemia().setGeneralEvaluationForm(tempForm);
+        }
+
+        if(tempForm.getAfterBirthReasonCerebralPalsy() !=null){
+            tempForm.getAfterBirthReasonCerebralPalsy().setGeneralEvaluationForm(tempForm);
+        }
+
+        if(tempForm.getBotoxTreatment() !=null){
+            tempForm.getBotoxTreatment().setGeneralEvaluationForm(tempForm);
+        }
+
+        if(tempForm.getVisualImpairment() !=null){
+            tempForm.getVisualImpairment().setGeneralEvaluationForm(tempForm);
+        }
+
+        if(tempForm.getHearingImpairment() !=null){
+            tempForm.getHearingImpairment().setGeneralEvaluationForm(tempForm);
+        }
+
+        if( tempForm.getEpilepsy() !=null){
+            tempForm.getEpilepsy().setGeneralEvaluationForm(tempForm);
+        }
+    }
+
+    private void setManyToManyBidirectional(GeneralEvaluationForm tempForm){
+
+        if(tempForm.getAppliedSurgeryCollection() !=null){
+            for(AppliedSurgery a:tempForm.getAppliedSurgeryCollection()){
+                appliedSurgeryRepository.save(a);
+            }
+        }
+
+
+        if(tempForm.getCoexistingDiseasesCollection() !=null){
+            for(CoexistingDiseases a:tempForm.getCoexistingDiseasesCollection()){
+                coexistingDiseasesRepository.save(a);
+            }
+        }
+
+    }
+
 
     @Override
-    public GeneralEvaluationFormDto save(GeneralEvaluationFormDto gefd){
-        log.warn("GeneralEval. servisine girdi:Tarih:" );
-        GeneralEvaluationForm tempForm = modelMapper.map(gefd, GeneralEvaluationForm.class);
+    public Boolean save(GeneralEvaluationFormDto gefd){
 
+        try{
+
+        log.warn("GeneralEval. servisine girdi" );
+
+        GeneralEvaluationForm tempForm = modelMapper.map(gefd, GeneralEvaluationForm.class);
         log.warn("GeneralEval: Mapleme başarılı" );
 
- /*
-        tempForm.getDiseaseOfMotherPregnancy().setGeneralEvaluationForm(tempForm);
-
-        tempForm.getHyperbilirubinemia().setGeneralEvaluationForm(tempForm);
-        tempForm.getAfterBirthReasonCerebralPalsy().setGeneralEvaluationForm(tempForm);
-        tempForm.getBotoxTreatment().setGeneralEvaluationForm(tempForm);
-        tempForm.getVisualImpairment().setGeneralEvaluationForm(tempForm);
-        tempForm.getHearingImpairment().setGeneralEvaluationForm(tempForm);
-        tempForm.getEpilepsy().setGeneralEvaluationForm(tempForm);
-        */
+        setBidirectionalOneToOne(tempForm);
         log.warn("Gen. Ev. Form- One-To-one Bitti. servisine girdi" );
 
         fillExpectationsAboutProgram(tempForm.getExpectationsAboutProgramCollection(),tempForm);
         fillOrthesisInfoCollection(tempForm.getOrthesisInfoCollection(),tempForm);
         fillOtherOrthesisInfo(tempForm.getOtherOrthesisInfoCollection(),tempForm);
         fillUsedMedicine(tempForm.getUsedMedicineCollection(),tempForm);
-
         log.warn("Gen. Ev. Form- Many-to-One Bitti. servisine girdi" );
 
-        for(AppliedSurgery a:tempForm.getAppliedSurgeryCollection()){
-            appliedSurgeryRepository.save(a);
-        }
 
-        for(CoexistingDiseases a:tempForm.getCoexistingDiseasesCollection()){
-            coexistingDiseasesRepository.save(a);
-        }
-
+        setManyToManyBidirectional(tempForm);
         log.warn("Gen. Ev. Form- Many-to-Many Bitti. servisine girdi" );
 
-        //Calisan kısım
+
         tempForm.setPatient(patientRepository.getPatientByUser(userRepository.findByUsername(securityHelper.getUsername())));
         log.warn("Son kayit islemi : ");
 
 
         generalEvaluationFormRepository.save(tempForm);
+        return Boolean.TRUE;
 
-        return gefd;
+
+        } catch (Exception e) {
+            log.error("REGISTRATION Failed=>", e);
+            return Boolean.FALSE;
+        }
     }
 
 
