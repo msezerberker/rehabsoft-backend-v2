@@ -144,4 +144,5 @@ public class GeneralEvaluationFormDto {
     private Epilepsy epilepsy;
 
 
+
 }
