@@ -6,15 +6,26 @@ import com.hacettepe.rehabsoft.helper.SecurityHelper;
 import com.hacettepe.rehabsoft.repository.*;
 import com.hacettepe.rehabsoft.service.GeneralEvaluationFormService;
 import com.hacettepe.rehabsoft.service.PatientService;
+import com.hacettepe.rehabsoft.util.ApiPaths;
+import io.swagger.models.auth.In;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Collection;
 
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormService {
 
     private final ModelMapper modelMapper;
@@ -24,17 +35,7 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
     private final PatientRepository patientRepository;
     private final UserRepository userRepository;
     private final SecurityHelper securityHelper;
-
-    public GeneralEvaluationFormServiceImpl(ModelMapper modelMapper, GeneralEvaluationFormRepository generalEvaluationFormRepository, AppliedSurgeryRepository appliedSurgeryRepository, CoexistingDiseasesRepository coexistingDiseasesRepository, PatientRepository patientRepository, UserRepository userRepository, SecurityHelper securityHelper, PatientService patientService) {
-        this.modelMapper = modelMapper;
-        this.generalEvaluationFormRepository = generalEvaluationFormRepository;
-        this.appliedSurgeryRepository = appliedSurgeryRepository;
-        this.coexistingDiseasesRepository = coexistingDiseasesRepository;
-        this.patientRepository = patientRepository;
-        this.userRepository = userRepository;
-        this.securityHelper = securityHelper;
-    }
-
+    private final BotoxTreatmentRepository botoxTreatmentRepository;
 
 
     private void fillExpectationsAboutProgram(Collection<ExpectationsAboutProgram> exps, GeneralEvaluationForm tempForm){
@@ -83,7 +84,13 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
         }
 
         if(tempForm.getBotoxTreatment() !=null){
+            tempForm.getBotoxTreatment().setBotoxRecordUrl("");
             tempForm.getBotoxTreatment().setGeneralEvaluationForm(tempForm);
+
+            BotoxTreatment persistedBotoxTreatment = botoxTreatmentRepository.save(tempForm.getBotoxTreatment());
+            String savedUrl = saveBotoxImage(persistedBotoxTreatment);
+            persistedBotoxTreatment.setBotoxRecordUrl(savedUrl);
+            tempForm.setBotoxTreatment(persistedBotoxTreatment);
         }
 
         if(tempForm.getVisualImpairment() !=null){
@@ -97,7 +104,15 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
         if( tempForm.getEpilepsy() !=null){
             tempForm.getEpilepsy().setGeneralEvaluationForm(tempForm);
         }
+
+        if( tempForm.getPhysiotherapyPast() !=null){
+            tempForm.getPhysiotherapyPast().setGeneralEvaluationForm(tempForm);
+            if(tempForm.getPhysiotherapyPast().getPhysiotherapyCentralCollection() != null){
+                tempForm.getPhysiotherapyPast().getPhysiotherapyCentralCollection().forEach(physiotherapyCentral -> physiotherapyCentral.setPhysiotherapyPast(tempForm.getPhysiotherapyPast()));
+            }
+        }
     }
+
 
     private void setManyToManyBidirectional(GeneralEvaluationForm tempForm){
 
@@ -116,6 +131,23 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
 
     }
 
+    private String saveBotoxImage(BotoxTreatment botoxTreatment){
+        String directory = ApiPaths.SavingBotoxImagePath.CTRL + ""+securityHelper.getUsername()+botoxTreatment.getId();
+
+        try
+        {
+            //This will decode the String which is encoded by using Base64 class
+            byte[] imageByte= Base64.decodeBase64(botoxTreatment.getBotoxRecordUrl());
+
+            new FileOutputStream(directory).write(imageByte);
+            return directory;
+        }
+        catch(Exception e)
+        {
+            return "error = "+e;
+        }
+
+    }
 
     @Override
     public Boolean save(GeneralEvaluationFormDto gefd){

@@ -143,6 +143,6 @@ public class GeneralEvaluationFormDto {
 
     private Epilepsy epilepsy;
 
-
+    private PhysiotherapyPast physiotherapyPast;
 
 }

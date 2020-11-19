@@ -21,4 +21,8 @@ public class PhysiotherapyPast extends BaseEntity {
 
     @OneToMany(mappedBy = "physiotherapyPast")
     private Collection<PhysiotherapyCentral> physiotherapyCentralCollection;
+
+    @OneToOne
+    @JoinColumn(name = "general_evaluation_form_id")
+    private GeneralEvaluationForm generalEvaluationForm;
 }
