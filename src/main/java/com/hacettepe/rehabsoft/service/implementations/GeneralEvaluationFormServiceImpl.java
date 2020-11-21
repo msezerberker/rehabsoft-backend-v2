@@ -1,21 +1,39 @@
 package com.hacettepe.rehabsoft.service.implementations;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hacettepe.rehabsoft.dto.GeneralEvaluationFormDto;
 import com.hacettepe.rehabsoft.entity.*;
 import com.hacettepe.rehabsoft.helper.SecurityHelper;
 import com.hacettepe.rehabsoft.repository.*;
 import com.hacettepe.rehabsoft.service.GeneralEvaluationFormService;
 import com.hacettepe.rehabsoft.service.PatientService;
+import com.hacettepe.rehabsoft.util.ApiPaths;
+import io.swagger.models.auth.In;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collection;
 
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormService {
+
+
 
     private final ModelMapper modelMapper;
     private final GeneralEvaluationFormRepository generalEvaluationFormRepository;
@@ -24,17 +42,8 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
     private final PatientRepository patientRepository;
     private final UserRepository userRepository;
     private final SecurityHelper securityHelper;
-
-    public GeneralEvaluationFormServiceImpl(ModelMapper modelMapper, GeneralEvaluationFormRepository generalEvaluationFormRepository, AppliedSurgeryRepository appliedSurgeryRepository, CoexistingDiseasesRepository coexistingDiseasesRepository, PatientRepository patientRepository, UserRepository userRepository, SecurityHelper securityHelper, PatientService patientService) {
-        this.modelMapper = modelMapper;
-        this.generalEvaluationFormRepository = generalEvaluationFormRepository;
-        this.appliedSurgeryRepository = appliedSurgeryRepository;
-        this.coexistingDiseasesRepository = coexistingDiseasesRepository;
-        this.patientRepository = patientRepository;
-        this.userRepository = userRepository;
-        this.securityHelper = securityHelper;
-    }
-
+    private final BotoxTreatmentRepository botoxTreatmentRepository;
+    private final ObjectMapper objectMapper;
 
 
     private void fillExpectationsAboutProgram(Collection<ExpectationsAboutProgram> exps, GeneralEvaluationForm tempForm){
@@ -69,7 +78,7 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
     }
 
 
-    private void setBidirectionalOneToOne(GeneralEvaluationForm tempForm){
+    private void setBidirectionalOneToOne(GeneralEvaluationForm tempForm, MultipartFile botoxImage){
         if(tempForm.getDiseaseOfMotherPregnancy() !=null){
             tempForm.getDiseaseOfMotherPregnancy().setGeneralEvaluationForm(tempForm);
         }
@@ -82,8 +91,19 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
             tempForm.getAfterBirthReasonCerebralPalsy().setGeneralEvaluationForm(tempForm);
         }
 
+        System.out.println("tempForm.getBotoxTreatment()");
         if(tempForm.getBotoxTreatment() !=null){
             tempForm.getBotoxTreatment().setGeneralEvaluationForm(tempForm);
+
+            if( botoxImage != null){
+                tempForm.getBotoxTreatment().setBotoxRecordUrl("");
+
+                BotoxTreatment persistedBotoxTreatment = botoxTreatmentRepository.save(tempForm.getBotoxTreatment());
+                String savedUrl = saveBotoxImage(persistedBotoxTreatment, botoxImage);
+                persistedBotoxTreatment.setBotoxRecordUrl(savedUrl);
+                tempForm.setBotoxTreatment(persistedBotoxTreatment);
+            }
+            System.out.println("tempForm.getBotoxTreatment()");
         }
 
         if(tempForm.getVisualImpairment() !=null){
@@ -97,12 +117,21 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
         if( tempForm.getEpilepsy() !=null){
             tempForm.getEpilepsy().setGeneralEvaluationForm(tempForm);
         }
+
+        if( tempForm.getPhysiotherapyPast() !=null){
+            tempForm.getPhysiotherapyPast().setGeneralEvaluationForm(tempForm);
+            if(tempForm.getPhysiotherapyPast().getPhysiotherapyCentralCollection() != null){
+                tempForm.getPhysiotherapyPast().getPhysiotherapyCentralCollection().forEach(physiotherapyCentral -> physiotherapyCentral.setPhysiotherapyPast(tempForm.getPhysiotherapyPast()));
+            }
+        }
     }
+
 
     private void setManyToManyBidirectional(GeneralEvaluationForm tempForm){
 
         if(tempForm.getAppliedSurgeryCollection() !=null){
             for(AppliedSurgery a:tempForm.getAppliedSurgeryCollection()){
+
                 appliedSurgeryRepository.save(a);
             }
         }
@@ -116,18 +145,35 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
 
     }
 
+    private String saveBotoxImage(BotoxTreatment botoxTreatment, MultipartFile image){
+        String directory = ApiPaths.SavingBotoxImagePath.CTRL + ""+securityHelper.getUsername()+botoxTreatment.getId();
+
+        try
+        {
+            byte[] bytes = image.getBytes();
+            Path path = Paths.get(directory );
+            Files.write(path, bytes);
+
+            return directory;
+        }
+        catch(Exception e)
+        {
+            return "error = "+e;
+        }
+
+    }
 
     @Override
-    public Boolean save(GeneralEvaluationFormDto gefd){
+    public Boolean save(String gefd, MultipartFile botoxImage){
 
         try{
 
         log.warn("GeneralEval. servisine girdi" );
-
-        GeneralEvaluationForm tempForm = modelMapper.map(gefd, GeneralEvaluationForm.class);
+        GeneralEvaluationFormDto tempFormDto =  objectMapper.readValue(gefd, GeneralEvaluationFormDto.class);
+        GeneralEvaluationForm tempForm = modelMapper.map(tempFormDto, GeneralEvaluationForm.class);
         log.warn("GeneralEval: Mapleme başarılı" );
 
-        setBidirectionalOneToOne(tempForm);
+        setBidirectionalOneToOne(tempForm, botoxImage);
         log.warn("Gen. Ev. Form- One-To-one Bitti. servisine girdi" );
 
         fillExpectationsAboutProgram(tempForm.getExpectationsAboutProgramCollection(),tempForm);

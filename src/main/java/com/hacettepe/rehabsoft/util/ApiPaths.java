@@ -17,5 +17,8 @@ public class ApiPaths {
     }
 
 
+    public static final class SavingBotoxImagePath {
+        public static final String CTRL = "./src/main/resources/static/generalevaluationform/botoximage/";
+    }
 
 }
