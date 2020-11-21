@@ -26,6 +26,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Objects;
 
 
 @Service
@@ -93,15 +94,20 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
 
         System.out.println("tempForm.getBotoxTreatment()");
         if(tempForm.getBotoxTreatment() !=null){
-            tempForm.getBotoxTreatment().setGeneralEvaluationForm(tempForm);
 
             if( botoxImage != null){
                 tempForm.getBotoxTreatment().setBotoxRecordUrl("");
-
+                tempForm.getBotoxTreatment().setGeneralEvaluationForm(null);
                 BotoxTreatment persistedBotoxTreatment = botoxTreatmentRepository.save(tempForm.getBotoxTreatment());
+
                 String savedUrl = saveBotoxImage(persistedBotoxTreatment, botoxImage);
                 persistedBotoxTreatment.setBotoxRecordUrl(savedUrl);
+
+                persistedBotoxTreatment.setGeneralEvaluationForm(tempForm);
                 tempForm.setBotoxTreatment(persistedBotoxTreatment);
+            }
+            else{
+                tempForm.getBotoxTreatment().setGeneralEvaluationForm(tempForm);
             }
             System.out.println("tempForm.getBotoxTreatment()");
         }
@@ -146,21 +152,25 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
     }
 
     private String saveBotoxImage(BotoxTreatment botoxTreatment, MultipartFile image){
-        String directory = ApiPaths.SavingBotoxImagePath.CTRL + ""+securityHelper.getUsername()+botoxTreatment.getId();
 
-        try
-        {
-            byte[] bytes = image.getBytes();
-            Path path = Paths.get(directory );
-            Files.write(path, bytes);
+        if(image.getContentType() != null){
+            System.out.println(image.getContentType());
+            String directory = ApiPaths.SavingBotoxImagePath.CTRL + ""+securityHelper.getUsername() + "-" + botoxTreatment.getId()+ "." + Objects.requireNonNull(image.getContentType()).substring(image.getContentType().length() - 3);
 
-            return directory;
+            try
+            {
+                byte[] bytes = image.getBytes();
+                Path path = Paths.get(directory );
+                Files.write(path, bytes);
+
+                return directory;
+            }
+            catch(Exception e)
+            {
+                return "error = "+e;
+            }
         }
-        catch(Exception e)
-        {
-            return "error = "+e;
-        }
-
+        else return null;
     }
 
     @Override
