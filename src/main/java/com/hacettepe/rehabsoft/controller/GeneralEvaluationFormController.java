@@ -7,6 +7,7 @@ import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -28,15 +29,16 @@ public class GeneralEvaluationFormController {
 
 
     @RequestMapping(value="/create", method = RequestMethod.POST)
-    public ResponseEntity<String> saveGeneralForm(@RequestBody GeneralEvaluationFormDto gefd){
+    public ResponseEntity<String> saveGeneralForm( @RequestParam("imageFile") MultipartFile image,
+                                                   @RequestParam("model") String gefd
+    ){
         log.warn("GeneralEval. Controllerına girdi");
-
 
         if(generalEvaluationFormService.isGeneralEvaluationFormExist())
             return ResponseEntity.badRequest().body("Daha önce zaten bir form doldurdunuz");
 
 
-        Boolean success = generalEvaluationFormService.save(gefd);
+        Boolean success = generalEvaluationFormService.save(gefd, image);
         if(!success){
             return ResponseEntity.badRequest().body("Formunuzun kaydı sırasında beklenmedik bir hata meydana geldi.Lütfen tekrar deneyin");
         }

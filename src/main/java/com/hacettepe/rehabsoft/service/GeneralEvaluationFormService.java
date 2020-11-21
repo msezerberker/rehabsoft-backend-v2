@@ -1,9 +1,10 @@
 package com.hacettepe.rehabsoft.service;
 
 import com.hacettepe.rehabsoft.dto.GeneralEvaluationFormDto;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface GeneralEvaluationFormService {
-    Boolean save(GeneralEvaluationFormDto GEFD);
+    Boolean save(String GEFD, MultipartFile botoxImage);
 
     boolean isGeneralEvaluationFormExist();
 }
