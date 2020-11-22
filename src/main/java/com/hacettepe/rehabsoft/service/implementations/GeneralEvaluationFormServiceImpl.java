@@ -13,10 +13,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 
 
 @Service
@@ -82,17 +86,31 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
             tempForm.getAfterBirthReasonCerebralPalsy().setGeneralEvaluationForm(tempForm);
         }
 
-        System.out.println("tempForm.getBotoxTreatment()");
         if(tempForm.getBotoxTreatment() !=null){
-            tempForm.getBotoxTreatment().setGeneralEvaluationForm(tempForm);
 
             if( botoxImage != null){
-                tempForm.getBotoxTreatment().setBotoxRecordUrl("");
-
+                tempForm.getBotoxTreatment().setGeneralEvaluationForm(null);
                 BotoxTreatment persistedBotoxTreatment = botoxTreatmentRepository.save(tempForm.getBotoxTreatment());
-                String savedUrl = saveBotoxImage(persistedBotoxTreatment, botoxImage);
+
+                if(botoxImage.getContentType() == null){
+                    throw new InternalError();
+                }
+
+                String directoryAndImage =
+                        createURLWithDirectory(
+                                ApiPaths.SavingBotoxImagePath.CTRL+"",
+                                securityHelper.getUsername()+"",
+                                persistedBotoxTreatment.getId()+"-" + botoxImage.getName(),
+                                botoxImage.getContentType().substring(botoxImage.getContentType().length() - 3)+"");
+
+                String savedUrl = saveFileByDirectory(botoxImage, directoryAndImage);
                 persistedBotoxTreatment.setBotoxRecordUrl(savedUrl);
+
+                persistedBotoxTreatment.setGeneralEvaluationForm(tempForm);
                 tempForm.setBotoxTreatment(persistedBotoxTreatment);
+            }
+            else{
+                tempForm.getBotoxTreatment().setGeneralEvaluationForm(tempForm);
             }
             System.out.println("tempForm.getBotoxTreatment()");
         }
@@ -118,12 +136,15 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
     }
 
 
-    private void setManyToManyBidirectional(GeneralEvaluationForm tempForm){
+
+    private void setManyToManyBidirectional(GeneralEvaluationForm tempForm, MultipartFile[] appliedSurgeryEpicrisisImages){
 
         if(tempForm.getAppliedSurgeryCollection() !=null){
-            for(AppliedSurgery a:tempForm.getAppliedSurgeryCollection()){
+            List<MultipartFile> epicrisisImagesList = Arrays.asList(appliedSurgeryEpicrisisImages);
 
-                appliedSurgeryRepository.save(a);
+            for(AppliedSurgery appliedSurgery: tempForm.getAppliedSurgeryCollection()){
+                setAppliedSurgeryEpicrisisImageFromImageList(appliedSurgery, epicrisisImagesList);
+                appliedSurgeryRepository.save(appliedSurgery);
             }
         }
 
@@ -136,30 +157,69 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
 
     }
 
-    private String saveBotoxImage(BotoxTreatment botoxTreatment, MultipartFile image){
-        String directory = ApiPaths.SavingBotoxImagePath.CTRL + ""+securityHelper.getUsername()+botoxTreatment.getId();
+    // This function is used to save epicrisis image and set its url to corresponding surgery
+    private void setAppliedSurgeryEpicrisisImageFromImageList(AppliedSurgery appliedSurgery, List<MultipartFile> epicrisisImageList){
 
-        try
-        {
-            byte[] bytes = image.getBytes();
-            Path path = Paths.get(directory );
-            Files.write(path, bytes);
-
-            return directory;
+        if(appliedSurgery.getEpicrisisImageUrl() == null){
+            return ;
         }
-        catch(Exception e)
-        {
-            return "error = "+e;
+        if( epicrisisImageList == null){
+            return ;
+        }
+        if( epicrisisImageList.size() ==0){
+            return ;
         }
 
+        // Url includes index number of corresponding image to find which image belongs to the applied surgery.
+        int epicrisisImageIndex = Integer.parseInt(appliedSurgery.getEpicrisisImageUrl());
+        appliedSurgery.setEpicrisisImageUrl(null);
+        AppliedSurgery persistedAppliedSurgery = appliedSurgeryRepository.save(appliedSurgery);
+        String directoryAndImage =
+                createURLWithDirectory(
+                        ApiPaths.SavingAppliedSurgeryPath.CTRL+"",
+                        securityHelper.getUsername()+"",
+                        persistedAppliedSurgery.getId()+"-" + epicrisisImageList.get(epicrisisImageIndex).getOriginalFilename(),
+                        epicrisisImageList.get(epicrisisImageIndex).getContentType().substring(epicrisisImageList.get(epicrisisImageIndex).getContentType().length() - 3)+"");
+        String savedUrl = saveFileByDirectory(epicrisisImageList.get(epicrisisImageIndex), directoryAndImage);
+        persistedAppliedSurgery.setEpicrisisImageUrl(savedUrl);
+    }
+
+    // This function is used to create a directory in given url, and add filename its end
+    private String createURLWithDirectory(String savingDirectory, String createdDirectoryName, String fileName, String fileType){
+        String createdDirectoryURL = savingDirectory + createdDirectoryName;
+        File file = new File(createdDirectoryURL);
+        boolean bool = file.mkdir();
+        return createdDirectoryURL+ "/"+fileName+"."+fileType ;
+    }
+
+    // This function is used to save any file by giving location url and its name added in url.
+    private String saveFileByDirectory(MultipartFile image, String directory){
+        if(image.getContentType() != null){
+
+            log.warn("Dosya kaydetme kismina girdi. Content type: " + image.getContentType());
+            try {
+                byte[] bytes = image.getBytes();
+                Path path = Paths.get(directory );
+                Files.write(path, bytes);
+
+                return directory;
+            }
+            catch(Exception e)
+            {
+                return "error = "+e;
+            }
+        }
+        else return null;
     }
 
     @Override
-    public Boolean save(String gefd, MultipartFile botoxImage){
+    public Boolean save(String gefd, MultipartFile botoxImage, MultipartFile[] epicrisisImages){
 
         try{
 
         log.warn("GeneralEval. servisine girdi" );
+
+        // Because the DTO comes in Form Data object from Angular, the JSON stringfy to DTO mapping is required by using ObjectMapper from Jackson
         GeneralEvaluationFormDto tempFormDto =  objectMapper.readValue(gefd, GeneralEvaluationFormDto.class);
         GeneralEvaluationForm tempForm = modelMapper.map(tempFormDto, GeneralEvaluationForm.class);
         log.warn("GeneralEval: Mapleme başarılı" );
@@ -174,7 +234,7 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
         log.warn("Gen. Ev. Form- Many-to-One Bitti. servisine girdi" );
 
 
-        setManyToManyBidirectional(tempForm);
+        setManyToManyBidirectional(tempForm, epicrisisImages);
         log.warn("Gen. Ev. Form- Many-to-Many Bitti. servisine girdi" );
 
 
@@ -191,8 +251,6 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
             return Boolean.FALSE;
         }
     }
-
-
 
     @Override
     public boolean isGeneralEvaluationFormExist() {

@@ -29,7 +29,9 @@ public class GeneralEvaluationFormController {
 
 
     @RequestMapping(value="/create", method = RequestMethod.POST)
-    public ResponseEntity<String> saveGeneralForm( @RequestParam("imageFile") MultipartFile image,
+    public ResponseEntity<String> saveGeneralForm( @RequestParam(value = "botoxImageFile", required = false) MultipartFile botoxImage,
+                                                   @RequestParam(value = "appliedSurgeryEpicrisisImages", required = false) MultipartFile[] epicrisisImages,
+                                                   @RequestParam(value = "otherOrthesisImages", required = false) MultipartFile[] otherOrthesisImages,
                                                    @RequestParam("model") String gefd
     ){
         log.warn("GeneralEval. Controllerına girdi");
@@ -38,7 +40,7 @@ public class GeneralEvaluationFormController {
             return ResponseEntity.badRequest().body("Daha önce zaten bir form doldurdunuz");
 
 
-        Boolean success = generalEvaluationFormService.save(gefd, image);
+        Boolean success = generalEvaluationFormService.save(gefd, botoxImage, epicrisisImages);
         if(!success){
             return ResponseEntity.badRequest().body("Formunuzun kaydı sırasında beklenmedik bir hata meydana geldi.Lütfen tekrar deneyin");
         }

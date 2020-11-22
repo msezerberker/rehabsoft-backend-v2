@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### File Folders of User Image etc. ###
+### src/main/resource/static/generalevaluationform/botoximage/
+### src/main/resource/static/generalevaluationform/appliedsurgeries/
+### src/main/resource/static/generalevaluationform/otherorthesis/
