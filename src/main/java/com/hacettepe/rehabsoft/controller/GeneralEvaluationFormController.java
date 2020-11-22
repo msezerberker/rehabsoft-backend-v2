@@ -48,7 +48,7 @@ public class GeneralEvaluationFormController {
         }
 
 
-        Boolean success = generalEvaluationFormService.save(gefd, botoxImage, epicrisisImages);
+        Boolean success = generalEvaluationFormService.save(gefd, botoxImage, epicrisisImages, otherOrthesisImages);
         if(!success){
             responseMessage.setResponseMessage("Formunuzun kaydı sırasında beklenmedik bir hata meydana geldi.Lütfen tekrar deneyin");
             return ResponseEntity.badRequest().body(responseMessage);
