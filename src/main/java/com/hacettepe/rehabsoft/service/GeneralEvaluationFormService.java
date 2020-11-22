@@ -4,7 +4,7 @@ import com.hacettepe.rehabsoft.dto.GeneralEvaluationFormDto;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface GeneralEvaluationFormService {
-    Boolean save(String GEFD, MultipartFile botoxImage);
+    Boolean save(String GEFD, MultipartFile botoxImage, MultipartFile[] epicrisisImages);
 
     boolean isGeneralEvaluationFormExist();
 }
