@@ -2,6 +2,7 @@ package com.hacettepe.rehabsoft.controller;
 
 import com.hacettepe.rehabsoft.dto.GeneralEvaluationFormDto;
 import com.hacettepe.rehabsoft.dto.PatientDto;
+import com.hacettepe.rehabsoft.helper.ResponseMessage;
 import com.hacettepe.rehabsoft.service.PatientService;
 import com.hacettepe.rehabsoft.util.ApiPaths;
 import io.swagger.annotations.Api;
@@ -21,20 +22,29 @@ public class PatientController {
     @Autowired
     PatientService patientService;
 
+    @Autowired
+    ResponseMessage responseMessage;
+
     @RequestMapping(value="/create", method = RequestMethod.POST)
-    public ResponseEntity<String> savePatient(@RequestBody PatientDto patientDto){
+    public ResponseEntity<ResponseMessage> savePatient(@RequestBody PatientDto patientDto){
         log.warn("Patient Controllerına girdi");
 
-        if(patientService.isPatientAlreadySaved())
-            return ResponseEntity.badRequest().body("Zaten bir kaydınız bulunmakta.");
+        if(patientService.isPatientAlreadySaved()){
+            responseMessage.setResponseMessage("Zaten bir kaydınız bulunmakta.");
+            return ResponseEntity.badRequest().body(responseMessage);
+        }
 
 
-        if(patientService.isIdentityNoExists(patientDto.getTcKimlikNo()))
-            return ResponseEntity.ok("Bu kimlik numarası ile daha önce bir form olusturulmustur");
+
+        if(patientService.isIdentityNoExists(patientDto.getTcKimlikNo())){
+            responseMessage.setResponseMessage("Bu kimlik numarası ile daha önce bir form olusturulmustur");
+            return ResponseEntity.ok(responseMessage);
+        }
 
 
         patientService.savePatient(patientDto);
-        return ResponseEntity.ok("Formunuz basarıyla kaydedildi");
+        responseMessage.setResponseMessage("Formunuz basarıyla kaydedildi");
+        return ResponseEntity.ok(responseMessage);
 
 
     }

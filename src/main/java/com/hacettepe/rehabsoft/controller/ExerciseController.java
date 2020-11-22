@@ -1,6 +1,7 @@
 package com.hacettepe.rehabsoft.controller;
 
 import com.hacettepe.rehabsoft.dto.ExerciseDto;
+import com.hacettepe.rehabsoft.helper.ResponseMessage;
 import com.hacettepe.rehabsoft.service.ExerciseService;
 import com.hacettepe.rehabsoft.util.ApiPaths;
 import io.swagger.annotations.Api;
@@ -19,14 +20,19 @@ import java.util.List;
 @Api(value = "/api/exercises")
 public class ExerciseController {
 
+
+    @Autowired
+    ResponseMessage responseMessage;
+
     @Autowired
     ExerciseService exerciseService;
 
     @RequestMapping(value = "/create",method = RequestMethod.POST)
-    public ResponseEntity<String> createExercise(@Valid @RequestBody ExerciseDto exerciseDto){
+    public ResponseEntity<ResponseMessage> createExercise(@Valid @RequestBody ExerciseDto exerciseDto){
         log.warn("exercise creation controllerına girdi");
         String message = exerciseService.save(exerciseDto);
-        return ResponseEntity.ok(message);
+        responseMessage.setResponseMessage(message);
+        return ResponseEntity.ok(responseMessage);
     }
 
     @RequestMapping(value = "/delete/{id}",method = RequestMethod.DELETE)
@@ -45,10 +51,11 @@ public class ExerciseController {
 
 
     @RequestMapping(value = "/update",method = RequestMethod.POST)
-    public ResponseEntity<String> updateExercise(@Valid @RequestBody ExerciseDto exerciseDto){
+    public ResponseEntity<ResponseMessage> updateExercise(@Valid @RequestBody ExerciseDto exerciseDto){
         log.warn("exercise update controllerına girdi");
         String message = exerciseService.updateExercise(exerciseDto);
-        return ResponseEntity.ok(message);
+        responseMessage.setResponseMessage(message);
+        return ResponseEntity.ok(responseMessage);
     }
 
 }
