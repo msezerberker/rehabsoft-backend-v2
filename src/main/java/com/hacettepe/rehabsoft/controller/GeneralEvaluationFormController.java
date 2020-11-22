@@ -40,7 +40,7 @@ public class GeneralEvaluationFormController {
             return ResponseEntity.badRequest().body("Daha önce zaten bir form doldurdunuz");
 
 
-        Boolean success = generalEvaluationFormService.save(gefd, botoxImage, epicrisisImages);
+        Boolean success = generalEvaluationFormService.save(gefd, botoxImage, epicrisisImages, otherOrthesisImages);
         if(!success){
             return ResponseEntity.badRequest().body("Formunuzun kaydı sırasında beklenmedik bir hata meydana geldi.Lütfen tekrar deneyin");
         }

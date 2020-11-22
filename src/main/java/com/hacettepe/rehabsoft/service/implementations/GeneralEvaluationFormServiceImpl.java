@@ -17,10 +17,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 
 @Service
@@ -39,6 +36,7 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
     private final SecurityHelper securityHelper;
     private final BotoxTreatmentRepository botoxTreatmentRepository;
     private final ObjectMapper objectMapper;
+    private final OtherOrthesisInfoRepository otherOrthesisInfoRepository;
 
 
     private void fillExpectationsAboutProgram(Collection<ExpectationsAboutProgram> exps, GeneralEvaluationForm tempForm){
@@ -57,10 +55,38 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
         }
     }
 
-    private void fillOtherOrthesisInfo(Collection<OtherOrthesisInfo> exps,GeneralEvaluationForm tempForm){
+    private void fillOtherOrthesisInfo(Collection<OtherOrthesisInfo> exps,GeneralEvaluationForm tempForm, MultipartFile[] otherOrthesisImages){
         if(exps!=null){
-            for(OtherOrthesisInfo e:exps){
-                e.setGeneralEvaluationForm(tempForm);
+            for(OtherOrthesisInfo otherOrthesisInfo:exps){
+                setOtherOrthesisImagesEpicrisisImageFromImageList(otherOrthesisInfo, otherOrthesisImages);
+                otherOrthesisInfo.setGeneralEvaluationForm(tempForm);
+            }
+        }
+    }
+
+    private void setOtherOrthesisImagesEpicrisisImageFromImageList(OtherOrthesisInfo otherOrthesisInfo, MultipartFile[] otherOrthesisImages) {
+
+        if( otherOrthesisImages == null){
+            return ;
+        }
+
+        for(MultipartFile multipartFile:otherOrthesisImages){
+
+            StringBuilder newFileName = new StringBuilder();
+            String fileType = popFileTypeFromFileName(multipartFile.getOriginalFilename(), newFileName);
+
+            if(newFileName.toString().equals(otherOrthesisInfo.getOrthesisName())){
+                otherOrthesisInfo.setOrthesisUrl(null);
+                OtherOrthesisInfo persistedOrthesis = otherOrthesisInfoRepository.save(otherOrthesisInfo);
+
+                String directoryAndImage = createURLWithDirectory(
+                        ApiPaths.SavingOtherOrthesisImagePath.CTRL+"",
+                        securityHelper.getUsername()+"",
+                        persistedOrthesis.getId()+"-" + newFileName.toString(),
+                        fileType+"");
+
+                String savedUrl = saveFileByDirectory(multipartFile, directoryAndImage);
+                persistedOrthesis.setOrthesisUrl(savedUrl);
             }
         }
     }
@@ -100,7 +126,7 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
                         createURLWithDirectory(
                                 ApiPaths.SavingBotoxImagePath.CTRL+"",
                                 securityHelper.getUsername()+"",
-                                persistedBotoxTreatment.getId()+"-" + botoxImage.getName(),
+                                persistedBotoxTreatment.getId()+"",
                                 botoxImage.getContentType().substring(botoxImage.getContentType().length() - 3)+"");
 
                 String savedUrl = saveFileByDirectory(botoxImage, directoryAndImage);
@@ -160,28 +186,29 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
     // This function is used to save epicrisis image and set its url to corresponding surgery
     private void setAppliedSurgeryEpicrisisImageFromImageList(AppliedSurgery appliedSurgery, List<MultipartFile> epicrisisImageList){
 
-        if(appliedSurgery.getEpicrisisImageUrl() == null){
-            return ;
-        }
         if( epicrisisImageList == null){
             return ;
         }
-        if( epicrisisImageList.size() ==0){
-            return ;
-        }
 
-        // Url includes index number of corresponding image to find which image belongs to the applied surgery.
-        int epicrisisImageIndex = Integer.parseInt(appliedSurgery.getEpicrisisImageUrl());
-        appliedSurgery.setEpicrisisImageUrl(null);
-        AppliedSurgery persistedAppliedSurgery = appliedSurgeryRepository.save(appliedSurgery);
-        String directoryAndImage =
-                createURLWithDirectory(
-                        ApiPaths.SavingAppliedSurgeryPath.CTRL+"",
+        for(MultipartFile multipartFile:epicrisisImageList){
+
+            StringBuilder newFileName = new StringBuilder();
+            String fileType = popFileTypeFromFileName(multipartFile.getOriginalFilename(), newFileName);
+
+            if(newFileName.toString().equals(appliedSurgery.getSurgeryName())){
+                appliedSurgery.setEpicrisisImageUrl(null);
+                AppliedSurgery persistedAppliedSurgery = appliedSurgeryRepository.save(appliedSurgery);
+
+                String directoryAndImage = createURLWithDirectory(
+                        ApiPaths.SavingAppliedSurgeryImagePath.CTRL+"",
                         securityHelper.getUsername()+"",
-                        persistedAppliedSurgery.getId()+"-" + epicrisisImageList.get(epicrisisImageIndex).getOriginalFilename(),
-                        epicrisisImageList.get(epicrisisImageIndex).getContentType().substring(epicrisisImageList.get(epicrisisImageIndex).getContentType().length() - 3)+"");
-        String savedUrl = saveFileByDirectory(epicrisisImageList.get(epicrisisImageIndex), directoryAndImage);
-        persistedAppliedSurgery.setEpicrisisImageUrl(savedUrl);
+                        persistedAppliedSurgery.getId()+"-" + newFileName.toString(),
+                        fileType+"");
+
+                String savedUrl = saveFileByDirectory(multipartFile, directoryAndImage);
+                persistedAppliedSurgery.setEpicrisisImageUrl(savedUrl);
+            }
+        }
     }
 
     // This function is used to create a directory in given url, and add filename its end
@@ -190,6 +217,16 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
         File file = new File(createdDirectoryURL);
         boolean bool = file.mkdir();
         return createdDirectoryURL+ "/"+fileName+"."+fileType ;
+    }
+
+    // pop file type. append popped string to second parameter which is newFileName
+    private String popFileTypeFromFileName(String filename, StringBuilder newFileName){
+        List<String> listToGetFileType =  new LinkedList<>(Arrays.asList(Objects.requireNonNull(filename).split("\\.")));
+        String fileType = listToGetFileType.remove(listToGetFileType.size()-1);
+        for(String words: listToGetFileType){
+            newFileName.append(words);
+        }
+        return fileType;
     }
 
     // This function is used to save any file by giving location url and its name added in url.
@@ -213,7 +250,7 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
     }
 
     @Override
-    public Boolean save(String gefd, MultipartFile botoxImage, MultipartFile[] epicrisisImages){
+    public Boolean save(String gefd, MultipartFile botoxImage, MultipartFile[] epicrisisImages, MultipartFile[] otherOrthesisImages){
 
         try{
 
@@ -229,7 +266,7 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
 
         fillExpectationsAboutProgram(tempForm.getExpectationsAboutProgramCollection(),tempForm);
         fillOrthesisInfoCollection(tempForm.getOrthesisInfoCollection(),tempForm);
-        fillOtherOrthesisInfo(tempForm.getOtherOrthesisInfoCollection(),tempForm);
+        fillOtherOrthesisInfo(tempForm.getOtherOrthesisInfoCollection(),tempForm, otherOrthesisImages);
         fillUsedMedicine(tempForm.getUsedMedicineCollection(),tempForm);
         log.warn("Gen. Ev. Form- Many-to-One Bitti. servisine girdi" );
 
