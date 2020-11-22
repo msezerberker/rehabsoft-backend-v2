@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -57,14 +58,20 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
 
     private void fillOtherOrthesisInfo(Collection<OtherOrthesisInfo> exps,GeneralEvaluationForm tempForm, MultipartFile[] otherOrthesisImages){
         if(exps!=null){
-            for(OtherOrthesisInfo otherOrthesisInfo:exps){
-                setOtherOrthesisImagesEpicrisisImageFromImageList(otherOrthesisInfo, otherOrthesisImages);
+            List<OtherOrthesisInfo> forIterationOtherOrthesisInfo = new ArrayList<>(tempForm.getOtherOrthesisInfoCollection());
+            List<OtherOrthesisInfo> newOtherOrthesisInfo = new ArrayList<>(tempForm.getOtherOrthesisInfoCollection());
+            for(OtherOrthesisInfo otherOrthesisInfo:forIterationOtherOrthesisInfo){
+                setOtherOrthesisImagesEpicrisisImageFromImageList(otherOrthesisInfo, otherOrthesisImages, tempForm, newOtherOrthesisInfo);
+            }
+            tempForm.setOtherOrthesisInfoCollection(newOtherOrthesisInfo);
+            for(OtherOrthesisInfo otherOrthesisInfo:newOtherOrthesisInfo){
                 otherOrthesisInfo.setGeneralEvaluationForm(tempForm);
             }
         }
     }
 
-    private void setOtherOrthesisImagesEpicrisisImageFromImageList(OtherOrthesisInfo otherOrthesisInfo, MultipartFile[] otherOrthesisImages) {
+    @Transactional
+    public void setOtherOrthesisImagesEpicrisisImageFromImageList(OtherOrthesisInfo otherOrthesisInfo, MultipartFile[] otherOrthesisImages, GeneralEvaluationForm tempForm, List<OtherOrthesisInfo> newOtherOrthesisInfo) {
 
         if( otherOrthesisImages == null){
             return ;
@@ -77,6 +84,8 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
 
             if(newFileName.toString().equals(otherOrthesisInfo.getOrthesisName())){
                 otherOrthesisInfo.setOrthesisUrl(null);
+                otherOrthesisInfo.setGeneralEvaluationForm(null);
+                tempForm.getOtherOrthesisInfoCollection().remove(otherOrthesisInfo);
                 OtherOrthesisInfo persistedOrthesis = otherOrthesisInfoRepository.save(otherOrthesisInfo);
 
                 String directoryAndImage = createURLWithDirectory(
@@ -87,6 +96,11 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
 
                 String savedUrl = saveFileByDirectory(multipartFile, directoryAndImage);
                 persistedOrthesis.setOrthesisUrl(savedUrl);
+                newOtherOrthesisInfo.add(persistedOrthesis);
+            }
+            else{
+                otherOrthesisInfo.setGeneralEvaluationForm(tempForm);
+                newOtherOrthesisInfo.add(otherOrthesisInfo);
             }
         }
     }
@@ -100,20 +114,8 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
 
 
     private void setBidirectionalOneToOne(GeneralEvaluationForm tempForm, MultipartFile botoxImage){
-        if(tempForm.getDiseaseOfMotherPregnancy() !=null){
-            tempForm.getDiseaseOfMotherPregnancy().setGeneralEvaluationForm(tempForm);
-        }
-
-        if(tempForm.getHyperbilirubinemia() != null){
-            tempForm.getHyperbilirubinemia().setGeneralEvaluationForm(tempForm);
-        }
-
-        if(tempForm.getAfterBirthReasonCerebralPalsy() !=null){
-            tempForm.getAfterBirthReasonCerebralPalsy().setGeneralEvaluationForm(tempForm);
-        }
 
         if(tempForm.getBotoxTreatment() !=null){
-
             if( botoxImage != null){
                 tempForm.getBotoxTreatment().setGeneralEvaluationForm(null);
                 BotoxTreatment persistedBotoxTreatment = botoxTreatmentRepository.save(tempForm.getBotoxTreatment());
@@ -139,6 +141,18 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
                 tempForm.getBotoxTreatment().setGeneralEvaluationForm(tempForm);
             }
             System.out.println("tempForm.getBotoxTreatment()");
+        }
+
+        if(tempForm.getDiseaseOfMotherPregnancy() !=null){
+            tempForm.getDiseaseOfMotherPregnancy().setGeneralEvaluationForm(tempForm);
+        }
+
+        if(tempForm.getHyperbilirubinemia() != null){
+            tempForm.getHyperbilirubinemia().setGeneralEvaluationForm(tempForm);
+        }
+
+        if(tempForm.getAfterBirthReasonCerebralPalsy() !=null){
+            tempForm.getAfterBirthReasonCerebralPalsy().setGeneralEvaluationForm(tempForm);
         }
 
         if(tempForm.getVisualImpairment() !=null){
@@ -261,18 +275,20 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
         GeneralEvaluationForm tempForm = modelMapper.map(tempFormDto, GeneralEvaluationForm.class);
         log.warn("GeneralEval: Mapleme başarılı" );
 
-        setBidirectionalOneToOne(tempForm, botoxImage);
+        // Bu fonksiyonlar, iclerinde tempFormu degistirdigi icin, bunlar once calismali start
         log.warn("Gen. Ev. Form- One-To-one Bitti. servisine girdi" );
-
-        fillExpectationsAboutProgram(tempForm.getExpectationsAboutProgramCollection(),tempForm);
-        fillOrthesisInfoCollection(tempForm.getOrthesisInfoCollection(),tempForm);
+        setManyToManyBidirectional(tempForm, epicrisisImages);
+        log.warn("Gen. Ev. Form- Many-to-Many Bitti. servisine girdi" );
         fillOtherOrthesisInfo(tempForm.getOtherOrthesisInfoCollection(),tempForm, otherOrthesisImages);
+        setBidirectionalOneToOne(tempForm, botoxImage);
+        // Bu fonksiyonlar, iclerinde tempFormu degistirdigi icin, bunlar once calismali end
+
+        fillOrthesisInfoCollection(tempForm.getOrthesisInfoCollection(),tempForm);
+        fillExpectationsAboutProgram(tempForm.getExpectationsAboutProgramCollection(),tempForm);
         fillUsedMedicine(tempForm.getUsedMedicineCollection(),tempForm);
         log.warn("Gen. Ev. Form- Many-to-One Bitti. servisine girdi" );
 
 
-        setManyToManyBidirectional(tempForm, epicrisisImages);
-        log.warn("Gen. Ev. Form- Many-to-Many Bitti. servisine girdi" );
 
 
         tempForm.setPatient(patientRepository.getPatientByUser(userRepository.findByUsername(securityHelper.getUsername())));
