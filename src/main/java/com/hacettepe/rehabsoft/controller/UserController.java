@@ -1,6 +1,7 @@
 package com.hacettepe.rehabsoft.controller;
 
 import com.hacettepe.rehabsoft.dto.UserDto;
+import com.hacettepe.rehabsoft.helper.ResponseMessage;
 import com.hacettepe.rehabsoft.service.UserService;
 import com.hacettepe.rehabsoft.util.ApiPaths;
 import io.swagger.annotations.Api;
@@ -22,9 +23,11 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final ResponseMessage responseMessage;
 
-    public UserController(UserService userService){
+    public UserController(UserService userService,ResponseMessage responseMessage){
         this.userService = userService;
+        this.responseMessage = responseMessage;
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -44,10 +47,10 @@ public class UserController {
 
 
     @RequestMapping(value = "/update",method = RequestMethod.POST)
-    public ResponseEntity<String> updateUser(@Valid @RequestBody UserDto userDto){
+    public ResponseEntity<ResponseMessage> updateUser(@Valid @RequestBody UserDto userDto){
         log.warn("update controllerına girdi");
-        String updateMsg = userService.updateUser(userDto);
-        return ResponseEntity.ok(updateMsg);
+        responseMessage.setResponseMessage(userService.updateUser(userDto));
+        return ResponseEntity.ok(responseMessage);
     }
 
 

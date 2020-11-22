@@ -4,6 +4,7 @@ import com.hacettepe.rehabsoft.dto.RegistrationRequest;
 import com.hacettepe.rehabsoft.dto.TokenResponse;
 import com.hacettepe.rehabsoft.entity.User;
 import com.hacettepe.rehabsoft.helper.RegistrationHelper;
+import com.hacettepe.rehabsoft.helper.ResponseMessage;
 import com.hacettepe.rehabsoft.repository.UserRepository;
 import com.hacettepe.rehabsoft.security.JwtTokenUtil;
 import com.hacettepe.rehabsoft.service.GeneralEvaluationFormService;
@@ -31,6 +32,8 @@ import javax.validation.Valid;
 @Api(value = "/api/token")
 public class AccountController {
 
+    @Autowired
+    ResponseMessage responseMessage;
 
     @Autowired
     RegistrationHelper registrationHelper;
@@ -77,22 +80,26 @@ public class AccountController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ApiOperation(value="Register Operation",response = Boolean.class)
-    public ResponseEntity<String> register(@Valid @RequestBody RegistrationRequest registrationRequest) throws AuthenticationException {
+    public ResponseEntity<ResponseMessage> register(@Valid @RequestBody RegistrationRequest registrationRequest) throws AuthenticationException {
 
         log.warn("Kayıt controllerına girdi");
 
-        String validationMessage = registrationHelper.registrationValidator(registrationRequest);
-        if(validationMessage!=null){
-            return ResponseEntity.ok().body(validationMessage);
+
+        responseMessage.setResponseMessage(registrationHelper.registrationValidator(registrationRequest));
+
+        if(responseMessage.getResponseMessage()!=null){
+            return ResponseEntity.ok(responseMessage);
         }
 
         Boolean response = userService.register(registrationRequest);
 
         if(!response){
-                return ResponseEntity.badRequest().body("Kayıt sırasında bir hata meydana geldi.Lütfen tekrar deneyiniz");
+            responseMessage.setResponseMessage("Kayıt sırasında bir hata meydana geldi.Lütfen tekrar deneyiniz");
+                return ResponseEntity.badRequest().body(responseMessage);
             }
 
-        return ResponseEntity.ok().body("Basariyla kaydoldunuz!");
+        responseMessage.setResponseMessage("Basariyla kaydoldunuz!");
+        return ResponseEntity.ok(responseMessage);
 
 
     }
