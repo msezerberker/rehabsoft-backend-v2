@@ -57,20 +57,20 @@ public class AccountController {
     public ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginRequest loginRequest) throws AuthenticationException {
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsername(),
+                        loginRequest.getUsername().toLowerCase(),
                         loginRequest.getPassword()
                 )
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         final String token = jwtTokenUtil.generateToken(authentication);
 
-        User userFromDB = userRepository.findByUsername(loginRequest.getUsername());
+        User userFromDB = userRepository.findByUsername(loginRequest.getUsername().toLowerCase());
 
         boolean isPatientSaved = patientService.isPatientAlreadySaved();
         boolean isGeneralInformationSaved = generalEvaluationFormService.isGeneralEvaluationFormExist();
 
         //Burada sorun olabilir:Bunu yaz:         return ResponseEntity.ok(new AuthToken(token));
-        return ResponseEntity.ok(new TokenResponse(loginRequest.getUsername(),userFromDB.getFirstName(), userFromDB.getSurname(), userFromDB.getRole().getName(),token,isPatientSaved,isGeneralInformationSaved));
+        return ResponseEntity.ok(new TokenResponse(userFromDB.getUsername(),userFromDB.getFirstName(), userFromDB.getSurname(), userFromDB.getRole().getName(),token,isPatientSaved,isGeneralInformationSaved));
     }
 
 
@@ -93,14 +93,6 @@ public class AccountController {
             }
 
         return ResponseEntity.ok().body("Basariyla kaydoldunuz!");
-
-
-
-
-
-
-
-
 
 
     }

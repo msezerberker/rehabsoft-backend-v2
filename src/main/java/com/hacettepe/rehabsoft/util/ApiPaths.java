@@ -21,8 +21,14 @@ public class ApiPaths {
         public static final String CTRL = "./src/main/resources/static/generalevaluationform/botoximage/";
     }
 
+
     public static final class SavingAppliedSurgeryPath {
         public static final String CTRL = "./src/main/resources/static/generalevaluationform/appliedsurgeryimage/";
+    }
+
+
+    public static final class ExercisePath {
+        public static final String CTRL = BASE_PATH + "/exercises";
     }
 
 }

@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username.toLowerCase());
         if(user == null){
             throw new UsernameNotFoundException("Invalid username");
         }
@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
         dbUser.setSurname(tempUser.getSurname());
         dbUser.setFirstName(tempUser.getFirstName());
-        dbUser.setEmail(tempUser.getEmail());
+        dbUser.setEmail(tempUser.getEmail().toLowerCase());
         userRepository.save(dbUser);
         return "Degisiklikler başarıyla kaydedildi!";
 
@@ -85,18 +85,16 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public Boolean isUsernameExists(String username) {
-        if(userRepository.findByUsername(username)==null){
+        if(userRepository.findByUsername(username.toLowerCase())==null){
             return false;
         }
         return true;
     }
 
 
-
-
     @Override
     public Boolean isEmailExists(String email) {
-        if(userRepository.findByEmail(email)==null){
+        if(userRepository.findByEmail(email.toLowerCase())==null){
             return false;
         }
         return true;
@@ -118,11 +116,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         try {
             log.warn("Register'a giriyor");
             User user = new User();
-            user.setEmail(registrationRequest.getEmail());
+            user.setEmail(registrationRequest.getEmail().toLowerCase());
             user.setFirstName(registrationRequest.getFirstName());
             user.setSurname(registrationRequest.getSurname());
             user.setPassword(bCryptPasswordEncoder.encode(registrationRequest.getPassword()));
-            user.setUsername(registrationRequest.getUsername());
+            user.setUsername(registrationRequest.getUsername().toLowerCase());
             final Role role = roleRepository.findByName("USER");
             System.out.println(role.getName());
             user.setRole(role);
