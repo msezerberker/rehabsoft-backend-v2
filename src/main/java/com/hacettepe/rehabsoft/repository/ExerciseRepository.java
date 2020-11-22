@@ -8,4 +8,6 @@ public interface ExerciseRepository extends JpaRepository<Exercise,Long> {
 
     List<Exercise> findAll();
 
+    Exercise getByExerciseName(String name);
+
 }
