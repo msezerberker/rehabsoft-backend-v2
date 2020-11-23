@@ -63,6 +63,8 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
             for(OtherOrthesisInfo otherOrthesisInfo:forIterationOtherOrthesisInfo){
                 setOtherOrthesisImagesEpicrisisImageFromImageList(otherOrthesisInfo, otherOrthesisImages, tempForm, newOtherOrthesisInfo);
             }
+
+            tempForm.setOtherOrthesisInfoCollection(null);
             tempForm.setOtherOrthesisInfoCollection(newOtherOrthesisInfo);
             for(OtherOrthesisInfo otherOrthesisInfo:newOtherOrthesisInfo){
                 otherOrthesisInfo.setGeneralEvaluationForm(tempForm);
@@ -70,7 +72,7 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
         }
     }
 
-    @Transactional
+
     public void setOtherOrthesisImagesEpicrisisImageFromImageList(OtherOrthesisInfo otherOrthesisInfo, MultipartFile[] otherOrthesisImages, GeneralEvaluationForm tempForm, List<OtherOrthesisInfo> newOtherOrthesisInfo) {
 
         if( otherOrthesisImages == null){
@@ -179,15 +181,6 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
 
     private void setManyToManyBidirectional(GeneralEvaluationForm tempForm, MultipartFile[] appliedSurgeryEpicrisisImages){
 
-//        if(tempForm.getAppliedSurgeryCollection() !=null){
-//            List<MultipartFile> epicrisisImagesList = Arrays.asList(appliedSurgeryEpicrisisImages);
-//
-//            for(AppliedSurgery appliedSurgery: tempForm.getAppliedSurgeryCollection()){
-//                setAppliedSurgeryEpicrisisImageFromImageList(appliedSurgery, epicrisisImagesList, tempForm);
-//            }
-//        }
-
-
         if(tempForm.getCoexistingDiseasesCollection() !=null){
             for(CoexistingDiseases a:tempForm.getCoexistingDiseasesCollection()){
                 coexistingDiseasesRepository.save(a);
@@ -281,7 +274,7 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
         }
     }
 
-    @Transactional
+
     public void fillAppliedSurgery( Collection<AppliedSurgery> appliedSurgeryCollection, GeneralEvaluationForm tempForm, MultipartFile[] appliedSurgeryEpicrisisImages ) {
 
         if(appliedSurgeryCollection!=null){
@@ -293,7 +286,7 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
                 setAppliedSurgeryEpicrisisImageFromImageList(appliedSurgery, appliedSurgeryEpicrisisImages, tempForm, newAppliedSurgeryInfo);
             }
 
-
+            tempForm.setAppliedSurgeryCollection(null);
             tempForm.setAppliedSurgeryCollection(newAppliedSurgeryInfo);
             for(AppliedSurgery appliedSurgery:newAppliedSurgeryInfo){
                 appliedSurgery.setGeneralEvaluationForm(tempForm);
