@@ -136,11 +136,8 @@ public class GeneralEvaluationForm extends BaseEntity {
     private BotoxTreatment botoxTreatment;
 
 
-    //@JsonManagedReference
-    @ManyToMany
-    @JoinTable(name = "applied_surgery_general_evaluation_form", joinColumns = {
-            @JoinColumn(name = "general_evaluation_form_id") }, inverseJoinColumns = {
-            @JoinColumn(name = "applied_surgery_id") })
+    @JsonManagedReference
+    @OneToMany(mappedBy = "generalEvaluationForm", cascade = CascadeType.ALL)
     private Collection<AppliedSurgery> appliedSurgeryCollection;
 
     @JsonManagedReference

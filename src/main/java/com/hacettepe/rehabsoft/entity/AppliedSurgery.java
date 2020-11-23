@@ -1,15 +1,13 @@
 package com.hacettepe.rehabsoft.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @EqualsAndHashCode(callSuper = true)
@@ -26,6 +24,12 @@ public class AppliedSurgery extends BaseEntity {
 
     @Column(name = "epicrisis_image_url")
     private String epicrisisImageUrl;
+
+    @JsonBackReference
+    @ManyToOne
+    @JoinColumn( name="general_evaluation_form_id")
+    private GeneralEvaluationForm generalEvaluationForm;
+
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "applying_date")
