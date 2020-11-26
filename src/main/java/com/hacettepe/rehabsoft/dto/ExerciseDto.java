@@ -36,5 +36,5 @@ public class ExerciseDto {
     private Collection<ExerciseVideoDto> exerciseVideoCollection;
 
     @ApiModelProperty(required = true, value = "ExerciseOwner")
-    private User user;
+    private UserDto user;
 }
