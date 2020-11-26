@@ -955,7 +955,7 @@ CREATE TABLE public.physiotherapy_central
 );
 
 
-INSERT INTO doctor("version") VALUES (1);
+-- INSERT INTO doctor("version") VALUES (1);
 
 CREATE OR REPLACE FUNCTION add_doctor_procedure()
     RETURNS trigger AS

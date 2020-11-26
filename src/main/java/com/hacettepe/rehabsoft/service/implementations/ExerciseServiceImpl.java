@@ -62,12 +62,13 @@ public class ExerciseServiceImpl implements ExerciseService {
 
 
     @Override
+    @Transactional
     public Boolean delete(Long id) {
         try{
-        exerciseRepository.deleteById(id);
-        return Boolean.TRUE;
+            exerciseRepository.deleteById(id);
+            log.warn("Egzersiz silindi=>"+ id);
+            return Boolean.TRUE;
         }
-
         catch (Exception e) {
             log.error("Deletion of Exercise is Failed=>", e);
             return Boolean.FALSE;
@@ -82,8 +83,6 @@ public class ExerciseServiceImpl implements ExerciseService {
         }
         return true;
     }
-
-
 
     @Override
     public String updateExercise(ExerciseDto exerciseDto){
