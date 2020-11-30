@@ -31,10 +31,10 @@ public class ExerciseController {
 
     @RequestMapping(value = "/create",method = RequestMethod.POST)
     public ResponseEntity<ResponseMessage> createExercise(
-            @RequestParam(value = "exerciseMedia", required = false) MultipartFile[] exerciseMedia,
-            @Valid @RequestParam("model")  ExerciseDto exerciseDto) throws JsonProcessingException {
+            @RequestParam(value = "exerciseMediaList", required = false) MultipartFile[] exerciseMedia,
+            @Valid @RequestParam("model") String exerciseJSON) throws JsonProcessingException {
         log.warn("exercise creation controllerına girdi");
-        String message = exerciseService.save(exerciseDto, exerciseMedia);
+        String message = exerciseService.save(exerciseJSON, exerciseMedia);
         responseMessage.setResponseMessage(message);
         return ResponseEntity.ok(responseMessage);
     }

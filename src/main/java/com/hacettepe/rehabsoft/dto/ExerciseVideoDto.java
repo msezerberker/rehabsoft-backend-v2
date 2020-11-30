@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotEmpty;
 
 @Data
@@ -16,8 +18,11 @@ public class ExerciseVideoDto {
     @ApiModelProperty(required = true,value = "ID")
     private Long id;
 
-    @NotEmpty
-    @ApiModelProperty(required = true , value = "VideoUrl")
+    @ApiModelProperty(required = false , value = "VideoUrl")
     private String videoUrl;
+
+    @NotEmpty
+    @ApiModelProperty(required = true , value = "VideoTitle")
+    private String title;
 
 }
