@@ -1,16 +1,22 @@
 package com.hacettepe.rehabsoft.service.implementations;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hacettepe.rehabsoft.dto.ExerciseDto;
+import com.hacettepe.rehabsoft.dto.GeneralEvaluationFormDto;
 import com.hacettepe.rehabsoft.dto.UserDto;
 import com.hacettepe.rehabsoft.entity.Exercise;
+import com.hacettepe.rehabsoft.entity.GeneralEvaluationForm;
 import com.hacettepe.rehabsoft.entity.User;
 import com.hacettepe.rehabsoft.helper.SecurityHelper;
 import com.hacettepe.rehabsoft.repository.ExerciseRepository;
 import com.hacettepe.rehabsoft.repository.UserRepository;
 import com.hacettepe.rehabsoft.service.ExerciseService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.util.Arrays;
@@ -18,20 +24,14 @@ import java.util.List;
 
 @Slf4j
 @Service//(value = "exerciseService")
+@RequiredArgsConstructor
 public class ExerciseServiceImpl implements ExerciseService {
 
     private final ModelMapper modelMapper;
     private final ExerciseRepository exerciseRepository;
     private final UserRepository userRepository;
     private final SecurityHelper securityHelper;
-
-    public ExerciseServiceImpl(ModelMapper modelMapper, ExerciseRepository exerciseRepository,
-    UserRepository userRepository,SecurityHelper securityHelper) {
-        this.modelMapper = modelMapper;
-        this.exerciseRepository = exerciseRepository;
-        this.userRepository = userRepository;
-        this.securityHelper = securityHelper;
-    }
+    private final ObjectMapper objectMapper;
 
     @Override
     public List<ExerciseDto> getAll(){
@@ -47,12 +47,18 @@ public class ExerciseServiceImpl implements ExerciseService {
 
     @Override
     @Transactional
-    public String save(ExerciseDto exerciseDto) {
+    public String save(ExerciseDto exerciseDto, MultipartFile[] exerciseMedia) throws JsonProcessingException {
+
+        // Mapping JSON to Object DTO and Entity after
+        // ExerciseDto tempExerciseDto =  objectMapper.readValue(exerciseJSON, ExerciseDto.class);
+//        Exercise tempExercise = modelMapper.map(exerciseDto, Exercise.class);
+
 
         if(this.isExerciseNameExists(exerciseDto.getExerciseName())){
                 return "Bu isim başka bir egzersiz için kullanılıyor.Lütfen başka bir isim seçiniz.";
             }
         Exercise tempExercise = modelMapper.map(exerciseDto, Exercise.class);
+
         tempExercise.setUser(userRepository.findByUsername(securityHelper.getUsername()));
         tempExercise = exerciseRepository.save(tempExercise);
         exerciseDto.setId(tempExercise.getId());

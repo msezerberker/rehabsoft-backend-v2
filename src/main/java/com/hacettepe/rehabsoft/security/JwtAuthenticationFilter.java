@@ -6,7 +6,9 @@ import io.jsonwebtoken.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,11 +16,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.annotation.Resource;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -53,7 +57,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
                 logger.error("Kullanici adiniz veya sifreniz yanlıs.Lütfen tekrar deneyin");
             }
         } else {
-            logger.warn("couldn't find bearer string, will ignore the header");
+            ///******** cookie filter ********///
+            System.out.println(req.getServletPath());
+//            if(!req.getServletPath().equals("/api/token") || !req.getServletPath().startsWith("/video")){
+//                authToken = getFromCookie(req);
+//            }
+            logger.warn("couldn't find bearer string, will ignore the header, "+authToken);
         }
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
@@ -70,4 +79,32 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 
         chain.doFilter(req, res);
     }
+
+    public String getFromCookie( HttpServletRequest request){
+        String token = "";
+
+        // get token from a Cookie
+        Cookie[] cookies = request.getCookies();
+
+        if( cookies == null || cookies.length < 1 ) {
+            throw new AuthenticationServiceException( "Invalid Token" );
+        }
+
+        Cookie sessionCookie = null;
+        for( Cookie cookie : cookies ) {
+            System.out.println("sessionCookie: "+cookie.getName());
+            if( ( "someSessionId" ).equals( cookie.getName() ) ) {
+                sessionCookie = cookie;
+                break;
+            }
+        }
+
+        // TODO: move the cookie validation into a private method
+        if( sessionCookie == null || StringUtils.isEmpty( sessionCookie.getValue() ) ) {
+            throw new AuthenticationServiceException( "Invalid Token" );
+        }
+
+        return sessionCookie.getValue();
+    }
+
 }
