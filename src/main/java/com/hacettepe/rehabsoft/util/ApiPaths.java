@@ -35,4 +35,8 @@ public class ApiPaths {
     public static final class SavingOtherOrthesisImagePath {
         public static final String CTRL = "./src/main/resources/static/generalevaluationform/otherorthesisimage/";
     }
+
+    public static final class SavingExerciseMediaPath {
+        public static final String CTRL = "./src/main/resources/static/exercise/";
+    }
 }

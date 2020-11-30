@@ -785,6 +785,7 @@ CREATE TABLE public.exercise_video
     last_modified_date timestamp without time zone,
     "version" bigint,
     video_url varchar(255),
+    title varchar(255),
     exercise_id bigint,
     PRIMARY KEY ("id"),
     FOREIGN KEY (exercise_id)
