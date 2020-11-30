@@ -22,14 +22,17 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 
 @Slf4j
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/token") //Token pathine gelen bütün isteklere izin verilecek.Bunun ayarı SecurityConfig'de
 @Api(value = "/api/token")
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class AccountController {
 
     @Autowired
@@ -57,15 +60,24 @@ public class AccountController {
 
     @RequestMapping(method = RequestMethod.POST) //LoginRequest'i DTO kısmında olusturduk.Front-end'den gelen login objesi gibi düsün
     @ApiOperation(value = "Login Operation", response = TokenResponse.class)
-    public ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginRequest loginRequest) throws AuthenticationException {
+    @ResponseBody
+    public ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response, HttpServletRequest request) throws AuthenticationException {
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getUsername().toLowerCase(),
                         loginRequest.getPassword()
                 )
         );
+        System.out.println("asdasdas");
         SecurityContextHolder.getContext().setAuthentication(authentication);
         final String token = jwtTokenUtil.generateToken(authentication);
+
+        // Add a session cookie
+        Cookie sessionCookie = new Cookie( "someSessionId", token );
+        // httpsler icin bu degisecek deploy sonrasi
+        sessionCookie.setSecure(request.isSecure());
+        response.addCookie( sessionCookie );
+
 
         User userFromDB = userRepository.findByUsername(loginRequest.getUsername().toLowerCase());
 

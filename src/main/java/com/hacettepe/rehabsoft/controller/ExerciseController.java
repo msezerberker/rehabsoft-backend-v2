@@ -1,5 +1,6 @@
 package com.hacettepe.rehabsoft.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.hacettepe.rehabsoft.dto.ExerciseDto;
 import com.hacettepe.rehabsoft.helper.ResponseMessage;
 import com.hacettepe.rehabsoft.service.ExerciseService;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -28,9 +30,11 @@ public class ExerciseController {
     ExerciseService exerciseService;
 
     @RequestMapping(value = "/create",method = RequestMethod.POST)
-    public ResponseEntity<ResponseMessage> createExercise(@Valid @RequestBody ExerciseDto exerciseDto){
+    public ResponseEntity<ResponseMessage> createExercise(
+            @RequestParam(value = "exerciseMedia", required = false) MultipartFile[] exerciseMedia,
+            @Valid @RequestParam("model")  ExerciseDto exerciseDto) throws JsonProcessingException {
         log.warn("exercise creation controllerına girdi");
-        String message = exerciseService.save(exerciseDto);
+        String message = exerciseService.save(exerciseDto, exerciseMedia);
         responseMessage.setResponseMessage(message);
         return ResponseEntity.ok(responseMessage);
     }
@@ -46,6 +50,13 @@ public class ExerciseController {
     public ResponseEntity<List<ExerciseDto>> listExercises(){
         log.warn("listExercises metoduna girdi");
         List<ExerciseDto> exerciseList = exerciseService.getAll();
+        return ResponseEntity.ok(exerciseList);
+    }
+
+    @RequestMapping(value = "/get/{id}",method = RequestMethod.GET)
+    public ResponseEntity<ExerciseDto> getExerciseById(@PathVariable(value = "id") Long id){
+        log.warn("getExerciseById() metoduna girdi");
+        ExerciseDto exerciseList = exerciseService.getById(id);
         return ResponseEntity.ok(exerciseList);
     }
 

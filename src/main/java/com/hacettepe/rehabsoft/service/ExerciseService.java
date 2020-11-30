@@ -1,6 +1,9 @@
 package com.hacettepe.rehabsoft.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.hacettepe.rehabsoft.dto.ExerciseDto;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 public interface ExerciseService {
@@ -9,7 +12,7 @@ public interface ExerciseService {
 
     ExerciseDto getById(Long id);
 
-    String save(ExerciseDto exerciseDto);
+    String save(ExerciseDto exerciseDto, MultipartFile[] exerciseMedia ) throws JsonProcessingException;
 
     Boolean delete(Long id);
 
