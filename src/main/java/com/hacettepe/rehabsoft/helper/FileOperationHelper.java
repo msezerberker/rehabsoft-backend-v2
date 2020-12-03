@@ -34,21 +34,17 @@ public class FileOperationHelper {
     }
 
     // This function is used to save any file by giving location url and its name added in url.
-    public static String saveFileByDirectory(MultipartFile image, String directory){
+    public static String saveFileByDirectory(MultipartFile image, String directory) throws Exception{
         if(image.getContentType() != null){
 
             log.warn("Dosya kaydetme kismina girdi. Content type: " + image.getContentType());
-            try {
-                byte[] bytes = image.getBytes();
-                Path path = Paths.get(directory );
-                Files.write(path, bytes);
 
-                return directory;
-            }
-            catch(Exception e)
-            {
-                return "error = "+e;
-            }
+            byte[] bytes = image.getBytes();
+            Path path = Paths.get(directory );
+            Files.write(path, bytes);
+
+            return directory;
+
         }
         else return null;
     }

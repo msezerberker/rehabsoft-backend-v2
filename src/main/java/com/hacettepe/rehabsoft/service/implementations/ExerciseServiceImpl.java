@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.nio.file.InvalidPathException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -60,7 +61,7 @@ public class ExerciseServiceImpl implements ExerciseService {
 
     @Override
     @Transactional
-    public String save(String exerciseJSON, MultipartFile[] exerciseMediaList) throws JsonProcessingException {
+    public String save(String exerciseJSON, MultipartFile[] exerciseMediaList) throws Exception {
 
 
         System.out.println("exerciseJSON: "+exerciseJSON);
@@ -81,7 +82,7 @@ public class ExerciseServiceImpl implements ExerciseService {
         return "Egzersiz başarıyla kaydedildi!";
     }
 
-    private void fillExerciseVideoCollection(Exercise exercise, MultipartFile[] exerciseMediaList){
+    private void fillExerciseVideoCollection(Exercise exercise, MultipartFile[] exerciseMediaList) throws Exception {
         if(exercise.getExerciseVideoCollection()!=null){
             List<ExerciseVideo> forIterationnewExerciseVideoCollection = new ArrayList<>(exercise.getExerciseVideoCollection());
             List<ExerciseVideo> newExerciseVideoCollection = new ArrayList<>();
@@ -98,7 +99,8 @@ public class ExerciseServiceImpl implements ExerciseService {
         }
     }
 
-    private void saveExerciseMediaAndSetExerciseMediaUrls(ExerciseVideo exerciseVideo, MultipartFile[] exerciseMediaList, Exercise exercise, List<ExerciseVideo> newOtherExerciseVideoCollection) {
+    private void saveExerciseMediaAndSetExerciseMediaUrls(ExerciseVideo exerciseVideo, MultipartFile[] exerciseMediaList, Exercise exercise, List<ExerciseVideo> newOtherExerciseVideoCollection)
+    throws Exception {
         if( exerciseMediaList == null){
             return ;
         }
