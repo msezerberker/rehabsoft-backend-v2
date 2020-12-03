@@ -9,7 +9,7 @@ public interface UserService {
 
     UserDto save(UserDto user);
 
-    UserDto getById(Long id);
+    UserDto getByUsername(String username);
 
     List<UserDto> getAll();
 

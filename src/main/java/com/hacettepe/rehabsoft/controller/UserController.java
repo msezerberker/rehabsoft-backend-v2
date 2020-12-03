@@ -30,10 +30,10 @@ public class UserController {
         this.responseMessage = responseMessage;
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<UserDto> getOne(@PathVariable(value = "id") Long id){
+    @RequestMapping(value = "/{username}", method = RequestMethod.GET)
+    public ResponseEntity<UserDto> getOne(@PathVariable String username){
         log.warn("GetOne(User icin) metodu basariyla calisti");
-        return ResponseEntity.ok(userService.getById(id));
+        return ResponseEntity.ok(userService.getByUsername(username));
     }
 
 
@@ -46,15 +46,11 @@ public class UserController {
     }
 
 
-    @RequestMapping(value = "/update",method = RequestMethod.POST)
+    @RequestMapping(value = "/update",method = RequestMethod.PUT)
     public ResponseEntity<ResponseMessage> updateUser(@Valid @RequestBody UserDto userDto){
         log.warn("update controllerına girdi");
         responseMessage.setResponseMessage(userService.updateUser(userDto));
         return ResponseEntity.ok(responseMessage);
     }
-
-
-
-
 
 }
