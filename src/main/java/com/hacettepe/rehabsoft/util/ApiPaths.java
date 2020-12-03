@@ -39,4 +39,8 @@ public class ApiPaths {
     public static final class SavingExerciseMediaPath {
         public static final String CTRL = "./src/main/resources/static/exercise/";
     }
+
+    public static final class Profile {
+        public static final String CTRL = BASE_PATH + "/profile";
+    }
 }

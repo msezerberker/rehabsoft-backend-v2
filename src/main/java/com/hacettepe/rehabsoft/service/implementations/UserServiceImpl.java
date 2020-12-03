@@ -53,8 +53,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
 
     @Override
-    public UserDto getById(Long id) {
-        User tempUser = userRepository.getOne(id);
+    public UserDto getByUsername(String username) {
+        User tempUser = userRepository.findByUsername(username);
         return modelMapper.map(tempUser, UserDto.class);
     }
 
