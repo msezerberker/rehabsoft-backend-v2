@@ -56,7 +56,7 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
         }
     }
 
-    private void fillOtherOrthesisInfo(Collection<OtherOrthesisInfo> exps,GeneralEvaluationForm tempForm, MultipartFile[] otherOrthesisImages){
+    private void fillOtherOrthesisInfo(Collection<OtherOrthesisInfo> exps,GeneralEvaluationForm tempForm, MultipartFile[] otherOrthesisImages) throws Exception {
         if(exps!=null){
             List<OtherOrthesisInfo> forIterationOtherOrthesisInfo = new ArrayList<>(tempForm.getOtherOrthesisInfoCollection());
             List<OtherOrthesisInfo> newOtherOrthesisInfo = new ArrayList<>();
@@ -73,7 +73,7 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
     }
 
 
-    public void setOtherOrthesisImagesEpicrisisImageFromImageList(OtherOrthesisInfo otherOrthesisInfo, MultipartFile[] otherOrthesisImages, GeneralEvaluationForm tempForm, List<OtherOrthesisInfo> newOtherOrthesisInfo) {
+    public void setOtherOrthesisImagesEpicrisisImageFromImageList(OtherOrthesisInfo otherOrthesisInfo, MultipartFile[] otherOrthesisImages, GeneralEvaluationForm tempForm, List<OtherOrthesisInfo> newOtherOrthesisInfo) throws Exception {
 
         if( otherOrthesisImages == null){
             return ;
@@ -115,7 +115,7 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
     }
 
 
-    private void setBidirectionalOneToOne(GeneralEvaluationForm tempForm, MultipartFile botoxImage){
+    private void setBidirectionalOneToOne(GeneralEvaluationForm tempForm, MultipartFile botoxImage) throws Exception {
 
         if(tempForm.getBotoxTreatment() !=null){
             if( botoxImage != null){
@@ -236,7 +236,7 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
     }
 
 
-    public void fillAppliedSurgery( Collection<AppliedSurgery> appliedSurgeryCollection, GeneralEvaluationForm tempForm, MultipartFile[] appliedSurgeryEpicrisisImages ) {
+    public void fillAppliedSurgery( Collection<AppliedSurgery> appliedSurgeryCollection, GeneralEvaluationForm tempForm, MultipartFile[] appliedSurgeryEpicrisisImages ) throws Exception {
 
         if(appliedSurgeryCollection!=null){
 
@@ -257,7 +257,7 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
     }
 
     // This function is used to save epicrisis image and set its url to corresponding surgery
-    private void setAppliedSurgeryEpicrisisImageFromImageList(AppliedSurgery appliedSurgery, MultipartFile[] epicrisisImageList, GeneralEvaluationForm tempForm, List<AppliedSurgery> newAppliedSurgeryCollection){
+    private void setAppliedSurgeryEpicrisisImageFromImageList(AppliedSurgery appliedSurgery, MultipartFile[] epicrisisImageList, GeneralEvaluationForm tempForm, List<AppliedSurgery> newAppliedSurgeryCollection) throws Exception {
 
         if( epicrisisImageList == null){
             return ;

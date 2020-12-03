@@ -12,7 +12,7 @@ public interface ExerciseService {
 
     ExerciseDto getById(Long id);
 
-    String save(String exerciseJSON, MultipartFile[] exerciseMedia ) throws JsonProcessingException;
+    String save(String exerciseJSON, MultipartFile[] exerciseMedia ) throws Exception;
 
     Boolean delete(Long id);
 

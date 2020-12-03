@@ -32,7 +32,7 @@ public class ExerciseController {
     @RequestMapping(value = "/create",method = RequestMethod.POST)
     public ResponseEntity<ResponseMessage> createExercise(
             @RequestParam(value = "exerciseMediaList", required = false) MultipartFile[] exerciseMedia,
-            @Valid @RequestParam("model") String exerciseJSON) throws JsonProcessingException {
+            @Valid @RequestParam("model") String exerciseJSON) throws Exception {
         log.warn("exercise creation controllerına girdi");
         String message = exerciseService.save(exerciseJSON, exerciseMedia);
         responseMessage.setResponseMessage(message);
