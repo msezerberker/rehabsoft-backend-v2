@@ -15,6 +15,7 @@ import java.util.Set;
 @SequenceGenerator(name = "idgen", sequenceName = "users_seq", initialValue = 1, allocationSize = 1)
 public class User  extends BaseEntity{
 
+
     @Column(name = "username", unique = true)
     private String username;
 
