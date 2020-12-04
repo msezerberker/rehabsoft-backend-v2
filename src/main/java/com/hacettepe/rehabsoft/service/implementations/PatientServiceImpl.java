@@ -1,9 +1,12 @@
 package com.hacettepe.rehabsoft.service.implementations;
 
 
+import com.hacettepe.rehabsoft.dto.PatientDetailsDto;
 import com.hacettepe.rehabsoft.dto.PatientDto;
+import com.hacettepe.rehabsoft.dto.UserDto;
 import com.hacettepe.rehabsoft.entity.Parent;
 import com.hacettepe.rehabsoft.entity.Patient;
+import com.hacettepe.rehabsoft.entity.User;
 import com.hacettepe.rehabsoft.helper.SecurityHelper;
 import com.hacettepe.rehabsoft.repository.PatientRepository;
 import com.hacettepe.rehabsoft.repository.UserRepository;
@@ -13,6 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -77,6 +83,24 @@ public class PatientServiceImpl implements PatientService {
         patientRepository.save(patient);
 
         return patientDto;
+    }
+
+    public List<PatientDetailsDto> getAllPatientUsers(){
+
+
+        List<Patient> patientList = patientRepository.findAll();
+
+        /*gefd doldurulmamıssa sil
+        for(Patient patient:patientList){
+            if(patient.getGeneralEvaluationForm()==null){
+                patientList.remove(patient);
+            }
+        }
+
+         */
+        List<PatientDetailsDto> patientDetailsDtoList=  Arrays.asList(modelMapper.map(patientList, PatientDetailsDto[].class));
+
+        return patientDetailsDtoList;
     }
 
 
