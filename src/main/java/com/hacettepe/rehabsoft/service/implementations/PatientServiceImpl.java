@@ -14,6 +14,7 @@ import com.hacettepe.rehabsoft.service.ParentService;
 import com.hacettepe.rehabsoft.service.PatientService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -66,7 +67,10 @@ public class PatientServiceImpl implements PatientService {
     public PatientDto savePatient(PatientDto patientDto){
 
         log.warn("Patient servisine girdi:Save:");
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         Patient patient = modelMapper.map(patientDto, Patient.class);
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+
         //Log-in olmus user'ın ismi Spring Security'den alınarak atama yapılır
         patient.setUser(userRepository.findByUsername(securityHelper.getUsername()));
         patient.setGeneralEvaluationForm(null);

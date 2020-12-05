@@ -16,8 +16,7 @@ public interface ExerciseService {
 
     Boolean delete(Long id);
 
-    String updateExercise(ExerciseDto exerciseDto);
+    String updateExercise(String exerciseJSON, MultipartFile[] exerciseMedia) throws Exception;
 
     Boolean isExerciseNameExists(String name);
-
 }
