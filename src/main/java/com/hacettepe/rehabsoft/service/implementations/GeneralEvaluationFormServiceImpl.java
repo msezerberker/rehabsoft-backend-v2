@@ -38,6 +38,8 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
     private final BotoxTreatmentRepository botoxTreatmentRepository;
     private final ObjectMapper objectMapper;
     private final OtherOrthesisInfoRepository otherOrthesisInfoRepository;
+    private final PhysiotherapyPastRepository physiotherapyPastRepository;
+    private final PhysiotherapyCentralRepository physiotherapyCentralRepository;
 
 
     private void fillExpectationsAboutProgram(Collection<ExpectationsAboutProgram> exps, GeneralEvaluationForm tempForm){
@@ -217,7 +219,7 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
             // Because the DTO comes in Form Data object from Angular, the JSON stringfy to DTO mapping is required by using ObjectMapper from Jackson
             GeneralEvaluationFormDto tempFormDto =  objectMapper.readValue(gefd, GeneralEvaluationFormDto.class);
             GeneralEvaluationForm tempForm = modelMapper.map(tempFormDto, GeneralEvaluationForm.class);
-            log.warn("GeneralEval: Mapleme başarılı" );
+            log.warn("GeneralEval: Mapleme başarılı: "+tempForm.toString() );
 
 
             Patient patient = patientRepository.getPatientByUser(userRepository.findByUsername(securityHelper.getUsername()));
@@ -236,6 +238,7 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
             fillOrthesisInfoCollection(tempForm.getOrthesisInfoCollection(),tempForm);
             fillExpectationsAboutProgram(tempForm.getExpectationsAboutProgramCollection(),tempForm);
             fillUsedMedicine(tempForm.getUsedMedicineCollection(),tempForm);
+            fillPhysiotherapyPast(tempForm.getPhysiotherapyPast(),tempForm);
             log.warn("Gen. Ev. Form- Many-to-One Bitti. servisine girdi" );
 
             log.warn("Son kayit islemi : ");
@@ -249,6 +252,19 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
         }
     }
 
+    public void fillPhysiotherapyPast(PhysiotherapyPast physiotherapyPast, GeneralEvaluationForm form ){
+        if(physiotherapyPast == null ){
+            return;
+        }
+        if(physiotherapyPast.getPhysiotherapyCentralCollection() == null){
+            return;
+        }
+        if(physiotherapyPast.getPhysiotherapyCentralCollection().size() == 0){
+            return;
+        }
+        physiotherapyPast.getPhysiotherapyCentralCollection().forEach(physiotherapyCentralRepository::save);
+
+    }
 
     public void fillAppliedSurgery( Collection<AppliedSurgery> appliedSurgeryCollection, GeneralEvaluationForm tempForm, MultipartFile[] appliedSurgeryEpicrisisImages ) throws Exception {
 
