@@ -35,7 +35,6 @@ public class PatientController {
         }
 
 
-
         if(patientService.isIdentityNoExists(patientDto.getTcKimlikNo())){
             responseMessage.setResponseMessage("Bu kimlik numarası ile daha önce bir form olusturulmustur");
             return ResponseEntity.ok(responseMessage);

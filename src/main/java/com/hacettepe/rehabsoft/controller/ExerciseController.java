@@ -60,11 +60,12 @@ public class ExerciseController {
         return ResponseEntity.ok(exerciseList);
     }
 
-
     @RequestMapping(value = "/update",method = RequestMethod.POST)
-    public ResponseEntity<ResponseMessage> updateExercise(@Valid @RequestBody ExerciseDto exerciseDto){
+    public ResponseEntity<ResponseMessage> updateExercise(
+            @RequestParam(value = "exerciseMediaList", required = false) MultipartFile[] exerciseMedia,
+            @Valid @RequestParam("model") String exerciseJSON) throws Exception {
         log.warn("exercise update controllerına girdi");
-        String message = exerciseService.updateExercise(exerciseDto);
+        String message = exerciseService.updateExercise(exerciseJSON, exerciseMedia);
         responseMessage.setResponseMessage(message);
         return ResponseEntity.ok(responseMessage);
     }
