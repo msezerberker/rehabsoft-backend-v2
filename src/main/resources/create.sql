@@ -1,13 +1,13 @@
 DROP SCHEMA public CASCADE;
 CREATE SCHEMA public;
 
-CREATE SEQUENCE public.roles_seq
+CREATE SEQUENCE roles_seq
     INCREMENT 1
     START 1
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.roles_seq
+ALTER SEQUENCE roles_seq
     OWNER TO postgres;
 
 CREATE SEQUENCE public.users_seq
@@ -347,6 +347,9 @@ ALTER SEQUENCE public.physiotherapy_central_seq
 --- tables start----
 
 
+
+
+
 CREATE TABLE public."roles"
 (
     "id" bigint NOT NULL default nextval('roles_seq'),
@@ -479,8 +482,8 @@ CREATE TABLE public.patient
         ON DELETE CASCADE,
     FOREIGN KEY (doctor_id)
         REFERENCES public."doctor" ("id") MATCH SIMPLE
-            ON UPDATE CASCADE
-            ON DELETE CASCADE,
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
     FOREIGN KEY (ilce_id)
         REFERENCES public.ilce ("id") MATCH SIMPLE
         ON UPDATE CASCADE
@@ -634,7 +637,7 @@ CREATE TABLE public.applied_surgery
     surgery_name varchar(255),
     epicrisis_image_url varchar(255),
     applying_date timestamp without time zone,
-	general_evaluation_form_id bigint,
+    general_evaluation_form_id bigint,
     PRIMARY KEY ("id"),
     FOREIGN KEY (general_evaluation_form_id)
         REFERENCES public."general_evaluation_form" ("id") MATCH SIMPLE
@@ -975,3 +978,93 @@ CREATE TRIGGER add_doctor
 EXECUTE PROCEDURE add_doctor_procedure();
 
 
+
+
+
+---******************** version 0.2 ****************************---
+CREATE SEQUENCE public.physiotherapy_program_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    CACHE 1;
+ALTER SEQUENCE public.physiotherapy_program_seq
+    OWNER TO postgres;
+
+CREATE SEQUENCE public.added_exercise_in_program_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    CACHE 1;
+ALTER SEQUENCE public.added_exercise_in_program_seq
+    OWNER TO postgres;
+
+CREATE SEQUENCE public.scheduled_exercise_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    CACHE 1;
+ALTER SEQUENCE public.scheduled_exercise_seq
+    OWNER TO postgres;
+
+CREATE TABLE public.physiotherapy_program
+(
+    "id" bigint NOT NULL default nextval('physiotherapy_program_seq'),
+    creation_date timestamp without time zone,
+    last_modified_date timestamp without time zone,
+    "version" bigint,
+    is_active boolean,
+    start_date timestamp without time zone,
+    finish_date timestamp without time zone,
+    goal varchar(500),
+    doctor_id bigint,
+    patient_id bigint,
+    PRIMARY KEY ("id"),
+    FOREIGN KEY (doctor_id)
+        REFERENCES public."doctor" ("id") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    FOREIGN KEY (patient_id)
+        REFERENCES public."patient" ("id") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);
+
+
+CREATE TABLE public.added_exercise_in_program
+(
+    "id" bigint NOT NULL default nextval('added_exercise_in_program_seq'),
+    creation_date timestamp without time zone,
+    last_modified_date timestamp without time zone,
+    "version" bigint,
+    physiotherapy_program_id bigint,
+    exercise_id bigint,
+    PRIMARY KEY ("id"),
+    FOREIGN KEY (physiotherapy_program_id)
+        REFERENCES public."physiotherapy_program" ("id") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    FOREIGN KEY (exercise_id)
+        REFERENCES public."exercise" ("id") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);
+
+CREATE TABLE public.scheduled_exercise
+(
+    "id" bigint NOT NULL default nextval('scheduled_exercise_seq'),
+    creation_date timestamp without time zone,
+    last_modified_date timestamp without time zone,
+    "version" bigint,
+    added_exercise_in_program_id bigint,
+    scheduled_date  timestamp without time zone,
+    is_applied boolean,
+    PRIMARY KEY ("id"),
+    FOREIGN KEY (added_exercise_in_program_id)
+        REFERENCES public."added_exercise_in_program" ("id") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);
+---******************** version 0.2 ****************************---
