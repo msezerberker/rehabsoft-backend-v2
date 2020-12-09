@@ -123,15 +123,19 @@ public class GeneralEvaluationForm extends BaseEntity {
     @Column(name = "is_hypoglycaemia")
     private Boolean isHypoglycaemia;
 
+    @JsonManagedReference
     @OneToOne(cascade = javax.persistence.CascadeType.ALL,mappedBy = "generalEvaluationForm")
     private DiseaseOfMotherPregnancy diseaseOfMotherPregnancy;
 
+    @JsonManagedReference
     @OneToOne(cascade = javax.persistence.CascadeType.ALL,mappedBy = "generalEvaluationForm")
     private Hyperbilirubinemia hyperbilirubinemia;
 
+    @JsonManagedReference
     @OneToOne(cascade = javax.persistence.CascadeType.ALL,mappedBy = "generalEvaluationForm")
     private AfterBirthReasonCerebralPalsy afterBirthReasonCerebralPalsy;
 
+    @JsonManagedReference
     @OneToOne(cascade = javax.persistence.CascadeType.ALL,mappedBy = "generalEvaluationForm")
     private BotoxTreatment botoxTreatment;
 
@@ -159,9 +163,11 @@ public class GeneralEvaluationForm extends BaseEntity {
     private Collection<CoexistingDiseases> coexistingDiseasesCollection;
 
 
+    @JsonManagedReference
     @OneToOne(cascade = javax.persistence.CascadeType.ALL,mappedBy = "generalEvaluationForm")
     private VisualImpairment visualImpairment;
 
+    @JsonManagedReference
     @OneToOne(cascade = javax.persistence.CascadeType.ALL,mappedBy = "generalEvaluationForm")
     private HearingImpairment hearingImpairment;
 
@@ -170,13 +176,16 @@ public class GeneralEvaluationForm extends BaseEntity {
     private Collection<ExpectationsAboutProgram> expectationsAboutProgramCollection;
 
 
+    @JsonManagedReference
     @OneToOne
     @JoinColumn( name="patient_id")
     private Patient patient;
 
+    @JsonManagedReference
     @OneToOne(cascade = javax.persistence.CascadeType.ALL,mappedBy = "generalEvaluationForm")
     private Epilepsy epilepsy;
 
+    @JsonManagedReference
     @OneToOne(cascade = javax.persistence.CascadeType.ALL,mappedBy = "generalEvaluationForm")
     private PhysiotherapyPast physiotherapyPast;
 

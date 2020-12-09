@@ -1,5 +1,6 @@
 package com.hacettepe.rehabsoft.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -19,6 +20,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @SequenceGenerator(name = "idgen", sequenceName = "botox_treatment_seq", initialValue = 1, allocationSize = 1)
 public class BotoxTreatment extends BaseEntity{
+
+    @JsonBackReference
     @OneToOne
     @JoinColumn( name="general_evaluation_form_id")
     private GeneralEvaluationForm generalEvaluationForm;

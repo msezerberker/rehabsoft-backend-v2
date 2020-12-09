@@ -1,5 +1,6 @@
 package com.hacettepe.rehabsoft.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,6 +24,7 @@ public class Patient extends BaseEntity{
     @Column(name = "address")
     private String address;
 
+    @JsonBackReference
     @OneToOne(mappedBy = "patient", cascade = CascadeType.ALL)
     private GeneralEvaluationForm generalEvaluationForm;
 

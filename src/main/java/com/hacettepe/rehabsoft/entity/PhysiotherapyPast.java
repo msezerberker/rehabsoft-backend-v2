@@ -1,5 +1,6 @@
 package com.hacettepe.rehabsoft.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,6 +23,7 @@ public class PhysiotherapyPast extends BaseEntity {
     @OneToMany(mappedBy = "physiotherapyPast")
     private Collection<PhysiotherapyCentral> physiotherapyCentralCollection;
 
+    @JsonBackReference
     @OneToOne
     @JoinColumn(name = "general_evaluation_form_id")
     private GeneralEvaluationForm generalEvaluationForm;

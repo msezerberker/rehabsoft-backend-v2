@@ -41,8 +41,6 @@ public class PatientServiceImpl implements PatientService {
     private PatientRepository patientRepository;
 
 
-
-
     public Boolean isPatientAlreadySaved(){
         String username = securityHelper.getUsername();
         Patient patient = patientRepository.getPatientByUser(userRepository.findByUsername(username));
@@ -100,12 +98,23 @@ public class PatientServiceImpl implements PatientService {
                 patientList.remove(patient);
             }
         }
-
          */
+
         List<PatientDetailsDto> patientDetailsDtoList=  Arrays.asList(modelMapper.map(patientList, PatientDetailsDto[].class));
 
         return patientDetailsDtoList;
     }
 
 
+    @Override
+    public PatientDetailsDto findPatientByTcKimlikNo(String tcKimlikNo) {
+
+        User user = userRepository.findByUsername(tcKimlikNo); //hastanın username'i kimlik numarasıdır
+        UserDto userDto = modelMapper.map(user,UserDto.class);
+
+        PatientDetailsDto patientDetailsDto =new PatientDetailsDto(tcKimlikNo,userDto);
+
+        return patientDetailsDto;
+
+    }
 }

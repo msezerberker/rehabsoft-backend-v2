@@ -1,5 +1,6 @@
 package com.hacettepe.rehabsoft.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,6 +16,8 @@ import javax.persistence.*;
 @AllArgsConstructor
 @SequenceGenerator(name = "idgen", sequenceName = "after_birth_reason_cerebral_palsy_seq", initialValue = 1, allocationSize = 1)
 public class AfterBirthReasonCerebralPalsy extends BaseEntity{
+
+    @JsonBackReference
     @OneToOne
     @JoinColumn( name="general_evaluation_form_id")
     private GeneralEvaluationForm generalEvaluationForm;

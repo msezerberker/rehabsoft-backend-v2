@@ -19,5 +19,9 @@ public interface PatientService {
     Boolean isIdentityNoExists(String tcKimlikNo);
     List<PatientDetailsDto> getAllPatientUsers();
 
+    PatientDetailsDto findPatientByTcKimlikNo(String tcKimlikNo);
+
+
+
 
 }
