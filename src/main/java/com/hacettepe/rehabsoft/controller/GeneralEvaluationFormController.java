@@ -1,6 +1,9 @@
 package com.hacettepe.rehabsoft.controller;
 
+import com.hacettepe.rehabsoft.dto.GefDto;
 import com.hacettepe.rehabsoft.dto.GeneralEvaluationFormDto;
+import com.hacettepe.rehabsoft.dto.UserDto;
+import com.hacettepe.rehabsoft.entity.GeneralEvaluationForm;
 import com.hacettepe.rehabsoft.helper.ResponseMessage;
 import com.hacettepe.rehabsoft.service.GeneralEvaluationFormService;
 import com.hacettepe.rehabsoft.util.ApiPaths;
@@ -8,10 +11,12 @@ import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.util.List;
 
 
 @Slf4j
@@ -57,6 +62,17 @@ public class GeneralEvaluationFormController {
         responseMessage.setResponseMessage("Formunuz başarı ile kaydedildi!");
         return  ResponseEntity.ok(responseMessage);
 
-    } 
+    }
+
+
+    @RequestMapping(value = "/get-form/{tcKimlikNo}",method = RequestMethod.GET)
+    public ResponseEntity<GefDto> getGefd(@PathVariable String tcKimlikNo){
+        log.warn("get-form(evaluation icin) metodu basariyla calisti");
+
+        return ResponseEntity.ok(generalEvaluationFormService.getGefd(tcKimlikNo));
+    }
+
+
+
 
 }

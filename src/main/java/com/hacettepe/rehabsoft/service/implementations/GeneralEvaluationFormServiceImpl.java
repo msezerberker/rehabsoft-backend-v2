@@ -1,6 +1,7 @@
 package com.hacettepe.rehabsoft.service.implementations;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hacettepe.rehabsoft.dto.GefDto;
 import com.hacettepe.rehabsoft.dto.GeneralEvaluationFormDto;
 import com.hacettepe.rehabsoft.entity.*;
 import com.hacettepe.rehabsoft.helper.FileOperationHelper;
@@ -347,4 +348,11 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
     }
 
 
+    @Override
+    public GefDto getGefd(String tcKimlikNo) {
+        GeneralEvaluationForm generalEvaluationForm= generalEvaluationFormRepository.getByPatient(patientRepository.getPatientByTcKimlikNo(tcKimlikNo));
+         GefDto gefDto = modelMapper.map(generalEvaluationForm,GefDto.class);
+
+         return gefDto;
+    }
 }

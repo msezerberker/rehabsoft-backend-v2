@@ -17,8 +17,9 @@ import javax.persistence.*;
 @SequenceGenerator(name = "idgen", sequenceName = "disease_of_mother_pregnancy_seq", initialValue = 1, allocationSize = 1)
 public class DiseaseOfMotherPregnancy extends BaseEntity{
 
+    @JsonBackReference
     @OneToOne(
-            fetch = FetchType.LAZY
+            fetch = FetchType.EAGER
     )
     @JoinColumn( name="general_evaluation_form_id")
     private GeneralEvaluationForm generalEvaluationForm;

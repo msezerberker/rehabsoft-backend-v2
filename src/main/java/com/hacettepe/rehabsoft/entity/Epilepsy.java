@@ -1,5 +1,6 @@
 package com.hacettepe.rehabsoft.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,6 +19,7 @@ public class Epilepsy extends BaseEntity{
     @Column(name = "epilepsy_situation")
     private String epilepsySituation;
 
+    @JsonBackReference
     @OneToOne(
             fetch = FetchType.LAZY
     )

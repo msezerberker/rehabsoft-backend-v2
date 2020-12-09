@@ -53,12 +53,19 @@ public class PatientController {
 
     @RequestMapping(value = "/all",method = RequestMethod.GET)
     public ResponseEntity<List<PatientDetailsDto>> listAllPatientUsers(){
-
         log.warn("listAllPatient metodu basariyla calisti");
         List<PatientDetailsDto> patientList = patientService.getAllPatientUsers();
 
         return ResponseEntity.ok(patientList);
+    }
 
+
+
+    @RequestMapping(value = "/{tcKimlikNo}",method = RequestMethod.GET)
+    public ResponseEntity<PatientDetailsDto> getPatient(@PathVariable String tcKimlikNo){
+        log.warn("getPatient metodu basariyla calisti");
+        PatientDetailsDto patientDetailsDto= patientService.findPatientByTcKimlikNo(tcKimlikNo);
+        return ResponseEntity.ok(patientDetailsDto);
     }
 
 }
