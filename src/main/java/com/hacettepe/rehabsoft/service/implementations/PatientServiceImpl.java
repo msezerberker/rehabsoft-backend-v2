@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.ListIterator;
 
 @Service
 @Slf4j
@@ -99,6 +100,17 @@ public class PatientServiceImpl implements PatientService {
             }
         }
          */
+        ListIterator<Patient> iter = patientList.listIterator();
+        while(iter.hasNext()){
+            if(iter.next().getGeneralEvaluationForm()==null){
+                iter.remove();
+            }
+        }
+
+
+        if(patientList==null){
+            log.warn("Patient listesi bosaldi");
+            return null;}
 
         List<PatientDetailsDto> patientDetailsDtoList=  Arrays.asList(modelMapper.map(patientList, PatientDetailsDto[].class));
 
@@ -110,6 +122,10 @@ public class PatientServiceImpl implements PatientService {
     public PatientDetailsDto findPatientByTcKimlikNo(String tcKimlikNo) {
 
         User user = userRepository.findByUsername(tcKimlikNo); //hastanın username'i kimlik numarasıdır
+        if (user==null){
+            return null;
+        }
+
         UserDto userDto = modelMapper.map(user,UserDto.class);
 
         PatientDetailsDto patientDetailsDto =new PatientDetailsDto(tcKimlikNo,userDto);
