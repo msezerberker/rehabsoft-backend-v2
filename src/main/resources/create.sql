@@ -1067,4 +1067,58 @@ CREATE TABLE public.scheduled_exercise
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
+
+CREATE SEQUENCE public.video_request_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    CACHE 1;
+ALTER SEQUENCE public.scheduled_exercise_seq
+    OWNER TO postgres;
+
+CREATE SEQUENCE public.response_video_request_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    CACHE 1;
+ALTER SEQUENCE public.response_video_request_seq
+    OWNER TO postgres;
+
+CREATE TABLE public.video_request
+(
+    "id" bigint NOT NULL default nextval('video_request_seq'),
+    creation_date timestamp without time zone,
+    last_modified_date timestamp without time zone,
+    "version" bigint,
+    request_content varchar(255),
+    request_title varchar(100),
+    doctor_id bigint,
+    patient_id bigint,
+    PRIMARY KEY ("id"),
+    FOREIGN KEY (doctor_id)
+        REFERENCES public."doctor" ("id") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    FOREIGN KEY (patient_id)
+        REFERENCES public."patient" ("id") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);
+
+CREATE TABLE public.response_video_request
+(
+    "id" bigint NOT NULL default nextval('response_video_request_seq'),
+    creation_date timestamp without time zone,
+    last_modified_date timestamp without time zone,
+    "version" bigint,
+    video_url varchar(255),
+    video_request_id bigint,
+    PRIMARY KEY ("id"),
+    FOREIGN KEY (video_request_id)
+        REFERENCES public."video_request" ("id") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);
 ---******************** version 0.2 ****************************---
