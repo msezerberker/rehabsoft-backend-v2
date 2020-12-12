@@ -1077,15 +1077,6 @@ CREATE SEQUENCE public.video_request_seq
 ALTER SEQUENCE public.scheduled_exercise_seq
     OWNER TO postgres;
 
-CREATE SEQUENCE public.response_video_request_seq
-    INCREMENT 1
-    START 1
-    MINVALUE 1
-    MAXVALUE 9223372036854775807
-    CACHE 1;
-ALTER SEQUENCE public.response_video_request_seq
-    OWNER TO postgres;
-
 CREATE TABLE public.video_request
 (
     "id" bigint NOT NULL default nextval('video_request_seq'),
@@ -1106,6 +1097,29 @@ CREATE TABLE public.video_request
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
+CREATE TABLE public.exercise_video_request
+(
+    video_request_id bigint,
+    exercise_id bigint,
+    PRIMARY KEY (video_request_id,exercise_id ),
+    FOREIGN KEY (video_request_id)
+        REFERENCES public."video_request" ("id") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    FOREIGN KEY (exercise_id)
+        REFERENCES public."exercise" ("id") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);
+
+CREATE SEQUENCE public.response_video_request_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    CACHE 1;
+ALTER SEQUENCE public.response_video_request_seq
+    OWNER TO postgres;
 
 CREATE TABLE public.response_video_request
 (
@@ -1113,7 +1127,6 @@ CREATE TABLE public.response_video_request
     creation_date timestamp without time zone,
     last_modified_date timestamp without time zone,
     "version" bigint,
-    video_url varchar(255),
     response_content varchar(255),
     video_request_id bigint,
     PRIMARY KEY ("id"),
@@ -1122,4 +1135,29 @@ CREATE TABLE public.response_video_request
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
+
+CREATE SEQUENCE public.requested_video_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    CACHE 1;
+ALTER SEQUENCE public.requested_video_seq
+    OWNER TO postgres;
+
+CREATE TABLE public.requested_video
+(
+    "id" bigint NOT NULL default nextval('requested_video_seq'),
+    creation_date timestamp without time zone,
+    last_modified_date timestamp without time zone,
+    "version" bigint,
+    video_url varchar(255),
+    response_video_request_id bigint,
+    PRIMARY KEY ("id"),
+    FOREIGN KEY (response_video_request_id)
+        REFERENCES public."response_video_request" ("id") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);
+
 ---******************** version 0.2 ****************************---
