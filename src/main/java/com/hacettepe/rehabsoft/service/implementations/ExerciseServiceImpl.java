@@ -99,12 +99,14 @@ public class ExerciseServiceImpl implements ExerciseService {
     @Transactional
     public Boolean delete(Long id) {
         try{
-            if(exerciseRepository.findById(id).isPresent())
+            if(exerciseRepository.findById(id).isPresent()){
+                exerciseRepository.deleteById(id);
                 deleteExerciseMediaFiles(exerciseRepository.findById(id).get());
-            else
+            }
+            else{
                 throw new Exception();
+            }
 
-            exerciseRepository.deleteById(id);
             log.warn("Egzersiz silindi=>"+ id);
             return Boolean.TRUE;
         }
@@ -137,11 +139,11 @@ public class ExerciseServiceImpl implements ExerciseService {
                 }
             }
 
-            updateExerciseMediaCollection(exerciseFiles, dbExercise, exerciseDto);
             dbExercise.setExerciseName(exerciseDto.getExerciseName());
             dbExercise.setExerciseContent(exerciseDto.getExerciseContent());
-
             exerciseRepository.save(dbExercise);
+
+            updateExerciseMediaCollection(exerciseFiles, dbExercise, exerciseDto);
             return "Egzersiz ile ilgili değişiklikler başarıyla kaydedildi!";
 
         } catch (Exception e){
@@ -157,8 +159,8 @@ public class ExerciseServiceImpl implements ExerciseService {
 
     private Exercise updateExerciseMediaCollection( MultipartFile[] exerciseFiles, Exercise exerciseFromDatabase, ExerciseDto exerciseDto) throws Exception {
 
-        deleteExerciseMediaFiles(exerciseFromDatabase);
         exerciseVideoRepository.deleteAll(exerciseFromDatabase.getExerciseVideoCollection());
+        deleteExerciseMediaFiles(exerciseFromDatabase);
 
         if(!exerciseDto.getExerciseVideoCollection().isEmpty()){
             exerciseFromDatabase.setExerciseVideoCollection(
