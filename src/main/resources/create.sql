@@ -1114,6 +1114,7 @@ CREATE TABLE public.response_video_request
     last_modified_date timestamp without time zone,
     "version" bigint,
     video_url varchar(255),
+    response_content varchar(255),
     video_request_id bigint,
     PRIMARY KEY ("id"),
     FOREIGN KEY (video_request_id)

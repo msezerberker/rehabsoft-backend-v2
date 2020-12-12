@@ -51,7 +51,11 @@ public class FileOperationHelper {
         else return null;
     }
 
+    // This method is delete folder with its data contains by using PATH.
     public static void deleteDirectoryByPath(String folderPath) throws IOException {
+
+        log.warn("Klasor silme kismina girdi");
+
         if(Files.exists(Paths.get(folderPath))){
             File mediaFolder = new File(folderPath);
             FileUtils.deleteDirectory(mediaFolder);
