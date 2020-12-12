@@ -43,4 +43,8 @@ public class ApiPaths {
     public static final class Profile {
         public static final String CTRL = BASE_PATH + "/profile";
     }
+
+    public static final class NotificationPath {
+        public static final String CTRL = BASE_PATH + "/notification";
+    }
 }

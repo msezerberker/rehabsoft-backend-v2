@@ -43,4 +43,6 @@ public class Patient extends BaseEntity{
             inverseJoinColumns = @JoinColumn(name = "parent_id"))
     private Collection<Parent> parentCollection;
 
+    @OneToMany(mappedBy = "patient")
+    Collection<VideoRequest> videoRequestCollection;
 }

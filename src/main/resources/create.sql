@@ -1074,7 +1074,7 @@ CREATE SEQUENCE public.video_request_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.scheduled_exercise_seq
+ALTER SEQUENCE public.video_request_seq
     OWNER TO postgres;
 
 CREATE TABLE public.video_request
