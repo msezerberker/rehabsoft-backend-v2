@@ -1160,4 +1160,30 @@ CREATE TABLE public.requested_video
         ON DELETE CASCADE
 );
 
+CREATE SEQUENCE public.notification_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    CACHE 1;
+ALTER SEQUENCE public.notification_seq
+    OWNER TO postgres;
+
+CREATE TABLE public.notification
+(
+    "id" bigint NOT NULL default nextval('notification_seq'),
+    creation_date timestamp without time zone,
+    last_modified_date timestamp without time zone,
+    "version" bigint,
+    notification_content varchar(255),
+    notification_url varchar(255),
+    notification_title varchar(100),
+    users_id bigint,
+    PRIMARY KEY ("id"),
+    FOREIGN KEY (users_id)
+        REFERENCES public."users" ("id") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);
+
 ---******************** version 0.2 ****************************---

@@ -3,8 +3,7 @@ package com.hacettepe.rehabsoft.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Set;
-
+import java.util.Collection;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -13,7 +12,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @SequenceGenerator(name = "idgen", sequenceName = "users_seq", initialValue = 1, allocationSize = 1)
-public class User  extends BaseEntity{
+public class User extends BaseEntity{
 
 
     @Column(name = "username", unique = true)
@@ -34,5 +33,8 @@ public class User  extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
+
+    @OneToMany(mappedBy = "user")
+    private Collection<Notification> notificationCollection;
 
 }
