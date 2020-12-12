@@ -32,4 +32,7 @@ public class Exercise extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToMany(mappedBy = "exerciseCollection")
+    private Collection<VideoRequest> videoRequestCollection;
 }

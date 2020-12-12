@@ -23,4 +23,7 @@ public class Doctor extends BaseEntity{
     @OneToOne
     @JoinColumn(name = "user_id")
     User user;
+
+    @OneToMany(mappedBy = "doctor")
+    Collection<VideoRequest> videoRequestCollection;
 }

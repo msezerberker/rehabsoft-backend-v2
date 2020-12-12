@@ -54,17 +54,17 @@ public class DatabasePopulator {
                 Doctor doctorSaved = doctorRepository.save(doctor);
 
                 if(exerciseRepository.findAll().isEmpty()){
-                    final Exercise exercise1 = exerciseRepository.save(new Exercise("Deneme exercise", "Deneme contentcontentcontent content", new ArrayList<>(), new ArrayList<>(), userFetched ));
-                    final Exercise exercise2 = exerciseRepository.save(new Exercise("Deneme exercise2", "Deneme contentcontentcontent content", new ArrayList<>(), new ArrayList<>(), userFetched ));
-                    final Exercise exercise3 = exerciseRepository.save(new Exercise("Deneme exercise3", "Deneme contentcontentcontent content", new ArrayList<>(), new ArrayList<>(), userFetched ));
-                    final Exercise exercise4 = exerciseRepository.save(new Exercise("Deneme exercise4", "Deneme contentcontentcontent content", new ArrayList<>(), new ArrayList<>(), userFetched ));
-                    final Exercise exercise5 = exerciseRepository.save(new Exercise("Deneme exercise5", "Deneme contentcontentcontent content", new ArrayList<>(), new ArrayList<>(), userFetched ));
-                    final Exercise exercise6 = exerciseRepository.save(new Exercise("Deneme exercise6", "Deneme contentcontentcontent content", new ArrayList<>(), new ArrayList<>(), userFetched ));
-                    final Exercise exercise7 = exerciseRepository.save(new Exercise("Deneme exercise7", "Deneme contentcontentcontent content", new ArrayList<>(), new ArrayList<>(), userFetched ));
-                    final Exercise exercise8 = exerciseRepository.save(new Exercise("Deneme exercise8", "Deneme contentcontentcontent content", new ArrayList<>(), new ArrayList<>(), userFetched ));
-                    final Exercise exercise9 = exerciseRepository.save(new Exercise("Deneme exercise9", "Deneme contentcontentcontent content", new ArrayList<>(), new ArrayList<>(), userFetched ));
-                    final Exercise exercise10 = exerciseRepository.save(new Exercise("Deneme exercise10", "Deneme contentcontentcontent content", new ArrayList<>(), new ArrayList<>(), userFetched ));
-                    final Exercise exercise11 = exerciseRepository.save(new Exercise("Deneme exercise11", "Deneme contentcontentcontent content", new ArrayList<>(), new ArrayList<>(), userFetched ));
+                    final Exercise exercise1 = exerciseRepository.save(new Exercise("Deneme exercise", "Deneme contentcontentcontent content", new ArrayList<>(), new ArrayList<>(), userFetched, new ArrayList<>() ));
+                    final Exercise exercise2 = exerciseRepository.save(new Exercise("Deneme exercise2", "Deneme contentcontentcontent content", new ArrayList<>(), new ArrayList<>(), userFetched, new ArrayList<>() ));
+                    final Exercise exercise3 = exerciseRepository.save(new Exercise("Deneme exercise3", "Deneme contentcontentcontent content", new ArrayList<>(), new ArrayList<>(), userFetched, new ArrayList<>() ));
+                    final Exercise exercise4 = exerciseRepository.save(new Exercise("Deneme exercise4", "Deneme contentcontentcontent content", new ArrayList<>(), new ArrayList<>(), userFetched, new ArrayList<>() ));
+                    final Exercise exercise5 = exerciseRepository.save(new Exercise("Deneme exercise5", "Deneme contentcontentcontent content", new ArrayList<>(), new ArrayList<>(), userFetched, new ArrayList<>() ));
+                    final Exercise exercise6 = exerciseRepository.save(new Exercise("Deneme exercise6", "Deneme contentcontentcontent content", new ArrayList<>(), new ArrayList<>(), userFetched, new ArrayList<>() ));
+                    final Exercise exercise7 = exerciseRepository.save(new Exercise("Deneme exercise7", "Deneme contentcontentcontent content", new ArrayList<>(), new ArrayList<>(), userFetched, new ArrayList<>() ));
+                    final Exercise exercise8 = exerciseRepository.save(new Exercise("Deneme exercise8", "Deneme contentcontentcontent content", new ArrayList<>(), new ArrayList<>(), userFetched, new ArrayList<>() ));
+                    final Exercise exercise9 = exerciseRepository.save(new Exercise("Deneme exercise9", "Deneme contentcontentcontent content", new ArrayList<>(), new ArrayList<>(), userFetched, new ArrayList<>() ));
+                    final Exercise exercise10 = exerciseRepository.save(new Exercise("Deneme exercise10", "Deneme contentcontentcontent content", new ArrayList<>(), new ArrayList<>(), userFetched, new ArrayList<>() ));
+                    final Exercise exercise11 = exerciseRepository.save(new Exercise("Deneme exercise11", "Deneme contentcontentcontent content", new ArrayList<>(), new ArrayList<>(), userFetched, new ArrayList<>() ));
                 }
             }
         }
