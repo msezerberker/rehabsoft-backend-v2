@@ -1,9 +1,11 @@
 package com.hacettepe.rehabsoft.helper;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -49,4 +51,10 @@ public class FileOperationHelper {
         else return null;
     }
 
+    public static void deleteDirectoryByPath(String folderPath) throws IOException {
+        if(Files.exists(Paths.get(folderPath))){
+            File mediaFolder = new File(folderPath);
+            FileUtils.deleteDirectory(mediaFolder);
+        }
+    }
 }
