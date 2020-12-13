@@ -26,7 +26,7 @@ public class NotificationController {
 
     private final NotificationService notificationService;
 
-    @PreAuthorize("hasRole('ROLE_DOCTOR')" + "|| hasRole('ROLE_PATIENT')")
+    @PreAuthorize("hasRole('ROLE_USER')" + "|| hasRole('ROLE_DOCTOR')")
     @RequestMapping(value = "/all",method = RequestMethod.GET)
     public ResponseEntity<List<NotificationDto>> listNotifications(){
         log.warn("listNotifications metodu basariyla calisti");

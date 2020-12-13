@@ -8,6 +8,7 @@ import com.hacettepe.rehabsoft.helper.FileOperationHelper;
 import com.hacettepe.rehabsoft.helper.SecurityHelper;
 import com.hacettepe.rehabsoft.repository.*;
 import com.hacettepe.rehabsoft.service.GeneralEvaluationFormService;
+import com.hacettepe.rehabsoft.service.NotificationService;
 import com.hacettepe.rehabsoft.util.ApiPaths;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +42,7 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
     private final OtherOrthesisInfoRepository otherOrthesisInfoRepository;
     private final PhysiotherapyPastRepository physiotherapyPastRepository;
     private final PhysiotherapyCentralRepository physiotherapyCentralRepository;
+    private final NotificationService notificationService;
 
 
     private void fillExpectationsAboutProgram(Collection<ExpectationsAboutProgram> exps, GeneralEvaluationForm tempForm){
@@ -214,6 +216,8 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
 
         try{
 
+            User user = userRepository.findByUsername(securityHelper.getUsername());
+
             log.warn("GeneralEval. servisine girdi" );
             System.out.println("gefd-string: "+gefd);
 
@@ -223,7 +227,7 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
             log.warn("GeneralEval: Mapleme başarılı: "+tempForm.toString() );
 
 
-            Patient patient = patientRepository.getPatientByUser(userRepository.findByUsername(securityHelper.getUsername()));
+            Patient patient = patientRepository.getPatientByUser(user);
             log.warn("Pateitn Forma set ediliyor..: "+patient.getTcKimlikNo() );
             patient.setGeneralEvaluationForm(tempForm);
             tempForm.setPatient(patient);
@@ -244,6 +248,8 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
 
             log.warn("Son kayit islemi : ");
             generalEvaluationFormRepository.save(tempForm);
+            notificationService.deleteGeneralEvaluationFormNotification(user);
+            notificationService.createNotifiactionForNewPatientToDoctor(patient);
             return Boolean.TRUE;
 
 
