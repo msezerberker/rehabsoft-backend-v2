@@ -9,6 +9,7 @@ import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,6 +30,7 @@ public class ExerciseController {
     @Autowired
     ExerciseService exerciseService;
 
+    @PreAuthorize("hasRole('ROLE_DOCTOR')")
     @RequestMapping(value = "/create",method = RequestMethod.POST)
     public ResponseEntity<ResponseMessage> createExercise(
             @RequestParam(value = "exerciseMediaList", required = false) MultipartFile[] exerciseMedia,
@@ -46,6 +48,7 @@ public class ExerciseController {
         return ResponseEntity.ok(Boolean.TRUE);
     }
 
+    @PreAuthorize("hasRole('ROLE_DOCTOR')")
     @RequestMapping(value = "/all",method = RequestMethod.GET)
     public ResponseEntity<List<ExerciseDto>> listExercises(){
         log.warn("listExercises metoduna girdi");

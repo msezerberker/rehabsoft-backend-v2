@@ -5,6 +5,7 @@ import com.hacettepe.rehabsoft.dto.UserDto;
 import com.hacettepe.rehabsoft.entity.*;
 import com.hacettepe.rehabsoft.repository.RoleRepository;
 import com.hacettepe.rehabsoft.repository.UserRepository;
+import com.hacettepe.rehabsoft.service.NotificationService;
 import com.hacettepe.rehabsoft.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -32,6 +33,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private NotificationService notificationService;
 
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -106,6 +110,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         User tempUser = modelMapper.map(user, User.class);
         tempUser = userRepository.save(tempUser);
         user.setId(tempUser.getId());
+        System.out.println();
         return user;
     }
 
@@ -124,15 +129,14 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             final Role role = roleRepository.findByName("USER");
             System.out.println(role.getName());
             user.setRole(role);
-            userRepository.save(user);
+            User userFromDatabase = userRepository.save(user);
+            notificationService.createNotificationForGeneralEvaluationForm(userFromDatabase);
             return Boolean.TRUE;
-
 
         } catch (Exception e) {
             log.error("REGISTRATION Failed=>", e);
             return Boolean.FALSE;
         }
     }
-
 
 }
