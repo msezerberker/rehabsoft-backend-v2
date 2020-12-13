@@ -1,5 +1,8 @@
 package com.hacettepe.rehabsoft.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,6 +25,8 @@ public class VideoRequest extends BaseEntity {
 
     @Column(name = "request_title")
     private String requestTitle;
+
+
 
     @ManyToOne
     @JoinColumn(name = "doctor_id")

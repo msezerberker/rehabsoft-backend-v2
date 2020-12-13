@@ -15,7 +15,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @SequenceGenerator(name = "idgen", sequenceName = "visual_impairment_seq", initialValue = 1, allocationSize = 1)
-
 public class VisualImpairment extends BaseEntity{
 
     @JsonBackReference

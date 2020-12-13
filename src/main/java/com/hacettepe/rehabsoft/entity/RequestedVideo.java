@@ -1,5 +1,6 @@
 package com.hacettepe.rehabsoft.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,6 +20,7 @@ public class RequestedVideo extends BaseEntity{
     @Column(name = "video_url")
     private String videoUrl;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "response_video_request_id")
     private ResponseVideoRequest responseVideoRequest;

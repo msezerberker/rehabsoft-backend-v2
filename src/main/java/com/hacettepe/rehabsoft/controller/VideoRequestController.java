@@ -1,20 +1,54 @@
 package com.hacettepe.rehabsoft.controller;
 
+import com.hacettepe.rehabsoft.dto.PatientDetailsDto;
+import com.hacettepe.rehabsoft.dto.PatientDto;
+import com.hacettepe.rehabsoft.dto.VideoRequestDto;
+import com.hacettepe.rehabsoft.entity.VideoRequest;
+import com.hacettepe.rehabsoft.helper.ResponseMessage;
 import com.hacettepe.rehabsoft.service.VideoRequestService;
 import com.hacettepe.rehabsoft.util.ApiPaths;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
-@RequestMapping(ApiPaths.NotificationPath.CTRL)
+@RequestMapping(ApiPaths.VideoRequestPath.CTRL)
 @RestController
-@Api(value = "/api/users/notification")
+@Api(value = "/api/video-request")
 @RequiredArgsConstructor
 public class VideoRequestController {
     private final VideoRequestService videoRequestService;
+    private final ResponseMessage responseMessage;
+
+    @RequestMapping(value="/create/{patientTcNo}", method = RequestMethod.POST)
+    public ResponseEntity<ResponseMessage> saveVideoRequest(@RequestBody VideoRequestDto videoRequestDto,@PathVariable String patientTcNo){
+        log.warn("saveVideoRequest controller'ı çalışıyor");
+
+        boolean sonuc = videoRequestService.save(videoRequestDto,patientTcNo);
+
+        if(sonuc){
+            responseMessage.setResponseMessage("islem basarili");
+        }
+        else{
+            responseMessage.setResponseMessage("Kayıt sırasında bir hata meydana geldi");
+        }
+
+        return ResponseEntity.ok(responseMessage);
+
+    }
+
+    @RequestMapping(value = "/history/{patientTcNo}",method = RequestMethod.GET)
+    public ResponseEntity<List<VideoRequestDto>> getVideoRequestHistory(@PathVariable String patientTcNo){
+
+        List<VideoRequestDto> videoRequestDtoList = videoRequestService.getVideoRequestHistory(patientTcNo);
+
+        return ResponseEntity.ok(videoRequestDtoList);
+    }
+
+
 }

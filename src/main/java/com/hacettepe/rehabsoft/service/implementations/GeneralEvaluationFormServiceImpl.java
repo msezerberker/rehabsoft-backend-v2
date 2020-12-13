@@ -351,7 +351,12 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
     @Override
     public GefDto getGefd(String tcKimlikNo) {
         GeneralEvaluationForm generalEvaluationForm= generalEvaluationFormRepository.getByPatient(patientRepository.getPatientByTcKimlikNo(tcKimlikNo));
-         GefDto gefDto = modelMapper.map(generalEvaluationForm,GefDto.class);
+
+        if(generalEvaluationForm==null){
+            return null;
+        }
+
+        GefDto gefDto = modelMapper.map(generalEvaluationForm,GefDto.class);
 
          return gefDto;
     }

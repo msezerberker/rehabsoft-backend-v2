@@ -31,6 +31,9 @@ public class PatientController {
     public ResponseEntity<ResponseMessage> savePatient(@RequestBody PatientDto patientDto){
         log.warn("Patient Controllerına girdi");
 
+
+        //logic kısmına servise yaz tek bir değer dönsün
+
         if(patientService.isPatientAlreadySaved()){
             responseMessage.setResponseMessage("Zaten bir kaydınız bulunmakta.");
             return ResponseEntity.badRequest().body(responseMessage);
