@@ -47,4 +47,13 @@ public class ApiPaths {
     public static final class NotificationPath {
         public static final String CTRL = BASE_PATH + "/notification";
     }
+
+    public static final class VideoRequestPath {
+        public static final String CTRL = BASE_PATH + "/video-request";
+    }
+
+    public static final class DoctorPath {
+        public static final String CTRL = BASE_PATH + "/doctor";
+    }
+
 }

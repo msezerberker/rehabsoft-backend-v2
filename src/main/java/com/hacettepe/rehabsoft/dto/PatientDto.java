@@ -24,7 +24,7 @@ public class PatientDto {
     @NotBlank(message = "Lütfen adınızı giriniz")
     private String address;
 
-    // private User user; // Biz serviste login yapmıs user'ın user objesine set edecegiz
+    // private UserDto user; // Biz serviste login yapmıs user'ın user objesine set edecegiz
 
     @NotNull(message = "Lütfen ailenizle ilgili gerekli bilgileri doldurunuz")
     private Collection<ParentDto> parentCollection;

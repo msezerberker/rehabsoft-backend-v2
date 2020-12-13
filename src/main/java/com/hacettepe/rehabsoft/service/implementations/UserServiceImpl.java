@@ -127,7 +127,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             user.setPassword(bCryptPasswordEncoder.encode(registrationRequest.getPassword()));
             user.setUsername(registrationRequest.getUsername().toLowerCase());
             final Role role = roleRepository.findByName("USER");
-            System.out.println(role.getName());
+            //System.out.println(role.getName());
             user.setRole(role);
             User userFromDatabase = userRepository.save(user);
             notificationService.createNotificationForGeneralEvaluationForm(userFromDatabase);
