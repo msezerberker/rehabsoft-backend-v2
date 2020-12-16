@@ -12,6 +12,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Data
@@ -40,5 +42,8 @@ public class VideoRequestDto {
     //one to one
     @JsonIgnore
     private ResponseVideoRequest responseVideoRequest;
+
+    @NotNull
+    private LocalDateTime creationDate;
 
 }

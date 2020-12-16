@@ -3,6 +3,7 @@ package com.hacettepe.rehabsoft.service.implementations;
 import com.hacettepe.rehabsoft.dto.PatientDetailsDto;
 import com.hacettepe.rehabsoft.dto.VideoRequestDto;
 import com.hacettepe.rehabsoft.entity.Patient;
+import com.hacettepe.rehabsoft.entity.User;
 import com.hacettepe.rehabsoft.entity.VideoRequest;
 import com.hacettepe.rehabsoft.helper.SecurityHelper;
 import com.hacettepe.rehabsoft.repository.DoctorRepository;
@@ -57,5 +58,16 @@ public class VideoRequestServiceImp implements VideoRequestService {
             return null;}
 
         return videoRequestDtoList;
+    }
+
+    @Override
+    public List<VideoRequestDto> getActiveVideoRequest(String username){
+        List<VideoRequest> videoRequestList = videoRequestRepository.findAllByPatientAndResponseVideoRequestIsNull(patientRepository.getPatientByUser(userRepository.findByUsername(username)));
+        List<VideoRequestDto> videoRequestDtoList = Arrays.asList((modelMapper.map(videoRequestList, VideoRequestDto[].class)));
+
+        if(videoRequestDtoList==null){
+            log.warn("Bekleyen video isteğiniz bulunmuyor.");
+            return null;}
+        return  videoRequestDtoList;
     }
 }

@@ -11,4 +11,6 @@ public interface VideoRequestRepository extends JpaRepository<VideoRequest,Long>
 
     List<VideoRequest> findAllByPatient(Patient patient);
     //List<VideoRequest> getAllByPatient(Patient patient);
+
+    List<VideoRequest> findAllByPatientAndResponseVideoRequestIsNull(Patient patient);
 }
