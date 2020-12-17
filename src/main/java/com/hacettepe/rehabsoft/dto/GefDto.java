@@ -1,6 +1,7 @@
 package com.hacettepe.rehabsoft.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.hacettepe.rehabsoft.entity.*;
@@ -92,13 +93,24 @@ public class GefDto {
     private Boolean isHypoglycaemia;
 
     //One to one
+
     private DiseaseOfMotherPregnancy diseaseOfMotherPregnancy;
+
     private Hyperbilirubinemia hyperbilirubinemia; //okey
+
     private AfterBirthReasonCerebralPalsy afterBirthReasonCerebralPalsy;
+
+
     private BotoxTreatment botoxTreatment;
+
+
     private VisualImpairment visualImpairment;
+
     private HearingImpairment hearingImpairment;
+
     private Epilepsy epilepsy;
+
+   
     private PhysiotherapyPast physiotherapyPast;
 
 
@@ -113,14 +125,11 @@ public class GefDto {
     private Collection<AppliedSurgery> appliedSurgeryCollection;
 
 /*
-    //DiseaseOfMotherPregnancy
-    //private String diseaseName;
+     @JsonIgnore
     private DiseaseOfMotherPregnancy diseaseOfMotherPregnancy;
 
 
-    //Hyperbilirubinemia
-    //private Boolean isPhototeraphy;
-    //private Integer hospitalDayTime;
+    @JsonIgnore
     private Hyperbilirubinemia hyperbilirubinemia;
 
 
