@@ -81,7 +81,7 @@ public class NotificationServiceImp implements NotificationService {
         Notification notification = new Notification();
         notification.setUser(patient.getDoctor().getUser());
         notification.setNotificationContent("Sisteme yeni hasta kaydoldu. Hastanın detaylarını görmek için tıklayın");
-        notification.setNotificationUrl(NotificationPaths.BASE_PATH+"/doctor/patient-info/:"+patient.getTcKimlikNo()+"/general-info");
+        notification.setNotificationUrl(NotificationPaths.BASE_PATH+"/doctor/patient-info/:"+patient.getTcKimlikNo());
         notificationRepository.save(notification);
     }
 

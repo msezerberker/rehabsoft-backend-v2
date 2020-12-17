@@ -63,13 +63,17 @@ public class FileOperationHelper {
     public static String splitPathAndMergeStartFromStaticDirectory(String savedUrl) {
         List<String> urlArray = new ArrayList<>(Arrays.asList(savedUrl.split("/")));
         urlArray.remove(0);
-        urlArray.remove(1);
-        urlArray.remove(2);
-        urlArray.remove(3);
+        urlArray.remove(0);
+        urlArray.remove(0);
+        urlArray.remove(0);
         StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(urlArray.get(0));
+        urlArray.remove(0);
+
         for(String str:urlArray){
-            stringBuilder.append(str);
+            stringBuilder.append("/").append(str);
         }
+
         return stringBuilder.toString();
     }
 }

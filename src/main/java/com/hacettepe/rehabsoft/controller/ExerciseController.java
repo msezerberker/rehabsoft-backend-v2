@@ -77,8 +77,8 @@ public class ExerciseController {
     }
 
     @PreAuthorize("hasRole('ROLE_USER')" + "|| hasRole('ROLE_DOCTOR')")
-    @RequestMapping(value = "/getimage/{id}",method = RequestMethod.POST, produces = MediaType.ALL_VALUE)
-    public ResponseEntity<byte[]> getExerciseImageById(@RequestParam Long id) throws IOException {
+    @RequestMapping(value = "/getimage/{id}",method = RequestMethod.GET, produces = MediaType.ALL_VALUE)
+    public ResponseEntity<byte[]> getExerciseImageById(@PathVariable Long id) throws IOException {
         log.warn("getExerciseImage() metoduna girdi "+id);
         byte[] exerciseImage = exerciseService.getExerciseImageById(id);
         if(exerciseImage==null){
