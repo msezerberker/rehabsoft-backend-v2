@@ -108,7 +108,7 @@ public class AccountController {
         if(!response){
             responseMessage.setResponseMessage("Kayıt sırasında bir hata meydana geldi.Lütfen tekrar deneyiniz");
                 return ResponseEntity.badRequest().body(responseMessage);
-            }
+        }
 
         responseMessage.setResponseMessage("Basariyla kaydoldunuz!");
         return ResponseEntity.ok(responseMessage);
