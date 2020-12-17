@@ -12,6 +12,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Data
@@ -20,6 +22,8 @@ import java.util.Collection;
 @ApiModel(value = "Data Transfer Object for Video Request From Patient")
 public class VideoRequestDto {
 
+    @ApiModelProperty(required = true,value = "ID")
+    private Long id;
 
     private String requestContent;
 
@@ -40,5 +44,8 @@ public class VideoRequestDto {
     //one to one
     @JsonIgnore
     private ResponseVideoRequest responseVideoRequest;
+
+    @NotNull
+    private LocalDateTime creationDate;
 
 }

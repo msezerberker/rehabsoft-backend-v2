@@ -3,6 +3,7 @@ package com.hacettepe.rehabsoft.controller;
 import com.hacettepe.rehabsoft.dto.PatientDetailsDto;
 import com.hacettepe.rehabsoft.dto.PatientDto;
 import com.hacettepe.rehabsoft.dto.VideoRequestDto;
+import com.hacettepe.rehabsoft.entity.User;
 import com.hacettepe.rehabsoft.entity.VideoRequest;
 import com.hacettepe.rehabsoft.helper.ResponseMessage;
 import com.hacettepe.rehabsoft.service.VideoRequestService;
@@ -50,5 +51,12 @@ public class VideoRequestController {
         return ResponseEntity.ok(videoRequestDtoList);
     }
 
+    @RequestMapping(value = "/active-requests/{username}", method = RequestMethod.GET)
+    public  ResponseEntity<List<VideoRequestDto>> getActiveVideoRequest(@PathVariable String username){
+
+        List<VideoRequestDto> videoRequestDtoList = videoRequestService.getActiveVideoRequest(username);
+
+        return  ResponseEntity.ok(videoRequestDtoList);
+    }
 
 }
