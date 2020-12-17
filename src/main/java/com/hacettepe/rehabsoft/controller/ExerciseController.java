@@ -1,19 +1,22 @@
 package com.hacettepe.rehabsoft.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+
 import com.hacettepe.rehabsoft.dto.ExerciseDto;
+import com.hacettepe.rehabsoft.entity.ExerciseVideo;
 import com.hacettepe.rehabsoft.helper.ResponseMessage;
 import com.hacettepe.rehabsoft.service.ExerciseService;
 import com.hacettepe.rehabsoft.util.ApiPaths;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -23,12 +26,12 @@ import java.util.List;
 @Api(value = "/api/exercises")
 public class ExerciseController {
 
-
     @Autowired
     ResponseMessage responseMessage;
 
     @Autowired
     ExerciseService exerciseService;
+
 
     @PreAuthorize("hasRole('ROLE_DOCTOR')")
     @RequestMapping(value = "/create",method = RequestMethod.POST)
@@ -59,8 +62,8 @@ public class ExerciseController {
     @RequestMapping(value = "/get/{id}",method = RequestMethod.GET)
     public ResponseEntity<ExerciseDto> getExerciseById(@PathVariable(value = "id") Long id){
         log.warn("getExerciseById() metoduna girdi");
-        ExerciseDto exerciseList = exerciseService.getById(id);
-        return ResponseEntity.ok(exerciseList);
+        ExerciseDto exercise = exerciseService.getById(id);
+        return ResponseEntity.ok(exercise);
     }
 
     @RequestMapping(value = "/update",method = RequestMethod.POST)
@@ -71,6 +74,21 @@ public class ExerciseController {
         String message = exerciseService.updateExercise(exerciseJSON, exerciseMedia);
         responseMessage.setResponseMessage(message);
         return ResponseEntity.ok(responseMessage);
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER')" + "|| hasRole('ROLE_DOCTOR')")
+    @RequestMapping(value = "/getimage/{id}",method = RequestMethod.POST, produces = MediaType.ALL_VALUE)
+    public ResponseEntity<byte[]> getExerciseImageById(@RequestParam Long id) throws IOException {
+        log.warn("getExerciseImage() metoduna girdi "+id);
+        byte[] exerciseImage = exerciseService.getExerciseImageById(id);
+        if(exerciseImage==null){
+            log.error("Egzersiz resmi bulunamadi ");
+            responseMessage.setResponseMessage("Hata oldu");
+            return ResponseEntity.badRequest().body(null);
+        }
+        else {
+            return ResponseEntity.ok(exerciseImage);
+        }
     }
 
 }

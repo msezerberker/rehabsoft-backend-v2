@@ -1,5 +1,8 @@
 package com.hacettepe.rehabsoft.service.implementations;
 
+import com.hacettepe.rehabsoft.entity.ExerciseVideo;
+import com.hacettepe.rehabsoft.repository.ExerciseVideoRepository;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -19,31 +22,39 @@ import java.util.Optional;
 import static com.hacettepe.rehabsoft.util.VideoStreamConstants.*;
 
 @Service
+@RequiredArgsConstructor
 public class VideoStreamService {
+
+    private final ExerciseVideoRepository exerciseVideoRepository;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * Prepare the content.
      *
-     * @param fileName String.
+     * @param id String.
      * @param fileType String.
      * @param range    String.
      * @return ResponseEntity.
      */
-    public ResponseEntity<byte[]> prepareContent(String fileName, String fileType, String range) {
+    public ResponseEntity<byte[]> prepareContent(Long id, String fileType, String range) {
         long rangeStart = 0;
         long rangeEnd;
         byte[] data;
         Long fileSize;
-        String fullFileName = fileName + "." + fileType;
+
+        Optional<ExerciseVideo> exerciseVideo = exerciseVideoRepository.findById(id);
+        if(exerciseVideo.isEmpty()){
+            return ResponseEntity.badRequest().body(null);
+        }
+        String filepath = exerciseVideo.get().getVideoUrl();
         try {
-            fileSize = getFileSize(fullFileName);
+            fileSize = getFileSize(filepath);
             if (range == null) {
                 return ResponseEntity.status(HttpStatus.OK)
                         .header(CONTENT_TYPE, VIDEO_CONTENT + fileType)
                         .header(CONTENT_LENGTH, String.valueOf(fileSize))
-                        .body(readByteRange(fullFileName, rangeStart, fileSize - 1)); // Read the object and convert it as bytes
+                        .body(readByteRange(filepath, rangeStart, fileSize - 1)); // Read the object and convert it as bytes
             }
             String[] ranges = range.split("-");
             rangeStart = Long.parseLong(ranges[0].substring(6));
@@ -55,7 +66,7 @@ public class VideoStreamService {
             if (fileSize < rangeEnd) {
                 rangeEnd = fileSize - 1;
             }
-            data = readByteRange(fullFileName, rangeStart, rangeEnd);
+            data = readByteRange(filepath, rangeStart, rangeEnd);
         } catch (IOException e) {
             logger.error("Exception while reading the file {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -74,14 +85,14 @@ public class VideoStreamService {
     /**
      * ready file byte by byte.
      *
-     * @param filename String.
+     * @param filepath String.
      * @param start    long.
      * @param end      long.
      * @return byte array.
      * @throws IOException exception.
      */
-    public byte[] readByteRange(String filename, long start, long end) throws IOException {
-        Path path = Paths.get(getFilePath(), filename);
+    public byte[] readByteRange(String filepath, long start, long end) throws IOException {
+        Path path = Paths.get(filepath);
         try (InputStream inputStream = (Files.newInputStream(path));
              ByteArrayOutputStream bufferedOutputStream = new ByteArrayOutputStream()) {
             byte[] data = new byte[BYTE_RANGE];
@@ -115,7 +126,7 @@ public class VideoStreamService {
      */
     public Long getFileSize(String fileName) {
         return Optional.ofNullable(fileName)
-                .map(file -> Paths.get(getFilePath(), file))
+                .map(file -> Paths.get(file))
                 .map(this::sizeFromFile)
                 .orElse(0L);
     }
