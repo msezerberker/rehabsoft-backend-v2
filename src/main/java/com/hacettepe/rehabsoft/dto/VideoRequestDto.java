@@ -22,6 +22,8 @@ import java.util.Collection;
 @ApiModel(value = "Data Transfer Object for Video Request From Patient")
 public class VideoRequestDto {
 
+    @ApiModelProperty(required = true,value = "ID")
+    private Long id;
 
     private String requestContent;
 
