@@ -1,9 +1,9 @@
 package com.hacettepe.rehabsoft.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.hacettepe.rehabsoft.dto.ExerciseDto;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface ExerciseService {
@@ -19,4 +19,6 @@ public interface ExerciseService {
     String updateExercise(String exerciseJSON, MultipartFile[] exerciseMedia) throws Exception;
 
     Boolean isExerciseNameExists(String name);
+
+    byte[] getExerciseImageById(Long id) throws IOException;
 }

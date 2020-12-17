@@ -9,10 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Slf4j
 public class FileOperationHelper {
@@ -60,5 +57,19 @@ public class FileOperationHelper {
             File mediaFolder = new File(folderPath);
             FileUtils.deleteDirectory(mediaFolder);
         }
+    }
+
+    // if read file is problem because of the path, it removes strings until to resource directory.
+    public static String splitPathAndMergeStartFromStaticDirectory(String savedUrl) {
+        List<String> urlArray = new ArrayList<>(Arrays.asList(savedUrl.split("/")));
+        urlArray.remove(0);
+        urlArray.remove(1);
+        urlArray.remove(2);
+        urlArray.remove(3);
+        StringBuilder stringBuilder = new StringBuilder();
+        for(String str:urlArray){
+            stringBuilder.append(str);
+        }
+        return stringBuilder.toString();
     }
 }
