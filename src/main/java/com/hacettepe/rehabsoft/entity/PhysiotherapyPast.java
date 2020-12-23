@@ -19,7 +19,6 @@ public class PhysiotherapyPast extends BaseEntity {
     @Column(name = "number_of_weekly_session")
     private Integer numberOfWeeklySession;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "physiotherapyPast")
     private Collection<PhysiotherapyCentral> physiotherapyCentralCollection;
 
