@@ -52,7 +52,7 @@ public class ResponseVideoRequestController {
         return ResponseEntity.ok(responseVideoRequest);
     }
 
-    @PreAuthorize("hasRole('ROLE_DOCTOR')")
+    @PreAuthorize("hasRole('ROLE_DOCTOR') || hasRole('ROLE_DOCTOR')")
     @RequestMapping(value = "/all",method = RequestMethod.GET)
     public ResponseEntity<List<ResponseVideoRequestDto>> listResponseVideoRequests(){
         log.warn("listResponseVideoRequests metoduna girdi");

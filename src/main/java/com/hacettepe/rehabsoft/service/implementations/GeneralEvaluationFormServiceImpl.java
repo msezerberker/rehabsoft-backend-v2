@@ -224,7 +224,7 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
             // Because the DTO comes in Form Data object from Angular, the JSON stringfy to DTO mapping is required by using ObjectMapper from Jackson
             GeneralEvaluationFormDto tempFormDto =  objectMapper.readValue(gefd, GeneralEvaluationFormDto.class);
             GeneralEvaluationForm tempForm = modelMapper.map(tempFormDto, GeneralEvaluationForm.class);
-            log.warn("GeneralEval: Mapleme başarılı: "+tempForm.toString() );
+            log.warn("GeneralEval: Mapleme başarılı: ");
 
 
             Patient patient = patientRepository.getPatientByUser(user);
