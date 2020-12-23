@@ -18,6 +18,5 @@ public class ResponseVideoRequestDto {
     @NotEmpty
     private String responseContent;
 
-    @JsonManagedReference
     private Collection<RequestedVideoDto> requestedVideoCollection;
 }

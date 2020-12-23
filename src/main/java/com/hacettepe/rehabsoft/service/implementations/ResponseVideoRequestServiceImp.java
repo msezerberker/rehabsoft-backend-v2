@@ -16,7 +16,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,6 +32,7 @@ public class ResponseVideoRequestServiceImp implements ResponseVideoRequestServi
     private final VideoRequestRepository videoRequestRepository;
     private final ResponseVideoRequestRepository responseVideoRequestRepository;
     private final RequestedVideoRepository requestedVideoRepository;
+    private final EntityManager entityManager;
 
     @Override
     @Transactional
@@ -40,7 +43,9 @@ public class ResponseVideoRequestServiceImp implements ResponseVideoRequestServi
             ResponseVideoRequestDto responseVideoRequestDto = (ResponseVideoRequestDto) BeanValidationDeserializer.deserializeJSONWithValidation(responseVideoRequestJSON, ResponseVideoRequestDto.class);
 
             ResponseVideoRequest tempResponseVideoRequest = modelMapper.map(responseVideoRequestDto, ResponseVideoRequest.class);
-            fillRequestedVideoCollection( tempResponseVideoRequest, responseMediaList );
+            BigInteger idOfSavingResponse = (BigInteger) entityManager.createNativeQuery("SELECT nextval('response_video_request_seq')").getSingleResult();
+            idOfSavingResponse = idOfSavingResponse.add(BigInteger.ONE);
+            fillRequestedVideoCollection( tempResponseVideoRequest, responseMediaList,idOfSavingResponse );
 
             tempResponseVideoRequest.setVideoRequest(videoRequestRepository.findById(videoRequestId).orElseThrow());
             tempResponseVideoRequest = responseVideoRequestRepository.save(tempResponseVideoRequest);
@@ -65,14 +70,15 @@ public class ResponseVideoRequestServiceImp implements ResponseVideoRequestServi
         return modelMapper.map(responseVideoRequest, ResponseVideoRequestDto.class);
     }
 
-    private void fillRequestedVideoCollection(ResponseVideoRequest responseVideoRequest, MultipartFile[] responseMediaList) throws Exception {
+    private void fillRequestedVideoCollection(ResponseVideoRequest responseVideoRequest, MultipartFile[] responseMediaList, BigInteger idOfSavingResponse) throws Exception {
         try{
             if(responseVideoRequest.getRequestedVideoCollection()!=null){
                 List<RequestedVideo> forIterationNewRequestedVideoCollection = new ArrayList<>(responseVideoRequest.getRequestedVideoCollection());
                 List<RequestedVideo> newRequestedVideoCollection = new ArrayList<>();
 
                 for(RequestedVideo requestedVideo:forIterationNewRequestedVideoCollection){
-                    saveRequestedVideoAndSetRequestedVideoUrls(requestedVideo, responseMediaList, responseVideoRequest, newRequestedVideoCollection);
+
+                    saveRequestedVideoAndSetRequestedVideoUrls(requestedVideo, responseMediaList, responseVideoRequest, newRequestedVideoCollection, idOfSavingResponse);
                 }
 
             }
@@ -83,7 +89,7 @@ public class ResponseVideoRequestServiceImp implements ResponseVideoRequestServi
 
     }
 
-    private void saveRequestedVideoAndSetRequestedVideoUrls(RequestedVideo requestedVideo, MultipartFile[] responseMediaList, ResponseVideoRequest responseVideoRequest, List<RequestedVideo> newRequestedVideoCollection)
+    private void saveRequestedVideoAndSetRequestedVideoUrls(RequestedVideo requestedVideo, MultipartFile[] responseMediaList, ResponseVideoRequest responseVideoRequest, List<RequestedVideo> newRequestedVideoCollection,  BigInteger idOfSavingResponse)
             throws Exception {
         if( responseMediaList == null){
             return ;
@@ -96,13 +102,13 @@ public class ResponseVideoRequestServiceImp implements ResponseVideoRequestServi
 
                 // videonun ismi, url'e girilecek front endde.
                 if(newFileName.toString().equals(requestedVideo.getVideoUrl())){
+
                     requestedVideo.setVideoUrl(null);
                     responseVideoRequest.getRequestedVideoCollection().remove(requestedVideo);
                     RequestedVideo persistedRequestedVideo = requestedVideoRepository.save(requestedVideo);
-
                     String directoryAndMediaURL = FileOperationHelper.createURLWithDirectory(
-                            ApiPaths.SavingExerciseMediaPath.CTRL+"",
-                            responseVideoRequest.getId()+"",
+                            ApiPaths.SavingResponseVideoRequestPath.CTRL+"",
+                            idOfSavingResponse.toString() +"",
                             persistedRequestedVideo.getId()+"-" + newFileName.toString(),
                             fileType+""
                     );

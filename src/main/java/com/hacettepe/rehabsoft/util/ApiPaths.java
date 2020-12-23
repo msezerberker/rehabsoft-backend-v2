@@ -40,6 +40,10 @@ public class ApiPaths {
         public static final String CTRL = "./src/main/resources/static/exercise/";
     }
 
+    public static final class SavingResponseVideoRequestPath {
+        public static final String CTRL = "./src/main/resources/static/responsevideorequest/";
+    }
+
     public static final class Profile {
         public static final String CTRL = BASE_PATH + "/profile";
     }
