@@ -34,7 +34,7 @@ public class ResponseVideoRequestController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @RequestMapping(value = "/create/{videoRequestId}",method = RequestMethod.POST)
     public ResponseEntity<ResponseMessage> createResponseVideoRequest(
-            @PathVariable @NotNull @NotEmpty Long videoRequestId,
+            @PathVariable @NotNull Long videoRequestId,
             @RequestParam(value = "responseMediaList", required = false) MultipartFile[] responseMediaList,
             @Valid @RequestParam("model") String responseVideoRequestJSON
     ) throws Exception {
