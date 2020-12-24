@@ -13,4 +13,6 @@ public interface ResponseVideoRequestService {
     List<ResponseVideoRequestDto> getAll();
 
     ResponseVideoRequestDto getById(Long id);
+
+    List<ResponseVideoRequestDto> responseVideoRequestList(String tcKimlik);
 }
