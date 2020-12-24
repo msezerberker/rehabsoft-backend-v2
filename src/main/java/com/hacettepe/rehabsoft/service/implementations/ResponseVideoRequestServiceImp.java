@@ -69,6 +69,12 @@ public class ResponseVideoRequestServiceImp implements ResponseVideoRequestServi
         ResponseVideoRequest responseVideoRequest = responseVideoRequestRepository.getOne(id);
         return modelMapper.map(responseVideoRequest, ResponseVideoRequestDto.class);
     }
+    @Override
+    public List<ResponseVideoRequestDto> responseVideoRequestList(String tcKimlik){
+        List<ResponseVideoRequest> responseVideoRequestList = responseVideoRequestRepository.getResponseVideoRequestsByPatientTcKimlikNo(tcKimlik);
+        List<ResponseVideoRequestDto> responseVideoRequestDtoList=  Arrays.asList(modelMapper.map(responseVideoRequestList, ResponseVideoRequestDto[].class));
+        return responseVideoRequestDtoList;
+    }
 
     private void fillRequestedVideoCollection(ResponseVideoRequest responseVideoRequest, MultipartFile[] responseMediaList, BigInteger idOfSavingResponse) throws Exception {
         try{

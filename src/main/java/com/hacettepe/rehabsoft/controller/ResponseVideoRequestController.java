@@ -36,7 +36,7 @@ public class ResponseVideoRequestController {
     public ResponseEntity<ResponseMessage> createResponseVideoRequest(
             @PathVariable @NotNull Long videoRequestId,
             @RequestParam(value = "responseMediaList", required = false) MultipartFile[] responseMediaList,
-            @Valid @RequestParam("model") String responseVideoRequestJSON
+            @RequestParam("model") String responseVideoRequestJSON
     ) throws Exception {
         log.warn("ResponseVideoRequest creation controllerına girdi");
         String message = responseVideoRequestService.save(responseVideoRequestJSON, responseMediaList, videoRequestId);
@@ -57,6 +57,16 @@ public class ResponseVideoRequestController {
     public ResponseEntity<List<ResponseVideoRequestDto>> listResponseVideoRequests(){
         log.warn("listResponseVideoRequests metoduna girdi");
         List<ResponseVideoRequestDto> responseVideoRequestDtoList = responseVideoRequestService.getAll();
+        return ResponseEntity.ok(responseVideoRequestDtoList);
+    }
+
+    @PreAuthorize("hasRole('ROLE_DOCTOR') || hasRole('ROLE_DOCTOR')")
+    @RequestMapping(value = "/all/{tcKimlikNo}",method = RequestMethod.GET)
+    public ResponseEntity<List<ResponseVideoRequestDto>> listResponseVideoRequestsByPatientTckimlikNo(
+            @PathVariable String tcKimlikNo
+    ){
+        log.warn("listResponseVideoRequestsByPatientTckimlikNo metoduna girdi");
+        List<ResponseVideoRequestDto> responseVideoRequestDtoList = responseVideoRequestService.responseVideoRequestList(tcKimlikNo);
         return ResponseEntity.ok(responseVideoRequestDtoList);
     }
 }

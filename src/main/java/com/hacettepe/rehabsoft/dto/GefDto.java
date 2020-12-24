@@ -110,7 +110,7 @@ public class GefDto {
 
     private Epilepsy epilepsy;
 
-   
+    @JsonIgnore
     private PhysiotherapyPast physiotherapyPast;
 
 
