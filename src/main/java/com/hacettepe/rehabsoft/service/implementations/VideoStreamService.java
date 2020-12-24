@@ -1,7 +1,9 @@
 package com.hacettepe.rehabsoft.service.implementations;
 
 import com.hacettepe.rehabsoft.entity.ExerciseVideo;
+import com.hacettepe.rehabsoft.entity.RequestedVideo;
 import com.hacettepe.rehabsoft.repository.ExerciseVideoRepository;
+import com.hacettepe.rehabsoft.repository.RequestedVideoRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +28,7 @@ import static com.hacettepe.rehabsoft.util.VideoStreamConstants.*;
 public class VideoStreamService {
 
     private final ExerciseVideoRepository exerciseVideoRepository;
+    private final RequestedVideoRepository requestedVideoRepository;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -48,6 +51,51 @@ public class VideoStreamService {
             return ResponseEntity.badRequest().body(null);
         }
         String filepath = exerciseVideo.get().getVideoUrl();
+        try {
+            fileSize = getFileSize(filepath);
+            if (range == null) {
+                return ResponseEntity.status(HttpStatus.OK)
+                        .header(CONTENT_TYPE, VIDEO_CONTENT + fileType)
+                        .header(CONTENT_LENGTH, String.valueOf(fileSize))
+                        .body(readByteRange(filepath, rangeStart, fileSize - 1)); // Read the object and convert it as bytes
+            }
+            String[] ranges = range.split("-");
+            rangeStart = Long.parseLong(ranges[0].substring(6));
+            if (ranges.length > 1) {
+                rangeEnd = Long.parseLong(ranges[1]);
+            } else {
+                rangeEnd = fileSize - 1;
+            }
+            if (fileSize < rangeEnd) {
+                rangeEnd = fileSize - 1;
+            }
+            data = readByteRange(filepath, rangeStart, rangeEnd);
+        } catch (IOException e) {
+            logger.error("Exception while reading the file {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+        String contentLength = String.valueOf((rangeEnd - rangeStart) + 1);
+        return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)
+                .header(CONTENT_TYPE, VIDEO_CONTENT + fileType)
+                .header(ACCEPT_RANGES, BYTES)
+                .header(CONTENT_LENGTH, contentLength)
+                .header(CONTENT_RANGE, BYTES + " " + rangeStart + "-" + rangeEnd + "/" + fileSize)
+                .body(data);
+
+
+    }
+
+    public ResponseEntity<byte[]> prepareRequestedVideoContent(Long id, String fileType, String range) {
+        long rangeStart = 0;
+        long rangeEnd;
+        byte[] data;
+        Long fileSize;
+
+        Optional<RequestedVideo> requestedVideo = requestedVideoRepository.findById(id);
+        if(requestedVideo.isEmpty()){
+            return ResponseEntity.badRequest().body(null);
+        }
+        String filepath = requestedVideo.get().getVideoUrl();
         try {
             fileSize = getFileSize(filepath);
             if (range == null) {

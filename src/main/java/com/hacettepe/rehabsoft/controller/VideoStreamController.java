@@ -28,5 +28,15 @@ public class VideoStreamController {
         log.warn("Video stream controller'a girdi");
         return Mono.just(videoStreamService.prepareContent(id, fileType, httpRangeList));
     }
+
+
+    @GetMapping("/stream/requested-video/{fileType}/{id}")
+    public Mono<ResponseEntity<byte[]>> streamRequestedVideo(@RequestHeader(value = "Range", required = false) String httpRangeList,
+                                                    @PathVariable("fileType") String fileType,
+                                                    @PathVariable("id") Long id) {
+
+        log.warn("Video stream controller'a girdi");
+        return Mono.just(videoStreamService.prepareRequestedVideoContent(id, fileType, httpRangeList));
+    }
 }
 

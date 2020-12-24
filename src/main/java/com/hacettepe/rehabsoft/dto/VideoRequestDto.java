@@ -42,7 +42,6 @@ public class VideoRequestDto {
     private Collection<Exercise> exerciseCollection;
 
     //one to one
-    @JsonIgnore
     private ResponseVideoRequest responseVideoRequest;
 
     @NotNull

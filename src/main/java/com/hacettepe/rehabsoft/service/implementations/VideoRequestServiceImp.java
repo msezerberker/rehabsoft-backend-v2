@@ -1,15 +1,13 @@
 package com.hacettepe.rehabsoft.service.implementations;
 
-import com.hacettepe.rehabsoft.dto.PatientDetailsDto;
 import com.hacettepe.rehabsoft.dto.VideoRequestDto;
-import com.hacettepe.rehabsoft.entity.Patient;
-import com.hacettepe.rehabsoft.entity.User;
 import com.hacettepe.rehabsoft.entity.VideoRequest;
 import com.hacettepe.rehabsoft.helper.SecurityHelper;
 import com.hacettepe.rehabsoft.repository.DoctorRepository;
 import com.hacettepe.rehabsoft.repository.PatientRepository;
 import com.hacettepe.rehabsoft.repository.UserRepository;
 import com.hacettepe.rehabsoft.repository.VideoRequestRepository;
+import com.hacettepe.rehabsoft.service.NotificationService;
 import com.hacettepe.rehabsoft.service.VideoRequestService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,16 +31,19 @@ public class VideoRequestServiceImp implements VideoRequestService {
     private final UserRepository userRepository;
     private final PatientRepository patientRepository;
     private final DoctorRepository doctorRepository;
+    private final NotificationService notificationService;
 
     @Override
     public boolean save(VideoRequestDto videoRequestDto,String patientTcNo) {
         log.warn("Video Request Save metoduna girdi");
         VideoRequest videoRequest = modelMapper.map(videoRequestDto, VideoRequest.class);
         videoRequest.setDoctor(doctorRepository.getDoctorByUser(userRepository.findByUsername(securityHelper.getUsername())));
+
+        // code review bunun yerine direkt videorequest patientindan cekilebilir.
         videoRequest.setPatient(patientRepository.getPatientByTcKimlikNo(patientTcNo));
 
         videoRequestRepository.save(videoRequest);
-
+        notificationService.createNotifiactionForNewVideoRequest(videoRequest);
         return true;
         //diger logicleri buraya ekleyecegiz.Dönüs tipini string yapmak daha dogru olur!!!!
     }

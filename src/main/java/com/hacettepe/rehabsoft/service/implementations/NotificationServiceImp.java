@@ -1,10 +1,7 @@
 package com.hacettepe.rehabsoft.service.implementations;
 
 import com.hacettepe.rehabsoft.dto.NotificationDto;
-import com.hacettepe.rehabsoft.entity.GeneralEvaluationForm;
-import com.hacettepe.rehabsoft.entity.Notification;
-import com.hacettepe.rehabsoft.entity.Patient;
-import com.hacettepe.rehabsoft.entity.User;
+import com.hacettepe.rehabsoft.entity.*;
 import com.hacettepe.rehabsoft.helper.NotificationServiceHelper;
 import com.hacettepe.rehabsoft.helper.SecurityHelper;
 import com.hacettepe.rehabsoft.repository.NotificationRepository;
@@ -80,8 +77,18 @@ public class NotificationServiceImp implements NotificationService {
         log.warn("createNotifiactionForNewPatientToDoctor'a giriyor");
         Notification notification = new Notification();
         notification.setUser(patient.getDoctor().getUser());
-        notification.setNotificationContent("Sisteme yeni hasta kaydoldu. Hastanın detaylarını görmek için tıklayın");
+        notification.setNotificationContent("Sisteme "+patient.getUser().getFirstName()+" "+patient.getUser().getSurname()+" isimli yeni hasta kaydoldu. Hastanın detaylarını görmek için tıklayın");
         notification.setNotificationUrl(NotificationPaths.BASE_PATH+"/doctor/patient-info/"+patient.getTcKimlikNo());
+        notificationRepository.save(notification);
+    }
+
+    @Override
+    public void createNotifiactionForNewVideoRequest(VideoRequest videoRequest) {
+        log.warn("createNotifiactionForNewPatientToDoctor'a giriyor");
+        Notification notification = new Notification();
+        notification.setUser(videoRequest.getPatient().getUser());
+        notification.setNotificationContent("Doktorunuz sizden yeni bir video talep etti. Detayları görmek için tıklayın");
+        notification.setNotificationUrl(NotificationPaths.BASE_PATH+"/user/user-video-submit");
         notificationRepository.save(notification);
     }
 
