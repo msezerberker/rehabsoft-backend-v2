@@ -1187,3 +1187,43 @@ CREATE TABLE public.notification
 );
 
 ---******************** version 0.2 ****************************---
+
+
+
+
+
+
+
+---******************** version 0.3 ****************************---
+
+CREATE SEQUENCE public.message_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    CACHE 1;
+ALTER SEQUENCE public.message_seq
+    OWNER TO postgres;
+
+CREATE TABLE public.message
+(
+    "id" bigint NOT NULL default nextval('message_seq'),
+    creation_date timestamp without time zone,
+    last_modified_date timestamp without time zone,
+    "version" bigint,
+    message_content varchar,
+    message_title varchar(100),
+    sender_users_id bigint,
+    receiver_users_id bigint,
+    PRIMARY KEY ("id"),
+    FOREIGN KEY (sender_users_id)
+        REFERENCES public."users" ("id") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    FOREIGN KEY (receiver_users_id)
+        REFERENCES public."users" ("id") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);
+
+---******************** version 0.3 ****************************---
