@@ -42,7 +42,6 @@ public class ExerciseServiceImpl implements ExerciseService {
     private final UserRepository userRepository;
     private final SecurityHelper securityHelper;
     private final ObjectMapper objectMapper;
-    private final ExerciseImageRepository exerciseImageRepository;
 
     @Override
     public List<ExerciseDto> getAll(){
@@ -70,11 +69,14 @@ public class ExerciseServiceImpl implements ExerciseService {
             }
 
             Exercise tempExercise = modelMapper.map(exerciseDto, Exercise.class);
-            fillExerciseVideoCollection( tempExercise, exerciseMediaList );
-
             tempExercise.setUser(userRepository.findByUsername(securityHelper.getUsername()));
+            List<ExerciseVideo> exerciseVideoListToSave = (List<ExerciseVideo>) tempExercise.getExerciseVideoCollection();
+            tempExercise.setExerciseVideoCollection(null);
             tempExercise = exerciseRepository.save(tempExercise);
             exerciseDto.setId(tempExercise.getId());
+
+            fillExerciseVideoCollection( tempExercise, exerciseMediaList, exerciseVideoListToSave );
+
 
             return "Egzersiz başarıyla kaydedildi!";
         } catch (Exception e){
@@ -89,8 +91,8 @@ public class ExerciseServiceImpl implements ExerciseService {
     public Boolean delete(Long id) {
         try{
             if(exerciseRepository.findById(id).isPresent()){
-                exerciseRepository.deleteById(id);
                 deleteExerciseMediaFiles(exerciseRepository.findById(id).get());
+                exerciseRepository.deleteById(id);
             }
             else{
                 throw new Exception();
@@ -172,7 +174,7 @@ public class ExerciseServiceImpl implements ExerciseService {
             deleteExerciseMediaFiles(exerciseFromDatabase);
         }
 
-        fillExerciseVideoCollection(exerciseFromDatabase, exerciseFiles);
+        fillExerciseVideoCollection(exerciseFromDatabase, exerciseFiles, (List<ExerciseVideo>) exerciseFromDatabase.getExerciseVideoCollection());
     }
 
     private void setExerciseVideoCollectionWithNewAddedExerciseVideo(Exercise exerciseFromDatabase, ExerciseDto exerciseDto) {
@@ -213,25 +215,23 @@ public class ExerciseServiceImpl implements ExerciseService {
     }
 
     private void deleteExerciseMediaFiles(Exercise exerciseFromDatabase) throws IOException {
-        try{
-            String folderPath = ApiPaths.ExercisePath.CTRL+"/"+exerciseFromDatabase.getExerciseName();
-            FileOperationHelper.deleteDirectoryByPath(folderPath);
-        } catch (Exception e){
-            e.printStackTrace();
-            throw new IOException();
+        if(exerciseFromDatabase.getExerciseVideoCollection() != null) {
+            try {
+                String folderPath = ApiPaths.SavingExerciseMediaPath.CTRL + "/" + exerciseFromDatabase.getId();
+                FileOperationHelper.deleteDirectoryByPath(folderPath);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new IOException();
+            }
         }
     }
 
-    private void fillExerciseVideoCollection(Exercise exercise, MultipartFile[] exerciseMediaList) throws Exception {
+    private void fillExerciseVideoCollection(Exercise exercise, MultipartFile[] exerciseMediaList, List<ExerciseVideo> exerciseVideoList) throws Exception {
         try{
-            if(exercise.getExerciseVideoCollection()!=null){
-                List<ExerciseVideo> forIterationnewExerciseVideoCollection = new ArrayList<>(exercise.getExerciseVideoCollection());
-                List<ExerciseVideo> newExerciseVideoCollection = new ArrayList<>();
-
-                for(ExerciseVideo exerciseVideo:forIterationnewExerciseVideoCollection){
-                    saveExerciseMediaAndSetExerciseMediaUrls(exerciseVideo, exerciseMediaList, exercise, newExerciseVideoCollection);
+            if(exerciseVideoList!=null){
+                for(ExerciseVideo exerciseVideo:exerciseVideoList){
+                    saveExerciseMediaAndSetExerciseMediaUrls(exerciseVideo, exerciseMediaList, exercise);
                 }
-
             }
         } catch (Exception e){
             e.printStackTrace();
@@ -240,7 +240,7 @@ public class ExerciseServiceImpl implements ExerciseService {
 
     }
 
-    private void saveExerciseMediaAndSetExerciseMediaUrls(ExerciseVideo exerciseVideo, MultipartFile[] exerciseMediaList, Exercise exercise, List<ExerciseVideo> newOtherExerciseVideoCollection)
+    private void saveExerciseMediaAndSetExerciseMediaUrls(ExerciseVideo exerciseVideo, MultipartFile[] exerciseMediaList, Exercise exercise)
             throws Exception {
         if( exerciseMediaList == null){
             return ;
@@ -253,12 +253,11 @@ public class ExerciseServiceImpl implements ExerciseService {
 
                 if(newFileName.toString().equals(exerciseVideo.getTitle())){
                     exerciseVideo.setVideoUrl(null);
-                    exercise.getExerciseVideoCollection().remove(exerciseVideo);
                     ExerciseVideo persistedExerciseVideo = exerciseVideoRepository.save(exerciseVideo);
 
                     String directoryAndMediaURL = FileOperationHelper.createURLWithDirectory(
                             ApiPaths.SavingExerciseMediaPath.CTRL+"",
-                            exercise.getExerciseName()+"",
+                            exercise.getId()+"",
                             persistedExerciseVideo.getId()+"-" + newFileName.toString(),
                             fileType+""
                     );
@@ -267,7 +266,7 @@ public class ExerciseServiceImpl implements ExerciseService {
 
                     persistedExerciseVideo.setVideoUrl(savedUrl);
                     persistedExerciseVideo.setExercise(exercise);
-                    newOtherExerciseVideoCollection.add(persistedExerciseVideo);
+                    exerciseVideoRepository.save(persistedExerciseVideo);
                 }
             }  catch(Exception e){
                 e.printStackTrace();
