@@ -62,6 +62,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return modelMapper.map(tempUser, UserDto.class);
     }
 
+
+
     public List<UserDto> getAll() {
         List<User> data = userRepository.findAll();
         return Arrays.asList(modelMapper.map(data, UserDto[].class));

@@ -1,5 +1,6 @@
 package com.hacettepe.rehabsoft.controller;
 
+import com.hacettepe.rehabsoft.dto.DoctorInfoDto;
 import com.hacettepe.rehabsoft.dto.PatientDetailsDto;
 import com.hacettepe.rehabsoft.dto.PatientDto;
 import com.hacettepe.rehabsoft.helper.ResponseMessage;
@@ -67,5 +68,17 @@ public class PatientController {
         PatientDetailsDto patientDetailsDto= patientService.findPatientByTcKimlikNo(tcKimlikNo);
         return ResponseEntity.ok(patientDetailsDto);
     }
+
+
+    @RequestMapping(value = "/doctorinfo",method = RequestMethod.GET)
+    public ResponseEntity<DoctorInfoDto> getPatient(){
+        log.warn("DoctorInfo metodu basariyla calisti");
+        DoctorInfoDto doctorInfoDto= patientService.receiveDoctorInfo();
+        return ResponseEntity.ok(doctorInfoDto);
+
+    }
+
+
+
 
 }

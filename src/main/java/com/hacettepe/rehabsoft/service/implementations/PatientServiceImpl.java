@@ -1,13 +1,13 @@
 package com.hacettepe.rehabsoft.service.implementations;
 
 
-import com.hacettepe.rehabsoft.dto.PatientDetailsDto;
-import com.hacettepe.rehabsoft.dto.PatientDto;
-import com.hacettepe.rehabsoft.dto.UserDto;
+import com.hacettepe.rehabsoft.dto.*;
+import com.hacettepe.rehabsoft.entity.Doctor;
 import com.hacettepe.rehabsoft.entity.Parent;
 import com.hacettepe.rehabsoft.entity.Patient;
 import com.hacettepe.rehabsoft.entity.User;
 import com.hacettepe.rehabsoft.helper.SecurityHelper;
+import com.hacettepe.rehabsoft.repository.DoctorRepository;
 import com.hacettepe.rehabsoft.repository.PatientRepository;
 import com.hacettepe.rehabsoft.repository.UserRepository;
 import com.hacettepe.rehabsoft.service.ParentService;
@@ -40,6 +40,8 @@ public class PatientServiceImpl implements PatientService {
 
     @Autowired
     private PatientRepository patientRepository;
+    @Autowired
+    private DoctorRepository doctorRepository;
 
 
     public Boolean isPatientAlreadySaved(){
@@ -132,5 +134,28 @@ public class PatientServiceImpl implements PatientService {
 
         return patientDetailsDto;
 
+    }
+
+    @Override
+    public DoctorInfoDto receiveDoctorInfo() {
+
+        Patient patient = patientRepository.getPatientByUser_Username(securityHelper.getUsername());
+        if(patient==null){
+            return null;
+
+        }
+
+        Doctor doctor = doctorRepository.getDoctorByPatientCollectionContains(patient);
+
+        if(doctor==null){
+            return null;
+        }
+
+        DoctorInfoDto doctorInfoDto = new DoctorInfoDto();
+        doctorInfoDto.setName(doctor.getUser().getFirstName());
+        doctorInfoDto.setSurname(doctor.getUser().getSurname());
+        doctorInfoDto.setEmail(doctor.getUser().getEmail());
+
+        return doctorInfoDto;
     }
 }
