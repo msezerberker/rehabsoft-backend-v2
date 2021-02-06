@@ -8,4 +8,6 @@ public interface PatientRepository extends JpaRepository<Patient,Long> {
 
     Patient getPatientByUser(User user);
     Patient getPatientByTcKimlikNo(String tcKimlikNo);
+    //Patient getPatientByUserUsername(String username);
+    Patient getPatientByUser_Username(String username);
 }

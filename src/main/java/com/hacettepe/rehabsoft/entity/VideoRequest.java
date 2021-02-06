@@ -46,4 +46,5 @@ public class VideoRequest extends BaseEntity {
     @OneToOne(mappedBy = "videoRequest")
     private ResponseVideoRequest responseVideoRequest;
 
+
 }

@@ -64,4 +64,8 @@ public class ApiPaths {
         public static final String CTRL = BASE_PATH + "/doctor";
     }
 
+    public static final class MessagePath {
+        public static final String CTRL = BASE_PATH + "/message";
+    }
+
 }
