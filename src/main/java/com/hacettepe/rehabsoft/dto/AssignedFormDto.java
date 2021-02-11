@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotEmpty;
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Data
@@ -16,6 +17,9 @@ import java.util.Collection;
 @NoArgsConstructor
 @ApiModel(value = "Data Transfer Object for Assigned Form")
 public class AssignedFormDto {
+
+    @NotEmpty
+    private LocalDateTime creationDate;
 
     @ApiModelProperty(required = true,value = "ID")
     private Long id;

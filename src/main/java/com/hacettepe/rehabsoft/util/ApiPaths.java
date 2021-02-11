@@ -56,4 +56,8 @@ public class ApiPaths {
         public static final String CTRL = BASE_PATH + "/doctor";
     }
 
+    public static final class FormDynamicPath {
+        public static final String CTRL = BASE_PATH + "/form-dynamic";
+    }
+
 }

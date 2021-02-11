@@ -831,6 +831,7 @@ CREATE TABLE public.form_field
     "version" bigint,
     form_field_name varchar(600),
     field_type varchar(255),
+	form_field_order bigint,
     form_dynamic_id bigint,
     PRIMARY KEY ("id"),
     FOREIGN KEY (form_dynamic_id)

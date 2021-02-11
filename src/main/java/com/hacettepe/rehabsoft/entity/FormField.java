@@ -23,6 +23,9 @@ public class FormField extends BaseEntity{
     @Column(name = "field_type")
     private String fieldType;
 
+    @Column(name = "form_field_order")
+    private int fieldOrder;
+
     @ManyToOne
     @JoinColumn(name = "form_dynamic_id")
     private FormDynamic formDynamic;
