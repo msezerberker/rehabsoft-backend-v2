@@ -36,3 +36,4 @@ build/
 ### src/main/resource/static/generalevaluationform/botoximage/
 ### src/main/resource/static/generalevaluationform/appliedsurgeries/
 ### src/main/resource/static/generalevaluationform/otherorthesis/
+/src/main/resources/static/

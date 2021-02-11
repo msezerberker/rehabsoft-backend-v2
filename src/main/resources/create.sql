@@ -755,7 +755,7 @@ CREATE TABLE public.expectations_about_program
     creation_date timestamp without time zone,
     last_modified_date timestamp without time zone,
     "version" bigint,
-    expectaition_content varchar(1000),
+    expectation_content varchar(1000),
     general_evaluation_form_id bigint,
     PRIMARY KEY ("id"),
     FOREIGN KEY (general_evaluation_form_id)
