@@ -68,7 +68,6 @@ public class AccountController {
                         loginRequest.getPassword()
                 )
         );
-        System.out.println("asdasdas");
         SecurityContextHolder.getContext().setAuthentication(authentication);
         final String token = jwtTokenUtil.generateToken(authentication);
 
@@ -94,12 +93,10 @@ public class AccountController {
     @ApiOperation(value="Register Operation",response = Boolean.class)
     public ResponseEntity<ResponseMessage> register(@Valid @RequestBody RegistrationRequest registrationRequest) throws AuthenticationException {
 
-        log.warn("Kayıt controllerına girdi");
-
-
         responseMessage.setResponseMessage(registrationHelper.registrationValidator(registrationRequest));
 
         if(responseMessage.getResponseMessage()!=null){
+            responseMessage.setResponseType(0);
             return ResponseEntity.ok(responseMessage);
         }
 
@@ -110,6 +107,7 @@ public class AccountController {
                 return ResponseEntity.badRequest().body(responseMessage);
         }
 
+        responseMessage.setResponseType(1);
         responseMessage.setResponseMessage("Basariyla kaydoldunuz!");
         return ResponseEntity.ok(responseMessage);
 

@@ -36,7 +36,7 @@ public class MessageController {
         boolean sonuc = messageService.save(messageDto);
 
         if(sonuc){
-            responseMessage.setResponseMessage("Mesaj basariliyla gönderildi");
+            responseMessage.setResponseMessage("Mesaj basariyla gönderildi");
         }
         else{
             responseMessage.setResponseMessage("Mesaj gönderimi sırasında bir hata meydana geldi");
