@@ -6,9 +6,13 @@ import com.hacettepe.rehabsoft.service.GeneralEvaluationFormService;
 import com.hacettepe.rehabsoft.util.ApiPaths;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Slf4j
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
@@ -64,6 +68,20 @@ public class GeneralEvaluationFormController {
     }
 
 
+    @PreAuthorize("hasRole('ROLE_USER')" + "|| hasRole('ROLE_DOCTOR')")
+    @RequestMapping(value = "/getbotoximage/{id}",method = RequestMethod.GET, produces = MediaType.ALL_VALUE)
+    public ResponseEntity<byte[]> getBotoxImageById(@PathVariable Long id) throws IOException {
+        log.warn("getBotoxImageById() metoduna girdi "+id);
+        byte[] exerciseImage = generalEvaluationFormService.getBotoxImageById(id);
+        if(exerciseImage==null){
+            log.error("Botox resmi bulunamadi ");
+            responseMessage.setResponseMessage("Hata oldu");
+            return ResponseEntity.badRequest().body(null);
+        }
+        else {
+            return ResponseEntity.ok(exerciseImage);
+        }
+    }
 
 
 }

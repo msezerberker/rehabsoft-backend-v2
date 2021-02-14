@@ -1,8 +1,6 @@
 package com.hacettepe.rehabsoft.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.hacettepe.rehabsoft.entity.*;
@@ -93,58 +91,51 @@ public class GeneralEvaluationFormDto {
     private Boolean isHypoglycaemia;
 
     //DiseaseOfMotherPregnancy
-    //private String diseaseName;
-    private DiseaseOfMotherPregnancy diseaseOfMotherPregnancy;
+    private DiseaseOfMotherPregnancyDto diseaseOfMotherPregnancy;
 
 
     //Hyperbilirubinemia
     //private Boolean isPhototeraphy;
     //private Integer hospitalDayTime;
-    private Hyperbilirubinemia hyperbilirubinemia;
+    private HyperbilirubinemiaDto hyperbilirubinemia;
 
 
     //AfterBirthReasonCerebralPalsy
-    //private Integer occuringMonth;
-    //private String cause;
-    //private String causeInfo;
     private AfterBirthReasonCerebralPalsy afterBirthReasonCerebralPalsy;
 
     //Botox_Treatment
-    //private LocalDateTime lastBotoxDate;
-    //private String botoxRecordUrl;
-    private BotoxTreatment botoxTreatment;
+    private BotoxTreatmentDto botoxTreatment;
 
 
 
     //Many To Many
-    private Collection<AppliedSurgery> appliedSurgeryCollection;
+    private Collection<AppliedSurgeryDto> appliedSurgeryCollection;
 
 
     //One to many
-    private Collection<OrthesisInfo> orthesisInfoCollection;
-    private Collection<OtherOrthesisInfo> otherOrthesisInfoCollection;
-    private Collection<UsedMedicine> usedMedicineCollection;
+    private Collection<OrthesisInfoDto> orthesisInfoCollection;
+    private Collection<OtherOrthesisInfoDto> otherOrthesisInfoCollection;
+    private Collection<UsedMedicineDto> usedMedicineCollection;
 
     //ManyToMany
-    private Collection<CoexistingDiseases> coexistingDiseasesCollection;
+    private Collection<CoexistingDiseasesDto> coexistingDiseasesCollection;
 
 
 
     //VisualImpairement
-    //private String information;
-    private VisualImpairment visualImpairment;
+    private VisualImpairmentDto visualImpairment;
 
     //OneTomany
 
     //HearingImpairment
     //private Boolean isUseHearingAid;
-    private HearingImpairment hearingImpairment;
+    private HearingImpairmentDto hearingImpairment;
 
     //ExpectationsAboutProgram
-    private Collection<ExpectationsAboutProgram> expectationsAboutProgramCollection;
+    private Collection<ExpectationsAboutProgramDto> expectationsAboutProgramCollection;
 
-    private Epilepsy epilepsy;
+    private EpilepsyDto epilepsy;
 
-    private PhysiotherapyPast physiotherapyPast;
+    private PhysiotherapyPastDto physiotherapyPast;
 
 }

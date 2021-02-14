@@ -68,9 +68,7 @@ public class PatientServiceImpl implements PatientService {
     public PatientDto savePatient(PatientDto patientDto){
 
         log.warn("Patient servisine girdi:Save:");
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         Patient patient = modelMapper.map(patientDto, Patient.class);
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
 
         //Log-in olmus user'ın ismi Spring Security'den alınarak atama yapılır
         patient.setUser(userRepository.findByUsername(securityHelper.getUsername()));
