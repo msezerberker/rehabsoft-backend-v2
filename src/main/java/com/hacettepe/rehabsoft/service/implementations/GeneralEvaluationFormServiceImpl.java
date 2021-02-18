@@ -151,7 +151,7 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
                                     ApiPaths.SavingBotoxImagePath.CTRL+"",
                                     securityHelper.getUsername()+"",
                                     persistedBotoxTreatment.getId()+"",
-                                    botoxImage.getContentType().substring(botoxImage.getContentType().length() - 3)+"");
+                                    botoxImage.getContentType().split("/")[1]);
 
                     String savedUrl = FileOperationHelper.saveFileByDirectory(botoxImage, directoryAndImage);
                     persistedBotoxTreatment.setBotoxRecordUrl(savedUrl);
