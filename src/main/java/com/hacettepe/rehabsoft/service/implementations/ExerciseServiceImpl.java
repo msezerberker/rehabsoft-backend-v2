@@ -150,8 +150,7 @@ public class ExerciseServiceImpl implements ExerciseService {
         if(exerciseVideo.isPresent()){
             String path = exerciseVideo.get().getVideoUrl();
             path = FileOperationHelper.splitPathAndMergeStartFromStaticDirectory(path);
-            InputStream in = getClass().getClassLoader()
-                    .getResourceAsStream(path );
+            InputStream in = getClass().getClassLoader().getResourceAsStream(path );
             return IOUtils.toByteArray(in);
         } else{
             return null;
