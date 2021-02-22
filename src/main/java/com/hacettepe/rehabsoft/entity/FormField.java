@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.Collection;
 
-
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "form_field")
@@ -18,7 +17,7 @@ import java.util.Collection;
 public class FormField extends BaseEntity{
 
     @Column(name = "form_field_name")
-    private String formFieldName;
+    private String fieldName;
 
     @Column(name = "field_type")
     private String fieldType;
@@ -30,8 +29,8 @@ public class FormField extends BaseEntity{
     @JoinColumn(name = "form_dynamic_id")
     private FormDynamic formDynamic;
 
-    @OneToMany(mappedBy = "formField", cascade = CascadeType.ALL)
-    private Collection<FormFieldDefaultValue> formFieldDefaultValueList;
+    @OneToMany(mappedBy = "formField", cascade = CascadeType.REMOVE)
+    private Collection<FormFieldDefaultValue> formFieldDefaultValueCollection;
 
 
 }

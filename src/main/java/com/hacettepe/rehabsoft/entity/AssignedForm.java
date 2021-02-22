@@ -16,7 +16,8 @@ import java.util.Collection;
 @SequenceGenerator(name = "idgen", sequenceName = "assigned_form_seq", initialValue = 1, allocationSize = 1)
 public class AssignedForm extends BaseEntity {
 
-    @ManyToOne
+
+    @ManyToOne(cascade = CascadeType.PERSIST )
     @JoinColumn(name = "form_dynamic_id")
     private FormDynamic formDynamic;
 

@@ -22,12 +22,10 @@ public class FormDynamic extends BaseEntity{
     @Column(name = "explanation")
     private String explanation;
 
-    @OneToMany(mappedBy = "formDynamic" , cascade =  CascadeType.ALL)
-    private Collection<FormField> formFieldList;
+    @OneToMany(mappedBy = "formDynamic")
+    private Collection<FormField> formFieldCollection;
 
-    @OneToOne(mappedBy = "formDynamic", cascade = CascadeType.ALL)
-    private FormTemplate formTemplate;
 
-    @OneToMany(mappedBy = "formDynamic", cascade = CascadeType.ALL)
-    private Collection<AssignedForm> assignedFormCollection;
+    //@OneToMany(mappedBy = "formDynamic", cascade = CascadeType.ALL)
+    //private Collection<AssignedForm> assignedFormCollection;
 }

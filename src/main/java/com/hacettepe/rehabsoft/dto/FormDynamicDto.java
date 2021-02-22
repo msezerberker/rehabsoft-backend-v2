@@ -36,7 +36,7 @@ public class FormDynamicDto {
     @ApiModelProperty(required = true, value = "formTemplate")
     private FormTemplate formTemplate;
 
-    @ApiModelProperty(required = true, value = "assignedFormCollection")
-    private Collection<AssignedForm> assignedFormCollection;
+    /*@ApiModelProperty(required = true, value = "assignedFormCollection")
+    private Collection<AssignedForm> assignedFormCollection;*/
 
 }

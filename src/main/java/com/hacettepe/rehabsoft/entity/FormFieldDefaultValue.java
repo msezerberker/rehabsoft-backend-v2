@@ -16,7 +16,7 @@ import javax.persistence.*;
 public class FormFieldDefaultValue extends BaseEntity {
 
     @Column(name = "value_name")
-    private String defaultValueName;
+    private String valueName;
 
     @ManyToOne
     @JoinColumn(name = "form_field_id")

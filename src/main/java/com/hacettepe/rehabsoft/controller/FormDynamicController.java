@@ -25,6 +25,7 @@ public class FormDynamicController {
     @Autowired
     FormDynamicService formDynamicService;
 
+    // For Doctors
     @RequestMapping(value = "/historyy/{patientTcNo}",method = RequestMethod.GET)
     public ResponseEntity<List<AssignedFormDto>> getAllAssignedForm(@PathVariable String patientTcNo){
 
@@ -35,7 +36,7 @@ public class FormDynamicController {
 
     @RequestMapping(value="/assignform/{patientTcNo}", method = RequestMethod.POST)
     public ResponseEntity<ResponseMessage> AssignDynamicForm(@RequestBody AssignedFormDto assignedFormDto,@PathVariable String patientTcNo){
-        log.warn("saveVideoRequest controller'ı çalışıyor");
+        log.warn("Hastaya form atama controller'ı çalışıyor");
 
         boolean sonuc = formDynamicService.assignForm(assignedFormDto,patientTcNo);
 
@@ -48,6 +49,25 @@ public class FormDynamicController {
 
         return ResponseEntity.ok(responseMessage);
     }
+
+    // For Patients
+    @RequestMapping(value = "/requests-not-answered/{patientTcNo}",method = RequestMethod.GET)
+    public ResponseEntity<List<AssignedFormDto>> getAllAssignedFormNotAnswered(@PathVariable String patientTcNo){
+
+        List<AssignedFormDto> assignedFormDtoList = formDynamicService.getAssignedFormHistory(patientTcNo);
+
+        return ResponseEntity.ok(assignedFormDtoList);
+    }
+
+    @RequestMapping(value = "/request-answered/{patientTcNo}",method = RequestMethod.GET)
+    public ResponseEntity<List<AssignedFormDto>> getAllAssignedFormAnswered(@PathVariable String patientTcNo) {
+
+        List<AssignedFormDto> assignedFormDtoList = formDynamicService.getAssignedFormHistory(patientTcNo);
+
+        return ResponseEntity.ok(assignedFormDtoList);
+    }
+
+
 
 
 }

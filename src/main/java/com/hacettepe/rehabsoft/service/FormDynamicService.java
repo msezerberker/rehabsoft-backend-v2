@@ -10,4 +10,10 @@ public interface FormDynamicService {
     List<AssignedFormDto> getAssignedFormHistory(String tcKimlikNo);
 
     boolean assignForm(AssignedFormDto assignedFormDto, String tcKimlikNo);
+
+    List<AssignedFormDto> getAssignedFormNotAnswered(String tcKimlikNo);
+
+    List<AssignedFormDto> getAssignedFormAnswered(String tcKimlikNo);
+
+
 }
