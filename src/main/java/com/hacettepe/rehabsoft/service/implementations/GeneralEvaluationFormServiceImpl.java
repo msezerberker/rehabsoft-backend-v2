@@ -359,14 +359,14 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
 
 
     @Override
-    public GefDto getGefd(String tcKimlikNo) {
+    public GeneralEvaluationFormDto getGefd(String tcKimlikNo) {
         GeneralEvaluationForm generalEvaluationForm= generalEvaluationFormRepository.getByPatient(patientRepository.getPatientByTcKimlikNo(tcKimlikNo));
 
         if(generalEvaluationForm==null){
             return null;
         }
 
-        GefDto gefDto = modelMapper.map(generalEvaluationForm,GefDto.class);
+        GeneralEvaluationFormDto gefDto = modelMapper.map(generalEvaluationForm,GeneralEvaluationFormDto.class);
 
          return gefDto;
     }
@@ -376,6 +376,34 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
         Optional<BotoxTreatment> botoxTreatment = botoxTreatmentRepository.findById(id);
         if(botoxTreatment.isPresent()){
             String path = botoxTreatment.get().getBotoxRecordUrl();
+            path = FileOperationHelper.splitPathAndMergeStartFromStaticDirectory(path);
+            InputStream in = getClass().getClassLoader()
+                    .getResourceAsStream(path );
+            return IOUtils.toByteArray(in);
+        } else{
+            return null;
+        }
+    }
+
+    @Override
+    public byte[] getEpicrisisImageById(Long id) throws IOException {
+        Optional<AppliedSurgery> appliedSurgery = appliedSurgeryRepository.findById(id);
+        if(appliedSurgery.isPresent()){
+            String path = appliedSurgery.get().getEpicrisisImageUrl();
+            path = FileOperationHelper.splitPathAndMergeStartFromStaticDirectory(path);
+            InputStream in = getClass().getClassLoader()
+                    .getResourceAsStream(path );
+            return IOUtils.toByteArray(in);
+        } else{
+            return null;
+        }
+    }
+
+    @Override
+    public byte[] getOrthesisImageById(Long id) throws IOException {
+        Optional<OtherOrthesisInfo> otherOrthesisInfo = otherOrthesisInfoRepository.findById(id);
+        if(otherOrthesisInfo.isPresent()){
+            String path = otherOrthesisInfo.get().getOrthesisUrl();
             path = FileOperationHelper.splitPathAndMergeStartFromStaticDirectory(path);
             InputStream in = getClass().getClassLoader()
                     .getResourceAsStream(path );

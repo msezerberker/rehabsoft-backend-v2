@@ -1,6 +1,7 @@
 package com.hacettepe.rehabsoft.controller;
 
 import com.hacettepe.rehabsoft.dto.GefDto;
+import com.hacettepe.rehabsoft.dto.GeneralEvaluationFormDto;
 import com.hacettepe.rehabsoft.helper.ResponseMessage;
 import com.hacettepe.rehabsoft.service.GeneralEvaluationFormService;
 import com.hacettepe.rehabsoft.util.ApiPaths;
@@ -61,7 +62,7 @@ public class GeneralEvaluationFormController {
 
 
     @RequestMapping(value = "/get-form/{tcKimlikNo}",method = RequestMethod.GET)
-    public ResponseEntity<GefDto> getGefd(@PathVariable String tcKimlikNo){
+    public ResponseEntity<GeneralEvaluationFormDto> getGefd(@PathVariable String tcKimlikNo){
         log.warn("get-form(evaluation icin) metodu basariyla calisti");
 
         return ResponseEntity.ok(generalEvaluationFormService.getGefd(tcKimlikNo));
@@ -80,6 +81,37 @@ public class GeneralEvaluationFormController {
         }
         else {
             return ResponseEntity.ok(exerciseImage);
+        }
+    }
+
+
+    @PreAuthorize("hasRole('ROLE_USER')" + "|| hasRole('ROLE_DOCTOR')")
+    @RequestMapping(value = "/getepicrisisimage/{id}",method = RequestMethod.GET, produces = MediaType.ALL_VALUE)
+    public ResponseEntity<byte[]> getEpicrisisImageById(@PathVariable Long id) throws IOException {
+        log.warn("getEpicrisisImageById() metoduna girdi "+id);
+        byte[] epicrisisImageById = generalEvaluationFormService.getEpicrisisImageById(id);
+        if(epicrisisImageById==null){
+            log.error("Epicrisis resmi bulunamadi ");
+            responseMessage.setResponseMessage("Hata oldu");
+            return ResponseEntity.badRequest().body(null);
+        }
+        else {
+            return ResponseEntity.ok(epicrisisImageById);
+        }
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER')" + "|| hasRole('ROLE_DOCTOR')")
+    @RequestMapping(value = "/getorthesisimage/{id}",method = RequestMethod.GET, produces = MediaType.ALL_VALUE)
+    public ResponseEntity<byte[]> getOrthesisImageById(@PathVariable Long id) throws IOException {
+        log.warn("getOrthesisImageById() metoduna girdi "+id);
+        byte[] orthesisImageById = generalEvaluationFormService.getOrthesisImageById(id);
+        if(orthesisImageById==null){
+            log.error("Epicrisis resmi bulunamadi ");
+            responseMessage.setResponseMessage("Hata oldu");
+            return ResponseEntity.badRequest().body(null);
+        }
+        else {
+            return ResponseEntity.ok(orthesisImageById);
         }
     }
 
