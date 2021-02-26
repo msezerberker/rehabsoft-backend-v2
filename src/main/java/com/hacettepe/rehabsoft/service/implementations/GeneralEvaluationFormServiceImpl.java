@@ -12,11 +12,15 @@ import com.hacettepe.rehabsoft.service.NotificationService;
 import com.hacettepe.rehabsoft.util.ApiPaths;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -147,7 +151,7 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
                                     ApiPaths.SavingBotoxImagePath.CTRL+"",
                                     securityHelper.getUsername()+"",
                                     persistedBotoxTreatment.getId()+"",
-                                    botoxImage.getContentType().substring(botoxImage.getContentType().length() - 3)+"");
+                                    botoxImage.getContentType().split("/")[1]);
 
                     String savedUrl = FileOperationHelper.saveFileByDirectory(botoxImage, directoryAndImage);
                     persistedBotoxTreatment.setBotoxRecordUrl(savedUrl);
@@ -355,15 +359,57 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
 
 
     @Override
-    public GefDto getGefd(String tcKimlikNo) {
+    public GeneralEvaluationFormDto getGefd(String tcKimlikNo) {
         GeneralEvaluationForm generalEvaluationForm= generalEvaluationFormRepository.getByPatient(patientRepository.getPatientByTcKimlikNo(tcKimlikNo));
 
         if(generalEvaluationForm==null){
             return null;
         }
 
-        GefDto gefDto = modelMapper.map(generalEvaluationForm,GefDto.class);
+        GeneralEvaluationFormDto gefDto = modelMapper.map(generalEvaluationForm,GeneralEvaluationFormDto.class);
 
          return gefDto;
+    }
+
+    @Override
+    public byte[] getBotoxImageById(Long id) throws IOException {
+        Optional<BotoxTreatment> botoxTreatment = botoxTreatmentRepository.findById(id);
+        if(botoxTreatment.isPresent()){
+            String path = botoxTreatment.get().getBotoxRecordUrl();
+            path = FileOperationHelper.splitPathAndMergeStartFromStaticDirectory(path);
+            InputStream in = getClass().getClassLoader()
+                    .getResourceAsStream(path );
+            return IOUtils.toByteArray(in);
+        } else{
+            return null;
+        }
+    }
+
+    @Override
+    public byte[] getEpicrisisImageById(Long id) throws IOException {
+        Optional<AppliedSurgery> appliedSurgery = appliedSurgeryRepository.findById(id);
+        if(appliedSurgery.isPresent()){
+            String path = appliedSurgery.get().getEpicrisisImageUrl();
+            path = FileOperationHelper.splitPathAndMergeStartFromStaticDirectory(path);
+            InputStream in = getClass().getClassLoader()
+                    .getResourceAsStream(path );
+            return IOUtils.toByteArray(in);
+        } else{
+            return null;
+        }
+    }
+
+    @Override
+    public byte[] getOrthesisImageById(Long id) throws IOException {
+        Optional<OtherOrthesisInfo> otherOrthesisInfo = otherOrthesisInfoRepository.findById(id);
+        if(otherOrthesisInfo.isPresent()){
+            String path = otherOrthesisInfo.get().getOrthesisUrl();
+            path = FileOperationHelper.splitPathAndMergeStartFromStaticDirectory(path);
+            InputStream in = getClass().getClassLoader()
+                    .getResourceAsStream(path );
+            return IOUtils.toByteArray(in);
+        } else{
+            return null;
+        }
     }
 }
