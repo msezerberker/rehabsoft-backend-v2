@@ -138,9 +138,9 @@ public class AdminController {
 
 
     @RequestMapping(value = "/admins",method = RequestMethod.GET)
-    public ResponseEntity<List<UserDto>> listAllAdmins(){
+    public ResponseEntity<List<User>> listAllAdmins(){
         log.warn("AdminCrud: listAllAdmins metodu basariyla calisti");
-        List<UserDto> adminList = adminCrudService.listAllAdmins();
+        List<User> adminList = adminCrudService.listAllAdmins();
 
 
         return ResponseEntity.ok(adminList);

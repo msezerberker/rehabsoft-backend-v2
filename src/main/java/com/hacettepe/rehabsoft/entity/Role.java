@@ -27,6 +27,6 @@ public class Role extends BaseEntity {
     private String name;
 
 
-    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "role")
     private Collection<User> users;
 }

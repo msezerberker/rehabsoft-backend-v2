@@ -1,16 +1,16 @@
 package com.hacettepe.rehabsoft.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
+
 
 import javax.persistence.*;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "notification")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @SequenceGenerator(name = "idgen", sequenceName = "notification_seq", initialValue = 1, allocationSize = 1)
