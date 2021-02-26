@@ -17,6 +17,8 @@ public interface UserService {
 
     Boolean isEmailExists(String email);
 
+    Boolean deleteUser(Long id);
+
     Boolean register(RegistrationRequest registrationRequest);
 
     String updateUser(UserDto user);

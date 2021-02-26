@@ -94,14 +94,7 @@ public class PatientServiceImpl implements PatientService {
 
 
         List<Patient> patientList = patientRepository.findAll();
-
-        /*gefd doldurulmamıssa sil
-        for(Patient patient:patientList){
-            if(patient.getGeneralEvaluationForm()==null){
-                patientList.remove(patient);
-            }
-        }
-         */
+        //gefd doldurulmamıssa sil
         ListIterator<Patient> iter = patientList.listIterator();
         while(iter.hasNext()){
             if(iter.next().getGeneralEvaluationForm()==null){
@@ -111,7 +104,6 @@ public class PatientServiceImpl implements PatientService {
 
 
         if(patientList==null){
-            log.warn("Patient listesi bosaldi");
             return null;}
 
         List<PatientDetailsDto> patientDetailsDtoList=  Arrays.asList(modelMapper.map(patientList, PatientDetailsDto[].class));

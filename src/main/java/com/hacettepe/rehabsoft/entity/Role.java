@@ -22,8 +22,10 @@ public class Role extends BaseEntity {
 
     //Her role bir id'ye sahip: Simdilik iki ana rol var: Fizyoterapist ve Hasta
 
+
     @Column(name = "role_name", unique=true)
     private String name;
+
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
     private Collection<User> users;
