@@ -36,6 +36,6 @@ public class FormFieldDto {
 
 
     @ApiModelProperty(required = true, value = "formFieldDefaultValueList")
-    private Collection<FormFieldDefaultValue> formFieldDefaultValueCollection;
+    private Collection<FormFieldDefaultValueDto> formFieldDefaultValueCollection;
 
 }

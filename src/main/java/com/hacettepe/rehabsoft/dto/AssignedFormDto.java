@@ -26,18 +26,18 @@ public class AssignedFormDto {
 
     @NotEmpty
     @ApiModelProperty(required = true, value = "formDynamic")
-    private FormDynamic formDynamic;
+    private FormDynamicDto formDynamic;
 
     @NotEmpty
     @ApiModelProperty(required = true, value = "patient")
-    private Patient patient;
+    private PatientDto patient;
 
     @NotEmpty
     @ApiModelProperty(required = true, value = "isAnswered")
     private boolean isFormAnswered;
 
     @ApiModelProperty(required = true, value = "formAnswersCollection")
-    private Collection<FormAnswers> formAnswersCollection;
+    private Collection<FormAnswerDto> formAnswersCollection;
 
 }
 

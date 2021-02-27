@@ -19,6 +19,6 @@ public class FormTemplateDto {
 
     @NotEmpty
     @ApiModelProperty(required = true, value = "formDynamic")
-    private FormDynamic formDynamic;
+    private FormDynamicDto formDynamic;
 
 }

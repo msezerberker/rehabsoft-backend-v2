@@ -26,7 +26,7 @@ public class FormAnswerDto {
 
     @NotEmpty
     @ApiModelProperty(required = true, value = "assignedForm")
-    private AssignedForm assignedForm;
+    private AssignedFormDto assignedForm;
 
     @NotEmpty
     @ApiModelProperty(required = true, value = "formField")

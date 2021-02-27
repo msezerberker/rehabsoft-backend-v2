@@ -97,4 +97,17 @@ public class FormDynamicServiceImpl implements FormDynamicService {
         return assignedFormDtoList;
     }
 
+    @Override
+    public AssignedFormDto getAssignedFormById(int id) {
+        AssignedForm assignedForm = assignedFormRepository.findById(id);
+        AssignedFormDto assignedFormDto = modelMapper.map(assignedForm,AssignedFormDto.class);
+
+        if (assignedFormDto == null){
+            log.warn("Forma erişilemedi !!!");
+            return null;
+        }
+        return assignedFormDto;
+    }
+
+
 }

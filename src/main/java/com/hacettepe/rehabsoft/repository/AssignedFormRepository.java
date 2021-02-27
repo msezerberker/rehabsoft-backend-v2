@@ -8,4 +8,5 @@ import java.util.List;
 public interface AssignedFormRepository extends JpaRepository<AssignedForm,Long> {
     List<AssignedForm> findAllByPatientOrderByCreationDate(Patient patient);
    List<AssignedForm> findAllByPatientAndIsAnsweredOrderByCreationDate(Patient patient, Boolean answered);
+   AssignedForm findById(int id);
 }

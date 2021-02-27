@@ -15,5 +15,7 @@ public interface FormDynamicService {
 
     List<AssignedFormDto> getAssignedFormAnswered(String tcKimlikNo);
 
+    AssignedFormDto getAssignedFormById(int id);
+
 
 }

@@ -54,7 +54,7 @@ public class FormDynamicController {
     @RequestMapping(value = "/requests-not-answered/{patientTcNo}",method = RequestMethod.GET)
     public ResponseEntity<List<AssignedFormDto>> getAllAssignedFormNotAnswered(@PathVariable String patientTcNo){
 
-        List<AssignedFormDto> assignedFormDtoList = formDynamicService.getAssignedFormHistory(patientTcNo);
+        List<AssignedFormDto> assignedFormDtoList = formDynamicService.getAssignedFormNotAnswered(patientTcNo);
 
         return ResponseEntity.ok(assignedFormDtoList);
     }
@@ -62,9 +62,17 @@ public class FormDynamicController {
     @RequestMapping(value = "/request-answered/{patientTcNo}",method = RequestMethod.GET)
     public ResponseEntity<List<AssignedFormDto>> getAllAssignedFormAnswered(@PathVariable String patientTcNo) {
 
-        List<AssignedFormDto> assignedFormDtoList = formDynamicService.getAssignedFormHistory(patientTcNo);
+        List<AssignedFormDto> assignedFormDtoList = formDynamicService.getAssignedFormAnswered(patientTcNo);
 
         return ResponseEntity.ok(assignedFormDtoList);
+    }
+
+    @RequestMapping(value = "/get-assigned-form/{id}",method = RequestMethod.GET)
+    public ResponseEntity<AssignedFormDto> getAssignedFormByID(@PathVariable int id) {
+
+        AssignedFormDto assignedFormDto = formDynamicService.getAssignedFormById(id);
+
+        return ResponseEntity.ok(assignedFormDto);
     }
 
 
