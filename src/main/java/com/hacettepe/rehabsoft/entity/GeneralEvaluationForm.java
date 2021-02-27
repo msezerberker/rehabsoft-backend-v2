@@ -185,7 +185,6 @@ public class GeneralEvaluationForm extends BaseEntity {
     @OneToOne(cascade = javax.persistence.CascadeType.ALL,mappedBy = "generalEvaluationForm")
     private Epilepsy epilepsy;
 
-    @JsonManagedReference
     @OneToOne(cascade = javax.persistence.CascadeType.ALL,mappedBy = "generalEvaluationForm")
     private PhysiotherapyPast physiotherapyPast;
 

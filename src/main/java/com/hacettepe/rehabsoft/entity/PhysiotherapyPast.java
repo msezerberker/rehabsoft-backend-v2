@@ -1,10 +1,8 @@
 package com.hacettepe.rehabsoft.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -12,7 +10,8 @@ import java.util.Collection;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "physiotherapy_past")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @SequenceGenerator(name = "idgen", sequenceName = "physiotherapy_past_seq", initialValue = 1, allocationSize = 1)
@@ -23,7 +22,7 @@ public class PhysiotherapyPast extends BaseEntity {
     @OneToMany(mappedBy = "physiotherapyPast")
     private Collection<PhysiotherapyCentral> physiotherapyCentralCollection;
 
-    @JsonBackReference
+
     @OneToOne
     @JoinColumn(name = "general_evaluation_form_id")
     private GeneralEvaluationForm generalEvaluationForm;

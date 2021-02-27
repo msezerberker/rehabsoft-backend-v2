@@ -78,7 +78,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         log.warn("Rol metodu calisti");
         http.cors().and().csrf().disable().
                 authorizeRequests()
-                .antMatchers("/api/token/register", "/api/token", "/video/stream/mp4/toystory").permitAll() //bu url herkese acıktır, register ve login urlleri
+                .antMatchers("/api/token/register", "/api/token", "/video/stream/**").permitAll() //bu url herkese acıktır, register ve login urlleri
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()

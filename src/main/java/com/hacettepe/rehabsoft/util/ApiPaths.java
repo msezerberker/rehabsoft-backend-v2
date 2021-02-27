@@ -40,6 +40,10 @@ public class ApiPaths {
         public static final String CTRL = "./src/main/resources/static/exercise/";
     }
 
+    public static final class SavingResponseVideoRequestPath {
+        public static final String CTRL = "./src/main/resources/static/responsevideorequest/";
+    }
+
     public static final class Profile {
         public static final String CTRL = BASE_PATH + "/profile";
     }
@@ -52,8 +56,16 @@ public class ApiPaths {
         public static final String CTRL = BASE_PATH + "/video-request";
     }
 
+    public static final class ResponseVideoRequestPath {
+        public static final String CTRL = BASE_PATH + "/response-video-request";
+    }
+
     public static final class DoctorPath {
         public static final String CTRL = BASE_PATH + "/doctor";
+    }
+
+    public static final class MessagePath {
+        public static final String CTRL = BASE_PATH + "/message";
     }
 
     public static final class FormDynamicPath {

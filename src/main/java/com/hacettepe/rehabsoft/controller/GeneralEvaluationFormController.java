@@ -1,14 +1,19 @@
 package com.hacettepe.rehabsoft.controller;
 
 import com.hacettepe.rehabsoft.dto.GefDto;
+import com.hacettepe.rehabsoft.dto.GeneralEvaluationFormDto;
 import com.hacettepe.rehabsoft.helper.ResponseMessage;
 import com.hacettepe.rehabsoft.service.GeneralEvaluationFormService;
 import com.hacettepe.rehabsoft.util.ApiPaths;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Slf4j
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
@@ -57,13 +62,58 @@ public class GeneralEvaluationFormController {
 
 
     @RequestMapping(value = "/get-form/{tcKimlikNo}",method = RequestMethod.GET)
-    public ResponseEntity<GefDto> getGefd(@PathVariable String tcKimlikNo){
+    public ResponseEntity<GeneralEvaluationFormDto> getGefd(@PathVariable String tcKimlikNo){
         log.warn("get-form(evaluation icin) metodu basariyla calisti");
 
         return ResponseEntity.ok(generalEvaluationFormService.getGefd(tcKimlikNo));
     }
 
 
+    @PreAuthorize("hasRole('ROLE_USER')" + "|| hasRole('ROLE_DOCTOR')")
+    @RequestMapping(value = "/getbotoximage/{id}",method = RequestMethod.GET, produces = MediaType.ALL_VALUE)
+    public ResponseEntity<byte[]> getBotoxImageById(@PathVariable Long id) throws IOException {
+        log.warn("getBotoxImageById() metoduna girdi "+id);
+        byte[] exerciseImage = generalEvaluationFormService.getBotoxImageById(id);
+        if(exerciseImage==null){
+            log.error("Botox resmi bulunamadi ");
+            responseMessage.setResponseMessage("Hata oldu");
+            return ResponseEntity.badRequest().body(null);
+        }
+        else {
+            return ResponseEntity.ok(exerciseImage);
+        }
+    }
+
+
+    @PreAuthorize("hasRole('ROLE_USER')" + "|| hasRole('ROLE_DOCTOR')")
+    @RequestMapping(value = "/getepicrisisimage/{id}",method = RequestMethod.GET, produces = MediaType.ALL_VALUE)
+    public ResponseEntity<byte[]> getEpicrisisImageById(@PathVariable Long id) throws IOException {
+        log.warn("getEpicrisisImageById() metoduna girdi "+id);
+        byte[] epicrisisImageById = generalEvaluationFormService.getEpicrisisImageById(id);
+        if(epicrisisImageById==null){
+            log.error("Epicrisis resmi bulunamadi ");
+            responseMessage.setResponseMessage("Hata oldu");
+            return ResponseEntity.badRequest().body(null);
+        }
+        else {
+            return ResponseEntity.ok(epicrisisImageById);
+        }
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER')" + "|| hasRole('ROLE_DOCTOR')")
+    @RequestMapping(value = "/getorthesisimage/{id}",method = RequestMethod.GET, produces = MediaType.ALL_VALUE)
+    public ResponseEntity<byte[]> getOrthesisImageById(@PathVariable Long id) throws IOException {
+        log.warn("getOrthesisImageById() metoduna girdi "+id);
+        byte[] orthesisImageById = generalEvaluationFormService.getOrthesisImageById(id);
+        if(orthesisImageById==null){
+            log.error("Epicrisis resmi bulunamadi ");
+            responseMessage.setResponseMessage("Hata oldu");
+            return ResponseEntity.badRequest().body(null);
+        }
+        else {
+            return ResponseEntity.ok(orthesisImageById);
+        }
+    }
 
 
 }

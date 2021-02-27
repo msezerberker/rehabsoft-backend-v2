@@ -3,6 +3,7 @@ package com.hacettepe.rehabsoft.service;
 import com.hacettepe.rehabsoft.dto.NotificationDto;
 import com.hacettepe.rehabsoft.entity.Patient;
 import com.hacettepe.rehabsoft.entity.User;
+import com.hacettepe.rehabsoft.entity.VideoRequest;
 
 import java.util.List;
 
@@ -22,4 +23,6 @@ public interface NotificationService {
     void deleteGeneralEvaluationFormNotification(User user);
 
     void createNotifiactionForNewPatientToDoctor(Patient patient);
+
+    void createNotifiactionForNewVideoRequest(VideoRequest videoRequest);
 }

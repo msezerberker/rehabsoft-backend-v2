@@ -17,8 +17,8 @@ import javax.persistence.*;
 @SequenceGenerator(name = "idgen", sequenceName = "expectations_about_program_seq", initialValue = 1, allocationSize = 1)
 public class ExpectationsAboutProgram extends BaseEntity{
 
-    @Column(name = "expectaition_content")
-    private String expectaitionContent;
+    @Column(name = "expectation_content")
+    private String expectationContent;
 
     @JsonBackReference
     @ManyToOne
