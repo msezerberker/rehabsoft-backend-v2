@@ -32,9 +32,11 @@ public class User extends BaseEntity{
     @Column(name = "email", unique=true)
     private String email;
 
+
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
+
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     private Collection<Notification> notificationCollection;

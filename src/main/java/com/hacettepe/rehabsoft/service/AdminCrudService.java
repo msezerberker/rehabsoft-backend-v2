@@ -19,7 +19,7 @@ public interface AdminCrudService {
 
     boolean createNewAdmin(RegistrationRequest registrationRequest);
     boolean deleteAdmin(Long id);
-    List<User> listAllAdmins();
+    List<UserCrudDto> listAllAdmins();
 
 
 }

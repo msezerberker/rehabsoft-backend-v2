@@ -60,7 +60,7 @@ public class AdminController {
 
 
 
-    @RequestMapping(value = "/deletedoctor/{id}",method = RequestMethod.GET)
+    @RequestMapping(value = "/deletedoctor/{id}",method = RequestMethod.DELETE)
     @ApiOperation(value="Delete Doctor",response = Boolean.class)
     public ResponseEntity<ResponseMessage> deleteDoctor(@PathVariable Long id){
 
@@ -119,9 +119,10 @@ public class AdminController {
 
 
 
-    @RequestMapping(value = "/deleteadmin/{id}",method = RequestMethod.GET)
+    @RequestMapping(value = "/deleteadmin/{id}",method = RequestMethod.DELETE)
     @ApiOperation(value="Delete Admin",response = Boolean.class)
     public ResponseEntity<ResponseMessage> deleteAdmin(@PathVariable Long id){
+        log.warn("AdminCrud: delete adminn metodu basariyla calisti");
 
         if(adminCrudService.deleteAdmin(id)){
             responseMessage.setResponseMessage("Admin başarı ile kaldırıldı");
@@ -138,12 +139,12 @@ public class AdminController {
 
 
     @RequestMapping(value = "/admins",method = RequestMethod.GET)
-    public ResponseEntity<List<User>> listAllAdmins(){
+    public ResponseEntity<List<UserCrudDto>> listAllAdmins(){
         log.warn("AdminCrud: listAllAdmins metodu basariyla calisti");
-        List<User> adminList = adminCrudService.listAllAdmins();
+        List<UserCrudDto> admins = adminCrudService.listAllAdmins();
 
 
-        return ResponseEntity.ok(adminList);
+        return ResponseEntity.ok(admins);
     }
 
 

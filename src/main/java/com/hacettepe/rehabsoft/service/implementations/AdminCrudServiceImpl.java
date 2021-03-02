@@ -30,7 +30,7 @@ import java.util.ListIterator;
 @RequiredArgsConstructor
 public class AdminCrudServiceImpl implements AdminCrudService {
 
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
     private final AdminService adminService;
     private final UserService userService;
     private final UserRepository userRepository;
@@ -66,10 +66,14 @@ public class AdminCrudServiceImpl implements AdminCrudService {
 
     @Override
     public List<UserCrudDto> listAllDoctors(){
+        List<User> doctors= userRepository.getAllByRoleName("DOCTOR");
 
-        List<User> doctorUsers= userRepository.getAllByRoleName("DOCTOR");
+        if(doctors==null){
+            return null;}
 
-        return Arrays.asList(modelMapper.map(doctorUsers, UserCrudDto[].class));
+        return Arrays.asList(modelMapper.map(doctors, UserCrudDto[].class));
+
+
     }
 
 
@@ -110,13 +114,13 @@ public class AdminCrudServiceImpl implements AdminCrudService {
 
 
     @Override
-    public List<User> listAllAdmins(){
-        log.warn("Admin servisine giris basarili: ");
-       // Role role = roleRepository.findByName("ADMIN");
-        List<User> adminUsers= userRepository.getAllByRoleName("USER");
+    public List<UserCrudDto> listAllAdmins(){
+        List<User> adminUsers= userRepository.getAllByRoleName("ADMIN");
 
+        if(adminUsers==null){
+            return null;}
 
-        return adminUsers;
+        return Arrays.asList(modelMapper.map(adminUsers, UserCrudDto[].class));
 
 
 
