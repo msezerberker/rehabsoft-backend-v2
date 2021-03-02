@@ -29,4 +29,7 @@ public class UserDto {
     @ApiModelProperty(required = true,value = "E-Mail")
     private String email;
 
+
+
+
 }

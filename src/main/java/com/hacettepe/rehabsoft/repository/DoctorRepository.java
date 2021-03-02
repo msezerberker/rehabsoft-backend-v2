@@ -11,4 +11,8 @@ public interface DoctorRepository extends JpaRepository<Doctor,Long> {
 
     Doctor getDoctorByPatientCollectionContains(Patient patient);
 
+    Boolean removeByUserId(Long id);
+
+    Boolean existsByUserId(Long id);
+
 }
