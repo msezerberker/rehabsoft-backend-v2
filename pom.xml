@@ -14,10 +14,10 @@
 	<name>rehabsoft</name>
 	<description>Demo project for Spring Boot</description>
 
-<!--	<properties>-->
-<!--		<java.version>11</java.version>-->
+	<properties>
+		<java.version>11</java.version>
 <!--		<spring-security.version>5.2.3.RELEASE</spring-security.version>-->
-<!--	</properties>-->
+	</properties>
 
 	<dependencies>
 
