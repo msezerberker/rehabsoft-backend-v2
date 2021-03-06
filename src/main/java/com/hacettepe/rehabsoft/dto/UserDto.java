@@ -1,5 +1,5 @@
 package com.hacettepe.rehabsoft.dto;
- 
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -34,5 +34,4 @@ public class UserDto {
     @ApiModelProperty(required = true,value = "E-Mail")
     private String email;
 
-    private Collection<NotificationDto> notificationCollection;
 }
