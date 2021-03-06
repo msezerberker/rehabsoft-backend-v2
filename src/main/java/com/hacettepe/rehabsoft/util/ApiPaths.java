@@ -4,7 +4,7 @@ public class ApiPaths {
 
     private static final String BASE_PATH = "/api";
 
-    public static final String LOCAL_CLIENT_BASE_PATH = "https://rehabsoft.herokuapp.com";
+    public static final String LOCAL_CLIENT_BASE_PATH = "http://localhost:4200";
     public static final String PROD_CLIENT_BASE_PATH = "http://localhost:4200";
 
     public static final class AdminPath {
