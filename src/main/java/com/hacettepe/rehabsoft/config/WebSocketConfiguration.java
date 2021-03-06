@@ -43,7 +43,7 @@ public class WebSocketConfiguration implements WebSocketConfigurer {
 //                return b;
 //            }
 //        })
-        .setAllowedOrigins("http://localhost:4200");
+        .setAllowedOrigins(ApiPaths.LOCAL_CLIENT_BASE_PATH);
     }
 
 }

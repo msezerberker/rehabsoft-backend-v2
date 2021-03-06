@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Slf4j
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
+@CrossOrigin(origins = ApiPaths.LOCAL_CLIENT_BASE_PATH, maxAge = 3600)
 @RequestMapping(ApiPaths.ExercisePath.CTRL)
 @RestController
 @Api(value = "/api/exercises")
