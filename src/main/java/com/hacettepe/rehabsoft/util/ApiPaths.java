@@ -5,7 +5,6 @@ public class ApiPaths {
     private static final String BASE_PATH = "/api";
 
 
-
     public static final class UserPath {
         public static final String CTRL = BASE_PATH + "/users";
     }
@@ -68,4 +67,10 @@ public class ApiPaths {
         public static final String CTRL = BASE_PATH + "/message";
     }
 
+    public static final class OnlineMeetingWebSocket {
+        public static final String CTRL = BASE_PATH + "/websocket/online-meeting";
+    }
+    public static final class OnlineMeetingPath {
+        public static final String CTRL = BASE_PATH + "/online-meeting";
+    }
 }

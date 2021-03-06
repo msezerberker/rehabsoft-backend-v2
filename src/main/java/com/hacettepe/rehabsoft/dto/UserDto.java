@@ -1,11 +1,12 @@
 package com.hacettepe.rehabsoft.dto;
-
+ 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.validation.constraints.*;
+import java.util.Collection;
 
 @Data
 @AllArgsConstructor
@@ -15,6 +16,10 @@ public class UserDto {
 
     @ApiModelProperty(required = true,value = "ID")
     private Long id;
+
+    @NotBlank(message = "Lütfen kullanici adinizi giriniz")
+    @ApiModelProperty(required = true,value = "Username")
+    private String username;
 
     @NotBlank(message = "Lütfen adinizi giriniz")
     @ApiModelProperty(required = true,value = "FirstName")
@@ -29,4 +34,5 @@ public class UserDto {
     @ApiModelProperty(required = true,value = "E-Mail")
     private String email;
 
+    private Collection<NotificationDto> notificationCollection;
 }
