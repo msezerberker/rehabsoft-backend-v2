@@ -79,6 +79,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable().
                 authorizeRequests()
                 .antMatchers("/api/token/register", "/api/token", "/video/stream/**").permitAll() //bu url herkese acıktır, register ve login urlleri
+                .antMatchers("/api/websocket/online-meeting").authenticated()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()

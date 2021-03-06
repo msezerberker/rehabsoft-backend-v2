@@ -16,7 +16,7 @@ import java.util.List;
 
 //@CrossOrigin(origins = "*", maxAge = 3600)
 @Slf4j
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
+@CrossOrigin(origins = ApiPaths.LOCAL_CLIENT_BASE_PATH, maxAge = 3600)
 @RequestMapping(ApiPaths.UserPath.CTRL)
 @RestController
 @Api(value = "/api/users")

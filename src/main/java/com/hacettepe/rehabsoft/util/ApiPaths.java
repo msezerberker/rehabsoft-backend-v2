@@ -4,6 +4,9 @@ public class ApiPaths {
 
     private static final String BASE_PATH = "/api";
 
+    public static final String LOCAL_CLIENT_BASE_PATH = "https://rehabsoft.herokuapp.com";
+    public static final String PROD_CLIENT_BASE_PATH = "http://localhost:4200";
+
     public static final class AdminPath {
         public static final String CTRL = BASE_PATH + "/admin";
     }
@@ -72,4 +75,10 @@ public class ApiPaths {
         public static final String CTRL = BASE_PATH + "/message";
     }
 
+    public static final class OnlineMeetingWebSocket {
+        public static final String CTRL = BASE_PATH + "/websocket/online-meeting";
+    }
+    public static final class OnlineMeetingPath {
+        public static final String CTRL = BASE_PATH + "/online-meeting";
+    }
 }

@@ -10,7 +10,7 @@ import javax.persistence.*;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "admin")
+@Table(name = "admins")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

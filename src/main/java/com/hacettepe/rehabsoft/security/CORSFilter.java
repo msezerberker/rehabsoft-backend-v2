@@ -1,5 +1,7 @@
 package com.hacettepe.rehabsoft.security;
 
+import com.hacettepe.rehabsoft.util.ApiPaths;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -16,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class CORSFilter implements Filter {
 
-    private final List<String> allowedOrigins = Arrays.asList("http://localhost:4200");
+    private final List<String> allowedOrigins = Arrays.asList(ApiPaths.LOCAL_CLIENT_BASE_PATH);
 
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         System.out.println("Filtering on...........................................................");

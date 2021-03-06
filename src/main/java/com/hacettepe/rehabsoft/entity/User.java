@@ -41,4 +41,9 @@ public class User extends BaseEntity{
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     private Collection<Notification> notificationCollection;
 
+    @OneToMany(mappedBy = "doctorUser")
+    private Collection<OnlineMeeting> doctorUserOnlineMeetingCollection;
+
+    @OneToMany(mappedBy = "patientUser")
+    private Collection<OnlineMeeting> patientUserOnlineMeetingCollection;
 }
