@@ -1,16 +1,15 @@
 package com.hacettepe.rehabsoft.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 import javax.persistence.*;
 import java.util.Collection;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "form_dynamic")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @SequenceGenerator(name = "idgen", sequenceName = "form_dynamic_seq", initialValue = 1, allocationSize = 1)
@@ -22,7 +21,7 @@ public class FormDynamic extends BaseEntity{
     @Column(name = "explanation")
     private String explanation;
 
-    @OneToMany(mappedBy = "formDynamic")
+    @OneToMany(mappedBy = "formDynamic" , cascade = CascadeType.REMOVE)
     private Collection<FormField> formFieldCollection;
 
 

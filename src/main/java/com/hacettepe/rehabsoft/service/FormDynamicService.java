@@ -17,5 +17,7 @@ public interface FormDynamicService {
 
     AssignedFormDto getAssignedFormById(int id);
 
+    boolean answerTheForm(AssignedFormDto assignedFormDto, String formID);
+
 
 }

@@ -1,8 +1,5 @@
 package com.hacettepe.rehabsoft.dto;
 
-import com.hacettepe.rehabsoft.entity.FormAnswers;
-import com.hacettepe.rehabsoft.entity.FormDynamic;
-import com.hacettepe.rehabsoft.entity.Patient;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;

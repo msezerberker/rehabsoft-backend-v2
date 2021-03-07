@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotEmpty;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -20,5 +21,12 @@ public class FormTemplateDto {
     @NotEmpty
     @ApiModelProperty(required = true, value = "formDynamic")
     private FormDynamicDto formDynamic;
+
+    @NotEmpty
+    @ApiModelProperty(required = true, value="user")
+    private UserDto user;
+
+    @NotEmpty
+    private LocalDateTime creationDate;
 
 }

@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @Slf4j
@@ -59,7 +58,7 @@ public class FormDynamicController {
         return ResponseEntity.ok(assignedFormDtoList);
     }
 
-    @RequestMapping(value = "/request-answered/{patientTcNo}",method = RequestMethod.GET)
+    @RequestMapping(value = "/requests-answered/{patientTcNo}",method = RequestMethod.GET)
     public ResponseEntity<List<AssignedFormDto>> getAllAssignedFormAnswered(@PathVariable String patientTcNo) {
 
         List<AssignedFormDto> assignedFormDtoList = formDynamicService.getAssignedFormAnswered(patientTcNo);
@@ -68,14 +67,30 @@ public class FormDynamicController {
     }
 
     @RequestMapping(value = "/get-assigned-form/{id}",method = RequestMethod.GET)
-    public ResponseEntity<AssignedFormDto> getAssignedFormByID(@PathVariable int id) {
+    public ResponseEntity<AssignedFormDto> getAssignedFormByID(@PathVariable String id) {
 
-        AssignedFormDto assignedFormDto = formDynamicService.getAssignedFormById(id);
+        int id2 = Integer.parseInt(id);
+
+        AssignedFormDto assignedFormDto = formDynamicService.getAssignedFormById(id2);
 
         return ResponseEntity.ok(assignedFormDto);
     }
 
+    @RequestMapping(value="/answer-the-form/{formID}", method = RequestMethod.POST)
+    public ResponseEntity<ResponseMessage> AnswerForm(@RequestBody AssignedFormDto assignedFormDto,@PathVariable String formID){
+        log.warn("Hastaya formu cevaplıyor controller'ı çalışıyor");
 
+        boolean sonuc = formDynamicService.answerTheForm(assignedFormDto,formID);
+
+        if(sonuc){
+            responseMessage.setResponseMessage("islem basarili");
+        }
+        else{
+            responseMessage.setResponseMessage("Form atama sırasında bir hata meydana geldi");
+        }
+
+        return ResponseEntity.ok(responseMessage);
+    }
 
 
 }

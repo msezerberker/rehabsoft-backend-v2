@@ -2,6 +2,7 @@ package com.hacettepe.rehabsoft.service.implementations;
 
 import com.hacettepe.rehabsoft.dto.AssignedFormDto;
 import com.hacettepe.rehabsoft.entity.AssignedForm;
+import com.hacettepe.rehabsoft.entity.FormAnswers;
 import com.hacettepe.rehabsoft.entity.FormField;
 import com.hacettepe.rehabsoft.entity.FormFieldDefaultValue;
 import com.hacettepe.rehabsoft.helper.SecurityHelper;
@@ -12,8 +13,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -29,15 +33,20 @@ public class FormDynamicServiceImpl implements FormDynamicService {
     @Autowired
     FormFieldDefaultValueRepository formFieldDefaultValueRepository;
 
+    @Autowired
+    FormAnswersRepository formAnswersRepository;
+
     private final SecurityHelper securityHelper;
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
     private final PatientRepository patientRepository;
     private final DoctorRepository doctorRepository;
 
+
     @Override
+    @Transactional(readOnly = true)
     public List<AssignedFormDto> getAssignedFormHistory(String tcKimlikNo) {
-        List<AssignedForm> assignedFormList = assignedFormRepository.findAllByPatientOrderByCreationDate(patientRepository.getPatientByTcKimlikNo(tcKimlikNo));
+        List<AssignedForm> assignedFormList = assignedFormRepository.findAllByPatientOrderByCreationDateDesc(patientRepository.getPatientByTcKimlikNo(tcKimlikNo));
         List<AssignedFormDto> assignedFormDtoList =  Arrays.asList(modelMapper.map(assignedFormList, AssignedFormDto[].class));
 
         if(assignedFormDtoList==null){
@@ -48,6 +57,7 @@ public class FormDynamicServiceImpl implements FormDynamicService {
     }
 
     @Override
+    @Transactional
     public boolean assignForm(AssignedFormDto assignedFormDto, String tcKimlikNo) {
         log.warn("Dynamic Form assign Form metoduna girdi");
 
@@ -72,8 +82,9 @@ public class FormDynamicServiceImpl implements FormDynamicService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<AssignedFormDto> getAssignedFormNotAnswered(String tcKimlikNo) {
-        List<AssignedForm> assignedFormList = assignedFormRepository.findAllByPatientAndIsAnsweredOrderByCreationDate(patientRepository.getPatientByTcKimlikNo(tcKimlikNo),false);
+        List<AssignedForm> assignedFormList = assignedFormRepository.findAllByPatientAndIsAnsweredOrderByCreationDateDesc(patientRepository.getPatientByTcKimlikNo(tcKimlikNo),false);
         List<AssignedFormDto> assignedFormDtoList =  Arrays.asList(modelMapper.map(assignedFormList, AssignedFormDto[].class));
 
         if(assignedFormDtoList==null){
@@ -85,8 +96,9 @@ public class FormDynamicServiceImpl implements FormDynamicService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<AssignedFormDto> getAssignedFormAnswered(String tcKimlikNo) {
-        List<AssignedForm> assignedFormList = assignedFormRepository.findAllByPatientAndIsAnsweredOrderByCreationDate(patientRepository.getPatientByTcKimlikNo(tcKimlikNo),true);
+        List<AssignedForm> assignedFormList = assignedFormRepository.findAllByPatientAndIsAnsweredOrderByCreationDateDesc(patientRepository.getPatientByTcKimlikNo(tcKimlikNo),true);
         List<AssignedFormDto> assignedFormDtoList =  Arrays.asList(modelMapper.map(assignedFormList, AssignedFormDto[].class));
 
         if(assignedFormDtoList==null){
@@ -98,8 +110,10 @@ public class FormDynamicServiceImpl implements FormDynamicService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public AssignedFormDto getAssignedFormById(int id) {
-        AssignedForm assignedForm = assignedFormRepository.findById(id);
+        long lid = id;
+        AssignedForm assignedForm = assignedFormRepository.findById(lid).get();
         AssignedFormDto assignedFormDto = modelMapper.map(assignedForm,AssignedFormDto.class);
 
         if (assignedFormDto == null){
@@ -109,5 +123,22 @@ public class FormDynamicServiceImpl implements FormDynamicService {
         return assignedFormDto;
     }
 
+    @Override
+    @Transactional
+    public boolean answerTheForm(AssignedFormDto assignedFormDto, String formID) {
 
+        long lFormID = Integer.parseInt(formID);
+        AssignedForm assignedFormWanswers = modelMapper.map(assignedFormDto, AssignedForm.class);
+        AssignedForm assignedForm = assignedFormRepository.findById(lFormID).get();
+        assignedForm.setFormAnswersCollection(assignedFormWanswers.getFormAnswersCollection());
+        for(FormAnswers answer : assignedFormWanswers.getFormAnswersCollection()){
+            answer.setAssignedForm(assignedForm);
+            answer.setFormField(formFieldRepository.findById(answer.getFormField().getId()).get());
+            formAnswersRepository.save(answer);
+        }
+        assignedForm.setAnswered(true);
+        assignedFormRepository.save(assignedForm);
+
+        return true;
+    }
 }

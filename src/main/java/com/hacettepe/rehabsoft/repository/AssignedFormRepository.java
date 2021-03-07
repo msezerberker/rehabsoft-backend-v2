@@ -6,7 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface AssignedFormRepository extends JpaRepository<AssignedForm,Long> {
-    List<AssignedForm> findAllByPatientOrderByCreationDate(Patient patient);
-   List<AssignedForm> findAllByPatientAndIsAnsweredOrderByCreationDate(Patient patient, Boolean answered);
-   AssignedForm findById(int id);
+
+    List<AssignedForm> findAllByPatientOrderByCreationDateDesc(Patient patient);
+   List<AssignedForm> findAllByPatientAndIsAnsweredOrderByCreationDateDesc(Patient patient, Boolean answered);
+
 }
