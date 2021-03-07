@@ -909,6 +909,11 @@ CREATE TABLE public.form_template
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
+ALTER TABLE form_template
+    ADD COLUMN user_id BIGINT;
+ALTER TABLE form_template
+    ADD CONSTRAINT fk_orders_customers
+        FOREIGN KEY (user_id) REFERENCES users (id);
 
 --new
 CREATE TABLE public.epilepsy
