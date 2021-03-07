@@ -912,7 +912,7 @@ CREATE TABLE public.form_template
 ALTER TABLE form_template
     ADD COLUMN user_id BIGINT;
 ALTER TABLE form_template
-    ADD CONSTRAINT fk_orders_customers
+    ADD CONSTRAINT fk_user_id
         FOREIGN KEY (user_id) REFERENCES users (id);
 
 --new
