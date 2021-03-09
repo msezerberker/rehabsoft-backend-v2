@@ -1,10 +1,8 @@
 package com.hacettepe.rehabsoft.service.implementations;
 
 import com.hacettepe.rehabsoft.dto.AssignedFormDto;
-import com.hacettepe.rehabsoft.entity.AssignedForm;
-import com.hacettepe.rehabsoft.entity.FormAnswers;
-import com.hacettepe.rehabsoft.entity.FormField;
-import com.hacettepe.rehabsoft.entity.FormFieldDefaultValue;
+import com.hacettepe.rehabsoft.dto.FormTemplateDto;
+import com.hacettepe.rehabsoft.entity.*;
 import com.hacettepe.rehabsoft.helper.SecurityHelper;
 import com.hacettepe.rehabsoft.repository.*;
 import com.hacettepe.rehabsoft.service.FormDynamicService;
@@ -35,6 +33,12 @@ public class FormDynamicServiceImpl implements FormDynamicService {
 
     @Autowired
     FormAnswersRepository formAnswersRepository;
+
+    @Autowired
+    FormTemplateRepository formTemplateRepository;
+
+    @Autowired
+    FormDynamicRepository formDynamicRepository;
 
     private final SecurityHelper securityHelper;
     private final ModelMapper modelMapper;
@@ -139,6 +143,71 @@ public class FormDynamicServiceImpl implements FormDynamicService {
         assignedForm.setAnswered(true);
         assignedFormRepository.save(assignedForm);
 
+        return true;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<FormTemplateDto> getFormTemplatesbyDoctor(String userName){
+        List<FormTemplate> formTemplates = formTemplateRepository.findByUserOrderByCreationDateDesc(userRepository.findByUsername(userName));
+        List<FormTemplateDto> formTemplateDtoList = Arrays.asList(modelMapper.map(formTemplates,FormTemplateDto[].class));
+        if(formTemplateDtoList==null){
+            log.warn("Henüz bir form örneği oluşturulmadı");
+            return null;
+        }
+        return formTemplateDtoList;
+    }
+
+    @Override
+    @Transactional
+    public boolean addFormTemplate(FormTemplateDto formTemplateDto,String userName){
+        FormTemplate formTemplate = modelMapper.map(formTemplateDto, FormTemplate.class);
+
+        FormDynamic formDynamic = formTemplate.getFormDynamic();
+        formDynamicRepository.save(formDynamic);
+
+        for(FormField field : formTemplate.getFormDynamic().getFormFieldCollection() ){
+            field.setFormDynamic(formDynamic);
+            formFieldRepository.save(field);
+            if(field.getFieldType().equals("SECMELI") || field.getFieldType().equals("COKLU_SECMELI") ){
+                for(FormFieldDefaultValue defaultValue : field.getFormFieldDefaultValueCollection()){
+                    defaultValue.setFormField(field);
+                    formFieldDefaultValueRepository.save(defaultValue);
+                }
+            }
+        }
+
+        formTemplate.setFormDynamic(formDynamic);
+        formTemplate.setUser(userRepository.findByUsername(userName));
+        formTemplateRepository.save(formTemplate);
+
+        return true;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public FormTemplateDto findTemplateByID(int id){
+        long lid = id;
+        FormTemplate formTemplate = formTemplateRepository.findById(lid).get();
+        FormTemplateDto formTemplateDto = modelMapper.map(formTemplate, FormTemplateDto.class);
+
+        if (formTemplateDto == null){
+            log.warn("Forma erişilemedi !!!");
+            return null;
+        }
+        return formTemplateDto;
+
+    }
+
+    @Override
+    @Transactional
+    public boolean assignTemplateForm(String patientTcNo, String templateID){
+        AssignedForm assignedForm = new AssignedForm();
+        assignedForm.setAnswered(false);
+        assignedForm.setPatient(patientRepository.getPatientByTcKimlikNo(patientTcNo));
+        long lTemplateID = Integer.parseInt(templateID);
+        assignedForm.setFormDynamic(formTemplateRepository.findById(lTemplateID).get().getFormDynamic());
+        assignedFormRepository.save(assignedForm);
         return true;
     }
 }

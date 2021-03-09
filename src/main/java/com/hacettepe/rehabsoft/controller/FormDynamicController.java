@@ -1,6 +1,7 @@
 package com.hacettepe.rehabsoft.controller;
 
 import com.hacettepe.rehabsoft.dto.AssignedFormDto;
+import com.hacettepe.rehabsoft.dto.FormTemplateDto;
 import com.hacettepe.rehabsoft.helper.ResponseMessage;
 import com.hacettepe.rehabsoft.service.FormDynamicService;
 import com.hacettepe.rehabsoft.util.ApiPaths;
@@ -46,6 +47,48 @@ public class FormDynamicController {
             responseMessage.setResponseMessage("Form atama sırasında bir hata meydana geldi");
         }
 
+        return ResponseEntity.ok(responseMessage);
+    }
+
+    @RequestMapping(value = "/get-all-templates/{userName}", method = RequestMethod.GET)
+    public ResponseEntity<List<FormTemplateDto>> getAllTemplates( @PathVariable String userName){
+        List<FormTemplateDto> formTemplateDtoList = formDynamicService.getFormTemplatesbyDoctor(userName);
+        return ResponseEntity.ok(formTemplateDtoList);
+    }
+
+    @RequestMapping(value = "/add-template/{userName}", method = RequestMethod.POST)
+    public ResponseEntity<ResponseMessage> AddTemplate(@RequestBody FormTemplateDto formTemplateDto,@PathVariable String userName){
+        log.warn("Doktor template ekleme controlleri calısıyor");
+
+        boolean result = formDynamicService.addFormTemplate(formTemplateDto, userName);
+
+        if(result){
+            responseMessage.setResponseMessage("islem basarili");
+        }
+        else{
+            responseMessage.setResponseMessage("Form atama sırasında bir hata meydana geldi");
+        }
+
+        return ResponseEntity.ok(responseMessage);
+
+    }
+
+    @RequestMapping(value = "get-template/{id}", method = RequestMethod.GET)
+    public ResponseEntity<FormTemplateDto> getTemplateByID(@PathVariable String id){
+
+        FormTemplateDto formTemplateDto =  formDynamicService.findTemplateByID(Integer.parseInt(id));
+        return ResponseEntity.ok(formTemplateDto) ;
+    }
+
+    @RequestMapping(value = "add-form-from-template/{templateID}",method = RequestMethod.POST)
+    public ResponseEntity<ResponseMessage> assignFormFromTemplate(@RequestBody String tcKimlikNo, @PathVariable String templateID){
+        boolean result = formDynamicService.assignTemplateForm(tcKimlikNo,templateID);
+        if(result){
+            responseMessage.setResponseMessage("Form başarıyla atandı");
+        }
+        else {
+            responseMessage.setResponseMessage("İşlem sırasında bir hata oluştu");
+        }
         return ResponseEntity.ok(responseMessage);
     }
 
