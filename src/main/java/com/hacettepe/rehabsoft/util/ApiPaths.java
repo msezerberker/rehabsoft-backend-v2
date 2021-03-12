@@ -69,8 +69,6 @@ public class ApiPaths {
         public static final String CTRL = BASE_PATH + "/response-video-request";
     }
 
-
-
     public static final class MessagePath {
         public static final String CTRL = BASE_PATH + "/message";
     }
@@ -78,7 +76,12 @@ public class ApiPaths {
     public static final class OnlineMeetingWebSocket {
         public static final String CTRL = BASE_PATH + "/websocket/online-meeting";
     }
+
     public static final class OnlineMeetingPath {
         public static final String CTRL = BASE_PATH + "/online-meeting";
+    }
+
+    public static final class FormDynamicPath {
+        public static final String CTRL = BASE_PATH + "/form-dynamic";
     }
 }

@@ -1,7 +1,6 @@
 package com.hacettepe.rehabsoft.service.implementations;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hacettepe.rehabsoft.dto.GefDto;
 import com.hacettepe.rehabsoft.dto.GeneralEvaluationFormDto;
 import com.hacettepe.rehabsoft.entity.*;
 import com.hacettepe.rehabsoft.helper.FileOperationHelper;
@@ -14,16 +13,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 

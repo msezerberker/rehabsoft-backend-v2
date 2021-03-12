@@ -1,6 +1,5 @@
 package com.hacettepe.rehabsoft.controller;
 
-import com.hacettepe.rehabsoft.dto.GefDto;
 import com.hacettepe.rehabsoft.dto.GeneralEvaluationFormDto;
 import com.hacettepe.rehabsoft.helper.ResponseMessage;
 import com.hacettepe.rehabsoft.service.GeneralEvaluationFormService;
