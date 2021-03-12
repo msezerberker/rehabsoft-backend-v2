@@ -37,7 +37,7 @@ public class DoctorServiceImpl implements DoctorService {
         user.setRole(role);
 
         //doctor kayıt işlemi
-        doctor.setUser(userRepository.findByUsername(username));
+        doctor.setUser(user);
         doctor.setPatientCollection(null);
         doctor.setVideoRequestCollection(null);
         doctorRepository.save(doctor);

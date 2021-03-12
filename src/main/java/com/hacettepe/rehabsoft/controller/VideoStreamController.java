@@ -1,6 +1,7 @@
 package com.hacettepe.rehabsoft.controller;
 
 import com.hacettepe.rehabsoft.service.implementations.VideoStreamService;
+import com.hacettepe.rehabsoft.util.ApiPaths;
 import com.hacettepe.rehabsoft.util.VideoStreamConstants.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 @Slf4j
-@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+@CrossOrigin(origins = ApiPaths.LOCAL_CLIENT_BASE_PATH, allowCredentials = "true")
 @RestController
 @RequestMapping("/video")
 public class VideoStreamController {

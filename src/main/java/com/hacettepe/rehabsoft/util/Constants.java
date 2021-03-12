@@ -8,4 +8,7 @@ public class Constants {
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String HEADER_STRING = "Authorization";
     public static final String AUTHORITIES_KEY = "scopes";
+    public static final Long PATIENT_ROLE_ID = 1L;
+    public static final Long ADMIN_ROLE_ID = 2L;
+    public static final Long DOCTOR_ROLE_ID = 3L;
 }

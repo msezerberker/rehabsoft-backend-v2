@@ -10,6 +10,7 @@ import com.hacettepe.rehabsoft.security.JwtTokenUtil;
 import com.hacettepe.rehabsoft.service.GeneralEvaluationFormService;
 import com.hacettepe.rehabsoft.service.PatientService;
 import com.hacettepe.rehabsoft.service.implementations.UserServiceImpl;
+import com.hacettepe.rehabsoft.util.ApiPaths;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +33,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/api/token") //Token pathine gelen bütün isteklere izin verilecek.Bunun ayarı SecurityConfig'de
 @Api(value = "/api/token")
-@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+@CrossOrigin(origins = ApiPaths.LOCAL_CLIENT_BASE_PATH, allowCredentials = "true")
 public class AccountController {
 
     @Autowired
@@ -110,7 +111,6 @@ public class AccountController {
         responseMessage.setResponseType(1);
         responseMessage.setResponseMessage("Basariyla kaydoldunuz!");
         return ResponseEntity.ok(responseMessage);
-
 
     }
 }

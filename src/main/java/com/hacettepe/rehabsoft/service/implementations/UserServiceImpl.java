@@ -7,6 +7,7 @@ import com.hacettepe.rehabsoft.repository.RoleRepository;
 import com.hacettepe.rehabsoft.repository.UserRepository;
 import com.hacettepe.rehabsoft.service.NotificationService;
 import com.hacettepe.rehabsoft.service.UserService;
+import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,6 +106,22 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         }
         return true;
     }
+
+
+    @Override
+    public Boolean deleteUser(Long id) {
+       if(userRepository.existsById(id)){
+           userRepository.deleteById(id);
+           return true;
+       }
+       else{
+           return false;
+       }
+
+    }
+
+
+
 
     @Override
     @Transactional

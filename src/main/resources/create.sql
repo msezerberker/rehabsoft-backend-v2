@@ -28,13 +28,13 @@ CREATE SEQUENCE public.doctor_seq
 ALTER SEQUENCE public.doctor_seq
     OWNER TO postgres;
 
-CREATE SEQUENCE public.admin_seq
+CREATE SEQUENCE public.admins_seq
     INCREMENT 1
     START 1
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.admin_seq
+ALTER SEQUENCE public.admins_seq
     OWNER TO postgres;
 
 CREATE SEQUENCE public.phone_seq
@@ -381,9 +381,9 @@ CREATE TABLE public."users"
 
 
 
-CREATE TABLE public.admin
+CREATE TABLE public.admins
 (
-    "id" bigint NOT NULL default nextval('admin_seq'),
+    "id" bigint NOT NULL default nextval('admins_seq'),
     creation_date timestamp without time zone,
     last_modified_date timestamp without time zone,
     "version" bigint,
@@ -1233,3 +1233,36 @@ CREATE TABLE public.message
 );
 
 ---******************** version 0.3 ****************************---
+
+---******************** version 0.5 ****************************---
+
+CREATE SEQUENCE public.online_meeting_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    CACHE 1;
+ALTER SEQUENCE public.online_meeting_seq
+    OWNER TO postgres;
+
+CREATE TABLE public.online_meeting
+(
+    "id" bigint NOT NULL default nextval('online_meeting_seq'),
+    creation_date timestamp without time zone,
+    last_modified_date timestamp without time zone,
+    "version" bigint,
+    doctor_user_id bigint,
+    patient_user_id bigint,
+    meeting_date timestamp without time zone,
+    PRIMARY KEY ("id"),
+    FOREIGN KEY (doctor_user_id)
+        REFERENCES public."users" ("id") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    FOREIGN KEY (patient_user_id)
+        REFERENCES public."users" ("id") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);
+
+---******************** version 0.5 ****************************---

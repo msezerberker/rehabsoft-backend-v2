@@ -13,7 +13,6 @@ import javax.validation.constraints.NotNull;
 @Data
 @Valid
 public class RegistrationRequest {
-    //Register olurken istenen bilgilerin DTOsu
 
     @NotBlank(message = "Ad alanı boş bırakılamaz")
     private String firstName;
@@ -27,7 +26,6 @@ public class RegistrationRequest {
     @NotBlank(message = "Şifre alanı boş bırakılamaz")
     private String password;
 
-    //private String passwordconfirmPassword;
     @NotBlank(message = "E-mail alanı boş bırakılamaz")
     private String email;
 }

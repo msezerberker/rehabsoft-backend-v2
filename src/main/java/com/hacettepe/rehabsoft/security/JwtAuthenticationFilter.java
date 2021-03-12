@@ -56,6 +56,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
             } catch(SignatureException e){
                 logger.error("Kullanici adiniz veya sifreniz yanlıs.Lütfen tekrar deneyin");
             }
+        }
+        else if(header == null && req.getHeader("sec-websocket-protocol") != null){
+            ///******** websocket filter ********///
+            authToken = req.getHeader("sec-websocket-protocol").split(",")[1];
+            authToken = authToken.trim();
+            try {
+                username = jwtTokenUtil.getUsernameFromToken(authToken);
+            } catch (IllegalArgumentException e) {
+                logger.error("an error occured during getting username from token", e);
+            } catch (ExpiredJwtException e) {
+                logger.warn("the token is expired and not valid anymore", e);
+            } catch(SignatureException e){
+                logger.error("Kullanici adiniz veya sifreniz yanlıs.Lütfen tekrar deneyin");
+            }
         } else {
             ///******** cookie filter ********///
             System.out.println(req.getServletPath());

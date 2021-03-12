@@ -4,10 +4,19 @@ public class ApiPaths {
 
     private static final String BASE_PATH = "/api";
 
+    public static final String LOCAL_CLIENT_BASE_PATH = "http://localhost:4200";
+//    public static final String LOCAL_CLIENT_BASE_PATH = "https://rehabsoft.herokuapp.com";
 
+    public static final class AdminPath {
+        public static final String CTRL = BASE_PATH + "/admin";
+    }
 
     public static final class UserPath {
         public static final String CTRL = BASE_PATH + "/users";
+    }
+
+    public static final class DoctorPath {
+        public static final String CTRL = BASE_PATH + "/doctor";
     }
 
     public static final class GeneralEvaluationFormPath {
@@ -60,16 +69,19 @@ public class ApiPaths {
         public static final String CTRL = BASE_PATH + "/response-video-request";
     }
 
-    public static final class DoctorPath {
-        public static final String CTRL = BASE_PATH + "/doctor";
-    }
-
     public static final class MessagePath {
         public static final String CTRL = BASE_PATH + "/message";
+    }
+
+    public static final class OnlineMeetingWebSocket {
+        public static final String CTRL = BASE_PATH + "/websocket/online-meeting";
+    }
+
+    public static final class OnlineMeetingPath {
+        public static final String CTRL = BASE_PATH + "/online-meeting";
     }
 
     public static final class FormDynamicPath {
         public static final String CTRL = BASE_PATH + "/form-dynamic";
     }
-
 }
