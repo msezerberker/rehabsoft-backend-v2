@@ -1,8 +1,12 @@
 package com.hacettepe.rehabsoft.config;
 
 import com.hacettepe.rehabsoft.service.OnlineMeetingService;
+import com.hacettepe.rehabsoft.util.ApiPaths;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.SubProtocolCapable;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -11,12 +15,15 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Component
+@Slf4j
+@Api(value = ApiPaths.OnlineMeetingWebSocket.CTRL)
 public class SocketHandler extends TextWebSocketHandler implements SubProtocolCapable {
 
-    private OnlineMeetingService onlineMeetingService;
+    private final OnlineMeetingService onlineMeetingService;
     List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
 
     public SocketHandler(OnlineMeetingService onlineMeetingService) {
@@ -27,10 +34,10 @@ public class SocketHandler extends TextWebSocketHandler implements SubProtocolCa
     public void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String request = message.getPayload();
 
-        for (WebSocketSession webSocketSession : sessions) {
-            System.out.println(webSocketSession.getPrincipal());
-            if (webSocketSession.isOpen() && isThisUserNotCurrentUserAndHasMeetingWithCurrentConnectedUser(session.getPrincipal().getName(), webSocketSession.getPrincipal().getName())) {
-                webSocketSession.sendMessage(message);
+        for (WebSocketSession connectedSession : sessions) {
+            System.out.println(connectedSession.getPrincipal());
+            if (connectedSession.isOpen() && isThisUserNotCurrentUserAndHasMeetingWithCurrentConnectedUser(Objects.requireNonNull(session.getPrincipal()).getName(), Objects.requireNonNull(connectedSession.getPrincipal()).getName())) {
+                connectedSession.sendMessage(message);
             }
         }
     }
@@ -49,6 +56,12 @@ public class SocketHandler extends TextWebSocketHandler implements SubProtocolCa
     @Override
     public List<String> getSubProtocols() {
         return Collections.singletonList("access-token");
+    }
+
+    @Override
+    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+        log.warn("Session is removed: "+session);
+        sessions.remove(session);
     }
 
     private boolean isThisUserNotCurrentUserAndHasMeetingWithCurrentConnectedUser(String currentConnectedUser, String otherUser) throws Exception {
