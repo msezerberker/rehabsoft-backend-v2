@@ -1,5 +1,6 @@
 package com.hacettepe.rehabsoft.config;
 
+import com.hacettepe.rehabsoft.dto.OnlineMeetingDto;
 import com.hacettepe.rehabsoft.service.OnlineMeetingService;
 import com.hacettepe.rehabsoft.util.ApiPaths;
 import io.swagger.annotations.Api;
@@ -13,6 +14,7 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -68,6 +70,14 @@ public class SocketHandler extends TextWebSocketHandler implements SubProtocolCa
         return !currentConnectedUser.equals(otherUser)
                 && onlineMeetingService.getOnlineMeetingsByUsername(currentConnectedUser)
                 .stream()
-                .anyMatch(onlineMeetingDto -> onlineMeetingDto.getDoctorUser().getUsername().equals(otherUser) || onlineMeetingDto.getPatientUser().getUsername().equals(otherUser));
+                .anyMatch(onlineMeetingDto ->
+                        (onlineMeetingDto.getDoctorUser().getUsername().equals(otherUser) || onlineMeetingDto.getPatientUser().getUsername().equals(otherUser))
+                        && isMeetingToday(onlineMeetingDto));
+    }
+
+    private boolean isMeetingToday(OnlineMeetingDto onlineMeetingDto) {
+        return LocalDateTime.now().getDayOfMonth() == onlineMeetingDto.getMeetingDate().getDayOfMonth()
+                && LocalDateTime.now().getMonth().equals(onlineMeetingDto.getMeetingDate().getMonth())
+                && LocalDateTime.now().getYear() == onlineMeetingDto.getMeetingDate().getYear();
     }
 }
