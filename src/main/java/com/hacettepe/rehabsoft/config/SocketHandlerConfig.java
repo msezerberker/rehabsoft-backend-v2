@@ -23,12 +23,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Component
 @Slf4j
 @Api(value = ApiPaths.OnlineMeetingWebSocket.CTRL)
-public class SocketHandler extends TextWebSocketHandler implements SubProtocolCapable {
+public class SocketHandlerConfig extends TextWebSocketHandler implements SubProtocolCapable {
 
     private final OnlineMeetingService onlineMeetingService;
     List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
 
-    public SocketHandler(OnlineMeetingService onlineMeetingService) {
+    public SocketHandlerConfig(OnlineMeetingService onlineMeetingService) {
         this.onlineMeetingService = onlineMeetingService;
     }
 

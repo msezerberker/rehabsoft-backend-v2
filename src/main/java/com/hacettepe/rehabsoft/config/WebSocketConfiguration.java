@@ -8,8 +8,6 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
-import java.util.Map;
-
 @Configuration
 @EnableWebSocket
 @RequiredArgsConstructor
@@ -19,8 +17,8 @@ public class WebSocketConfiguration implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        SocketHandler webSocketHandler = new SocketHandler(onlineMeetingService);
-        registry.addHandler(webSocketHandler, ApiPaths.OnlineMeetingWebSocket.CTRL)
+        SocketHandlerConfig webSocketHandlerConfig = new SocketHandlerConfig(onlineMeetingService);
+        registry.addHandler(webSocketHandlerConfig, ApiPaths.OnlineMeetingWebSocket.CTRL)
 
                 // this code can be used to eliminate other users connection who has nto any meeting url in database.
 //                .addInterceptors(new HttpSessionHandshakeInterceptor()
