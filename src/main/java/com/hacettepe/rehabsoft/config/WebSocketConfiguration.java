@@ -1,5 +1,6 @@
 package com.hacettepe.rehabsoft.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hacettepe.rehabsoft.service.OnlineMeetingService;
 import com.hacettepe.rehabsoft.util.ApiPaths;
 import lombok.RequiredArgsConstructor;
