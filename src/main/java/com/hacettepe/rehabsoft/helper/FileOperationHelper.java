@@ -19,15 +19,18 @@ public class FileOperationHelper {
         String createdDirectoryURL = savingDirectory + createdDirectoryName;
         File file = new File(createdDirectoryURL);
         boolean bool = file.mkdir();
-        return createdDirectoryURL+ "/"+fileName+"."+fileType ;
+        return file.getPath()+"\\"+fileName+"."+fileType ;
     }
 
     // pop file type. append popped string to second parameter which is newFileName
     public static String popFileTypeFromFileName(String filename, StringBuilder newFileName){
         List<String> listToGetFileType =  new LinkedList<>(Arrays.asList(Objects.requireNonNull(filename).split("\\.")));
         String fileType = listToGetFileType.remove(listToGetFileType.size()-1);
-        for(String words: listToGetFileType){
-            newFileName.append(words);
+        for (int i = 0; i < listToGetFileType.size(); i++) {
+            newFileName.append(listToGetFileType.get(i));
+            if(i!=listToGetFileType.size()-1){
+                newFileName.append('.');
+            }
         }
         return fileType;
     }

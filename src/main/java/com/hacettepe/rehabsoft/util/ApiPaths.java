@@ -1,11 +1,21 @@
 package com.hacettepe.rehabsoft.util;
 
-public class ApiPaths {
+import com.hacettepe.rehabsoft.helper.FileOperationHelper;
 
+public class ApiPaths {
+    // ****** Requestler icin ****** //
     private static final String BASE_PATH = "/api";
 
+    // ****** File operaitonlar icin ****** //
+    // Localde kullanilicak
+    // private static final String CLASS_PATH = "./src/main/resources";
+    // Prodda kullanilicak
+    private static final String CLASS_PATH = ApiPaths.class.getClassLoader().getResource(".").getFile();
+
+    //    public static final String LOCAL_CLIENT_BASE_PATH = "http://localhost:4200";
+    //    public static final String LOCAL_CLIENT_BASE_PATH = "https://rehabsoft.netlify.app";
     public static final String LOCAL_CLIENT_BASE_PATH = "http://localhost:4200";
-//    public static final String LOCAL_CLIENT_BASE_PATH = "https://rehabsoft.herokuapp.com";
+    public static final String LOCAL_CLIENT_BASE_PATH1 = "http://localhost:4200";
 
     public static final class AdminPath {
         public static final String CTRL = BASE_PATH + "/admin";
@@ -29,11 +39,11 @@ public class ApiPaths {
 
 
     public static final class SavingBotoxImagePath {
-        public static final String CTRL = "./src/main/resources/static/generalevaluationform/botoximage/";
+        public static final String CTRL = CLASS_PATH+"/static/generalevaluationform/botoximage/";
     }
 
     public static final class SavingAppliedSurgeryImagePath {
-        public static final String CTRL = "./src/main/resources/static/generalevaluationform/appliedsurgeryimage/";
+        public static final String CTRL = CLASS_PATH+"/static/generalevaluationform/appliedsurgeryimage/";
     }
 
 
@@ -42,15 +52,15 @@ public class ApiPaths {
     }
 
     public static final class SavingOtherOrthesisImagePath {
-        public static final String CTRL = "./src/main/resources/static/generalevaluationform/otherorthesisimage/";
+        public static final String CTRL = CLASS_PATH+"/static/generalevaluationform/otherorthesisimage/";
     }
 
     public static final class SavingExerciseMediaPath {
-        public static final String CTRL = "./src/main/resources/static/exercise/";
+        public static final String CTRL = CLASS_PATH+"static/exercise/";
     }
 
     public static final class SavingResponseVideoRequestPath {
-        public static final String CTRL = "./src/main/resources/static/responsevideorequest/";
+        public static final String CTRL = CLASS_PATH+"/static/responsevideorequest/";
     }
 
     public static final class Profile {
@@ -76,11 +86,9 @@ public class ApiPaths {
     public static final class OnlineMeetingWebSocket {
         public static final String CTRL = BASE_PATH + "/websocket/online-meeting";
     }
-
     public static final class OnlineMeetingPath {
         public static final String CTRL = BASE_PATH + "/online-meeting";
     }
-
     public static final class FormDynamicPath {
         public static final String CTRL = BASE_PATH + "/form-dynamic";
     }
