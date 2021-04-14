@@ -42,6 +42,7 @@ public class ExerciseServiceImpl implements ExerciseService {
     private final UserRepository userRepository;
     private final SecurityHelper securityHelper;
     private final ObjectMapper objectMapper;
+    private final FileOperationHelper fileOperationHelper;
 
     @Override
     public List<ExerciseDto> getAll(){
@@ -149,9 +150,7 @@ public class ExerciseServiceImpl implements ExerciseService {
         Optional<ExerciseVideo> exerciseVideo = exerciseVideoRepository.findById(id);
         if(exerciseVideo.isPresent()){
             String path = exerciseVideo.get().getVideoUrl();
-            path = FileOperationHelper.splitPathAndMergeStartFromStaticDirectory(path);
-            InputStream in = getClass().getClassLoader().getResourceAsStream(path );
-            return IOUtils.toByteArray(in);
+            return fileOperationHelper.readFileAsByte(path);
         } else{
             return null;
         }
@@ -170,7 +169,10 @@ public class ExerciseServiceImpl implements ExerciseService {
             setExerciseVideoCollectionWithNewAddedExerciseVideo(exerciseFromDatabase, exerciseDto);
         }
         else{
-            deleteExerciseMediaFiles(exerciseFromDatabase);
+            if(!exerciseFromDatabase.getExerciseVideoCollection().isEmpty()){
+                cleanDeletedExerciseMedia(exerciseFromDatabase, exerciseDto);
+                deleteExerciseMediaFiles(exerciseFromDatabase);
+            }
         }
 
         fillExerciseVideoCollection(exerciseFromDatabase, exerciseFiles, (List<ExerciseVideo>) exerciseFromDatabase.getExerciseVideoCollection());
@@ -197,8 +199,7 @@ public class ExerciseServiceImpl implements ExerciseService {
                 .collect(Collectors.toList());
 
         deletingExerciseVideoList.forEach(exerciseVideo -> {
-            File file = new File(exerciseVideo.getVideoUrl());
-            file.delete();
+            fileOperationHelper.deleteFileByPath(exerciseVideo.getVideoUrl());
         });
         exerciseFromDatabase.getExerciseVideoCollection().removeAll(deletingExerciseVideoList);
         exerciseVideoRepository.deleteAll(deletingExerciseVideoList);
@@ -216,8 +217,8 @@ public class ExerciseServiceImpl implements ExerciseService {
     private void deleteExerciseMediaFiles(Exercise exerciseFromDatabase) throws IOException {
         if(exerciseFromDatabase.getExerciseVideoCollection() != null) {
             try {
-                String folderPath = ApiPaths.SavingExerciseMediaPath.CTRL + "/" + exerciseFromDatabase.getId();
-                FileOperationHelper.deleteDirectoryByPath(folderPath);
+                String folderPath = ApiPaths.SavingExerciseMediaPath.CTRL + exerciseFromDatabase.getId()+"/";
+                fileOperationHelper.deleteDirectoryByPath(folderPath);
             } catch (Exception e) {
                 e.printStackTrace();
                 throw new IOException();
@@ -248,20 +249,19 @@ public class ExerciseServiceImpl implements ExerciseService {
         for(MultipartFile multipartFile:exerciseMediaList){
             try {
                 StringBuilder newFileName = new StringBuilder();
-                String fileType = FileOperationHelper.popFileTypeFromFileName(multipartFile.getOriginalFilename(), newFileName);
+                String fileType = fileOperationHelper.popFileTypeFromFileName(multipartFile.getOriginalFilename(), newFileName);
 
                 if(newFileName.toString().equals(exerciseVideo.getTitle())){
                     exerciseVideo.setVideoUrl(null);
                     ExerciseVideo persistedExerciseVideo = exerciseVideoRepository.save(exerciseVideo);
 
-                    String directoryAndMediaURL = FileOperationHelper.createURLWithDirectory(
-                            ApiPaths.SavingExerciseMediaPath.CTRL+"",
-                            exercise.getId()+"",
+                    String directoryAndMediaURL = fileOperationHelper.createURLWithDirectory(
+                            ApiPaths.SavingExerciseMediaPath.CTRL+exercise.getId()+"",
                             persistedExerciseVideo.getId()+"-" + newFileName.toString(),
                             fileType+""
                     );
 
-                    String savedUrl = FileOperationHelper.saveFileByDirectory(multipartFile, directoryAndMediaURL);
+                    String savedUrl = fileOperationHelper.saveFileByDirectory(multipartFile, directoryAndMediaURL);
 
                     persistedExerciseVideo.setVideoUrl(savedUrl);
                     persistedExerciseVideo.setExercise(exercise);

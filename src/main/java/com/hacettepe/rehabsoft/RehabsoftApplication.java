@@ -1,5 +1,6 @@
 package com.hacettepe.rehabsoft;
 
+import com.hacettepe.rehabsoft.helper.GoogleDriveHelper;
 import com.hacettepe.rehabsoft.service.DatabasePopulator;
 import org.dom4j.rule.Mode;
 import org.modelmapper.ModelMapper;
@@ -15,14 +16,20 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.repository.init.Jackson2RepositoryPopulatorFactoryBean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.GeneralSecurityException;
 
 
 @SpringBootApplication
 @EnableJpaAuditing
 public class RehabsoftApplication {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException, GeneralSecurityException {
 		ApplicationContext context =  SpringApplication.run(RehabsoftApplication.class, args);
 		DatabasePopulator databasePopulator = (DatabasePopulator) context.getBean("databasePopulator");
 	}
