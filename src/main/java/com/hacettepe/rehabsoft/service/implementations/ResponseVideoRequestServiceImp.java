@@ -33,6 +33,7 @@ public class ResponseVideoRequestServiceImp implements ResponseVideoRequestServi
     private final ResponseVideoRequestRepository responseVideoRequestRepository;
     private final RequestedVideoRepository requestedVideoRepository;
     private final EntityManager entityManager;
+    private final FileOperationHelper fileOperationHelper;
 
     @Override
     @Transactional
@@ -104,7 +105,7 @@ public class ResponseVideoRequestServiceImp implements ResponseVideoRequestServi
         for(MultipartFile multipartFile:responseMediaList){
             try {
                 StringBuilder newFileName = new StringBuilder();
-                String fileType = FileOperationHelper.popFileTypeFromFileName(multipartFile.getOriginalFilename(), newFileName);
+                String fileType = fileOperationHelper.popFileTypeFromFileName(multipartFile.getOriginalFilename(), newFileName);
 
                 // videonun ismi, url'e girilecek front endde.
                 if(newFileName.toString().equals(requestedVideo.getVideoUrl())){
@@ -112,14 +113,13 @@ public class ResponseVideoRequestServiceImp implements ResponseVideoRequestServi
                     requestedVideo.setVideoUrl(null);
                     responseVideoRequest.getRequestedVideoCollection().remove(requestedVideo);
                     RequestedVideo persistedRequestedVideo = requestedVideoRepository.save(requestedVideo);
-                    String directoryAndMediaURL = FileOperationHelper.createURLWithDirectory(
-                            ApiPaths.SavingResponseVideoRequestPath.CTRL+"",
-                            idOfSavingResponse.toString() +"",
+                    String directoryAndMediaURL = fileOperationHelper.createURLWithDirectory(
+                            ApiPaths.SavingResponseVideoRequestPath.CTRL+idOfSavingResponse.toString() +"",
                             persistedRequestedVideo.getId()+"-" + newFileName.toString(),
                             fileType+""
                     );
 
-                    String savedUrl = FileOperationHelper.saveFileByDirectory(multipartFile, directoryAndMediaURL);
+                    String savedUrl = fileOperationHelper.saveFileByDirectory(multipartFile, directoryAndMediaURL);
 
                     persistedRequestedVideo.setVideoUrl(savedUrl);
                     persistedRequestedVideo.setResponseVideoRequest(responseVideoRequest);

@@ -87,7 +87,7 @@ public class ExerciseController {
             return ResponseEntity.badRequest().body(null);
         }
         else {
-            log.error("Egzersiz resmi basariyla bulundu ");
+            log.warn("Egzersiz resmi basariyla bulundu ");
             return ResponseEntity.ok(exerciseImage);
         }
     }

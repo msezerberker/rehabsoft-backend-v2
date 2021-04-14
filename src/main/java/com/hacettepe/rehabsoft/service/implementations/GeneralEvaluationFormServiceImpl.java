@@ -42,6 +42,7 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
     private final PhysiotherapyPastRepository physiotherapyPastRepository;
     private final PhysiotherapyCentralRepository physiotherapyCentralRepository;
     private final NotificationService notificationService;
+    private final FileOperationHelper fileOperationHelper;
 
 
     private void fillExpectationsAboutProgram(Collection<ExpectationsAboutProgram> exps, GeneralEvaluationForm tempForm){
@@ -92,7 +93,7 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
             for(MultipartFile multipartFile:otherOrthesisImages){
 
                 StringBuilder newFileName = new StringBuilder();
-                String fileType = FileOperationHelper.popFileTypeFromFileName(multipartFile.getOriginalFilename(), newFileName);
+                String fileType = fileOperationHelper.popFileTypeFromFileName(multipartFile.getOriginalFilename(), newFileName);
 
                 if(newFileName.toString().equals(otherOrthesisInfo.getOrthesisName())){
                     otherOrthesisInfo.setOrthesisUrl(null);
@@ -100,13 +101,12 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
                     tempForm.getOtherOrthesisInfoCollection().remove(otherOrthesisInfo);
                     OtherOrthesisInfo persistedOrthesis = otherOrthesisInfoRepository.save(otherOrthesisInfo);
 
-                    String directoryAndImage = FileOperationHelper.createURLWithDirectory(
-                            ApiPaths.SavingOtherOrthesisImagePath.CTRL+"",
-                            securityHelper.getUsername()+"",
+                    String directoryAndImage = fileOperationHelper.createURLWithDirectory(
+                            ApiPaths.SavingOtherOrthesisImagePath.CTRL+securityHelper.getUsername()+"/",
                             persistedOrthesis.getId()+"-" + newFileName.toString(),
                             fileType+"");
 
-                    String savedUrl = FileOperationHelper.saveFileByDirectory(multipartFile, directoryAndImage);
+                    String savedUrl = fileOperationHelper.saveFileByDirectory(multipartFile, directoryAndImage);
                     persistedOrthesis.setOrthesisUrl(savedUrl);
                     newOtherOrthesisInfo.add(persistedOrthesis);
                 }
@@ -142,13 +142,12 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
                     }
 
                     String directoryAndImage =
-                            FileOperationHelper.createURLWithDirectory(
-                                    ApiPaths.SavingBotoxImagePath.CTRL+"",
-                                    securityHelper.getUsername()+"",
+                            fileOperationHelper.createURLWithDirectory(
+                                    ApiPaths.SavingBotoxImagePath.CTRL+securityHelper.getUsername()+"/",
                                     persistedBotoxTreatment.getId()+"",
                                     botoxImage.getContentType().split("/")[1]);
 
-                    String savedUrl = FileOperationHelper.saveFileByDirectory(botoxImage, directoryAndImage);
+                    String savedUrl = fileOperationHelper.saveFileByDirectory(botoxImage, directoryAndImage);
                     persistedBotoxTreatment.setBotoxRecordUrl(savedUrl);
 
                     persistedBotoxTreatment.setGeneralEvaluationForm(tempForm);
@@ -309,7 +308,7 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
             for(MultipartFile multipartFile:epicrisisImageList){
 
                 StringBuilder newFileName = new StringBuilder();
-                String fileType = FileOperationHelper.popFileTypeFromFileName(multipartFile.getOriginalFilename(), newFileName);
+                String fileType = fileOperationHelper.popFileTypeFromFileName(multipartFile.getOriginalFilename(), newFileName);
 
                 if(newFileName.toString().equals(appliedSurgery.getSurgeryName())){
                     appliedSurgery.setEpicrisisImageUrl(null);
@@ -317,13 +316,12 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
                     tempForm.getAppliedSurgeryCollection().remove(appliedSurgery);
                     AppliedSurgery persistedAppliedSurgery = appliedSurgeryRepository.save(appliedSurgery);
 
-                    String directoryAndImage = FileOperationHelper.createURLWithDirectory(
-                            ApiPaths.SavingAppliedSurgeryImagePath.CTRL+"",
-                            securityHelper.getUsername()+"",
+                    String directoryAndImage = fileOperationHelper.createURLWithDirectory(
+                            ApiPaths.SavingAppliedSurgeryImagePath.CTRL+securityHelper.getUsername()+"/",
                             persistedAppliedSurgery.getId()+"-" + newFileName.toString(),
                             fileType+"");
 
-                    String savedUrl = FileOperationHelper.saveFileByDirectory(multipartFile, directoryAndImage);
+                    String savedUrl = fileOperationHelper.saveFileByDirectory(multipartFile, directoryAndImage);
                     persistedAppliedSurgery.setEpicrisisImageUrl(savedUrl);
                     newAppliedSurgeryCollection.add(persistedAppliedSurgery);
                 }
@@ -371,10 +369,7 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
         Optional<BotoxTreatment> botoxTreatment = botoxTreatmentRepository.findById(id);
         if(botoxTreatment.isPresent()){
             String path = botoxTreatment.get().getBotoxRecordUrl();
-            path = FileOperationHelper.splitPathAndMergeStartFromStaticDirectory(path);
-            InputStream in = getClass().getClassLoader()
-                    .getResourceAsStream(path );
-            return IOUtils.toByteArray(in);
+            return fileOperationHelper.readFileAsByte(path);
         } else{
             return null;
         }
@@ -385,10 +380,7 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
         Optional<AppliedSurgery> appliedSurgery = appliedSurgeryRepository.findById(id);
         if(appliedSurgery.isPresent()){
             String path = appliedSurgery.get().getEpicrisisImageUrl();
-            path = FileOperationHelper.splitPathAndMergeStartFromStaticDirectory(path);
-            InputStream in = getClass().getClassLoader()
-                    .getResourceAsStream(path );
-            return IOUtils.toByteArray(in);
+            return fileOperationHelper.readFileAsByte(path);
         } else{
             return null;
         }
@@ -399,10 +391,7 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
         Optional<OtherOrthesisInfo> otherOrthesisInfo = otherOrthesisInfoRepository.findById(id);
         if(otherOrthesisInfo.isPresent()){
             String path = otherOrthesisInfo.get().getOrthesisUrl();
-            path = FileOperationHelper.splitPathAndMergeStartFromStaticDirectory(path);
-            InputStream in = getClass().getClassLoader()
-                    .getResourceAsStream(path );
-            return IOUtils.toByteArray(in);
+            return fileOperationHelper.readFileAsByte(path);
         } else{
             return null;
         }
