@@ -38,7 +38,7 @@ public class GeneralEvaluationFormController {
                                                            @RequestParam(value = "appliedSurgeryEpicrisisImages", required = false) MultipartFile[] epicrisisImages,
                                                            @RequestParam(value = "otherOrthesisImages", required = false) MultipartFile[] otherOrthesisImages,
                                                            @RequestParam("model") String gefd
-    ){
+    ) throws Exception {
         log.warn("GeneralEval. Controllerına girdi");
 
         if(generalEvaluationFormService.isGeneralEvaluationFormExist()){
