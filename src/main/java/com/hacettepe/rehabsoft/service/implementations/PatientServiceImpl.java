@@ -17,6 +17,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -44,6 +45,7 @@ public class PatientServiceImpl implements PatientService {
     private DoctorRepository doctorRepository;
 
 
+
     public Boolean isPatientAlreadySaved(){
         String username = securityHelper.getUsername();
         Patient patient = patientRepository.getPatientByUser(userRepository.findByUsername(username));
@@ -65,6 +67,7 @@ public class PatientServiceImpl implements PatientService {
 
 
     @Override
+    @Transactional
     public PatientDto savePatient(PatientDto patientDto){
 
         log.warn("Patient servisine girdi:Save:");
@@ -111,6 +114,7 @@ public class PatientServiceImpl implements PatientService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public PatientDetailsDto findPatientByTcKimlikNo(String tcKimlikNo) {
 
         User user = userRepository.findByUsername(tcKimlikNo); //hastanın username'i kimlik numarasıdır
@@ -127,6 +131,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public DoctorInfoDto receiveDoctorInfo() {
 
         Patient patient = patientRepository.getPatientByUser_Username(securityHelper.getUsername());
@@ -147,5 +152,44 @@ public class PatientServiceImpl implements PatientService {
         doctorInfoDto.setEmail(doctor.getUser().getEmail());
 
         return doctorInfoDto;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<PatientDto> findPatientNewRegistred(){
+        List<Patient> patients = patientRepository.getAllByDoctor(null);
+        List<PatientDto> patientsDto = Arrays.asList(modelMapper.map(patients,PatientDto[].class));
+
+        if(patientsDto==null){
+            log.warn("Atama bekleyen hasta bulunmuyor!!!");
+            return null;
+        }
+
+        return patientsDto;
+    }
+
+    @Override
+    @Transactional
+    public Boolean setDoctorToPatient(String patientTC, String doctorUserID) {
+
+        Patient patient = patientRepository.getPatientByTcKimlikNo(patientTC);
+        long lid = Integer.parseInt(doctorUserID);
+        patient.setDoctor(doctorRepository.getDoctorByUser(userRepository.findById(lid).get()));
+        patientRepository.save(patient);
+
+        return true;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<PatientDetailsDto> getAllPatientUsersByDoctor(String docUsername) {
+        List<Patient> patientList = patientRepository.getAllByDoctor(doctorRepository.getDoctorByUser(userRepository.findByUsername(docUsername)));
+
+        if(patientList==null){
+            return null;}
+
+        List<PatientDetailsDto> patientDetailsDtoList=  Arrays.asList(modelMapper.map(patientList, PatientDetailsDto[].class));
+
+        return patientDetailsDtoList;
     }
 }
