@@ -247,7 +247,8 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
             log.warn("Son kayit islemi : ");
             generalEvaluationFormRepository.save(tempForm);
             notificationService.deleteGeneralEvaluationFormNotification(user);
-            notificationService.createNotifiactionForNewPatientToDoctor(patient);
+            //notificationService.createNotifiactionForNewPatientToDoctor(patient);
+            // Line the above changed because assign doctor page is completed
             return Boolean.TRUE;
 
 

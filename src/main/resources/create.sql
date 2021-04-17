@@ -966,8 +966,9 @@ CREATE TABLE public.physiotherapy_central
 
 
 -- INSERT INTO doctor("version") VALUES (1);
+-- Insert doctor into patient removed,assign doctor to patient use case activated
 
-CREATE OR REPLACE FUNCTION add_doctor_procedure()
+/*CREATE OR REPLACE FUNCTION add_doctor_procedure()
     RETURNS trigger AS
 $BODY$
 BEGIN
@@ -981,7 +982,7 @@ CREATE TRIGGER add_doctor
     BEFORE INSERT
     ON PATIENT
     FOR EACH ROW
-EXECUTE PROCEDURE add_doctor_procedure();
+EXECUTE PROCEDURE add_doctor_procedure(); */
 
 
 

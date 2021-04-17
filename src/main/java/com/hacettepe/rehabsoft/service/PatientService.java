@@ -19,6 +19,11 @@ public interface PatientService {
     PatientDetailsDto findPatientByTcKimlikNo(String tcKimlikNo);
 
     DoctorInfoDto receiveDoctorInfo();
+    List<PatientDto> findPatientNewRegistred();
+
+    Boolean setDoctorToPatient(String patientTC, String doctorUserID);
+
+    List<PatientDetailsDto> getAllPatientUsersByDoctor(String docUsername);
 
 
 }
