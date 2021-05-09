@@ -4,6 +4,8 @@ import com.hacettepe.rehabsoft.dto.RegistrationRequest;
 import com.hacettepe.rehabsoft.dto.UserDto;
 import com.hacettepe.rehabsoft.entity.User;
 
+import javax.mail.MessagingException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 public interface UserService {
@@ -24,10 +26,12 @@ public interface UserService {
 
     String updateUser(UserDto user);
 
-    void updateResetPasswordToken(String token, String email);
+    String updateResetPasswordToken(String token, String email) throws UnsupportedEncodingException, MessagingException;
 
-    void updatePassword(User user, String newPassword);
+    Boolean resetTokenChecker(String token);
 
-    User getByResetPasswordToken(String token);
+    Boolean updatePassword(String token, String newPassword);
+
+    void sendEmail(String email, String resetPasswordLink) throws MessagingException, UnsupportedEncodingException;
 
 }
