@@ -370,6 +370,7 @@ CREATE TABLE public."users"
     user_password character varying(100),
     role_id bigint,
     email character varying(320),
+    reset_password_token character varying(320),
     firstname character varying(100),
     surname character varying(100),
     PRIMARY KEY ("id"),
