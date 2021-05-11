@@ -5,6 +5,7 @@ import com.hacettepe.rehabsoft.entity.*;
 import com.hacettepe.rehabsoft.helper.NotificationServiceHelper;
 import com.hacettepe.rehabsoft.helper.SecurityHelper;
 import com.hacettepe.rehabsoft.repository.NotificationRepository;
+import com.hacettepe.rehabsoft.repository.RoleRepository;
 import com.hacettepe.rehabsoft.repository.UserRepository;
 import com.hacettepe.rehabsoft.service.NotificationService;
 import com.hacettepe.rehabsoft.util.NotificationPaths;
@@ -26,6 +27,7 @@ public class NotificationServiceImp implements NotificationService {
     private final UserRepository userRepository;
     private final SecurityHelper securityHelper;
     private final ModelMapper modelMapper;
+    private final RoleRepository roleRepository;
 
     @Override
     public List<NotificationDto> getAll() {
@@ -89,6 +91,32 @@ public class NotificationServiceImp implements NotificationService {
         notification.setUser(videoRequest.getPatient().getUser());
         notification.setNotificationContent("Doktorunuz sizden yeni bir video talep etti. Detayları görmek için tıklayın");
         notification.setNotificationUrl(NotificationPaths.BASE_PATH+"/user/user-video-submit");
+        notificationRepository.save(notification);
+    }
+
+    @Override
+    public void createNotificationForMessage(Message message) {
+
+
+        log.warn("Message notify'a giriyor");
+
+        Notification notification = new Notification();
+
+        notification.setUser(message.getReceiverUser());
+
+        if(message.getReceiverUser().getRole().equals(roleRepository.findByName("DOCTOR"))){
+            notification.setNotificationContent( message.getSenderUser().getFirstName()  + " "+ message.getSenderUser().getSurname() + " isimli hastanızdan bir yeni mesajınız var" );
+            notification.setNotificationUrl(NotificationPaths.BASE_PATH+"/doctor/patient-info/" + message.getSenderUser().getUsername() + "/message");
+        }
+
+        else if(message.getReceiverUser().getRole().equals(roleRepository.findByName("USER"))){
+            notification.setNotificationContent( message.getSenderUser().getFirstName() + " "+ message.getSenderUser().getSurname() + " isimli fizyoterapistinizden bir yeni mesajınız var" );
+            notification.setNotificationUrl(NotificationPaths.BASE_PATH+"/user/message");
+        }
+        else{
+            //nothing
+        }
+
         notificationRepository.save(notification);
     }
 
