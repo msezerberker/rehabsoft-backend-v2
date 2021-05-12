@@ -1,6 +1,7 @@
 package com.hacettepe.rehabsoft.controller;
 
 
+import com.hacettepe.rehabsoft.dto.PasswordChangeDto;
 import com.hacettepe.rehabsoft.dto.PasswordResetDto;
 import com.hacettepe.rehabsoft.dto.PasswordUpdateDto;
 import com.hacettepe.rehabsoft.helper.ResponseMessage;
@@ -96,6 +97,17 @@ public class PasswordController {
             responseMessage.setResponseMessage("Bir hata meydana geldi! Lütfen tekrar deneyin");
             return ResponseEntity.badRequest().body(responseMessage);
         }
+    }
+
+
+    @RequestMapping(value = "/change", method = RequestMethod.POST)
+    public ResponseEntity<ResponseMessage>  resetPassword(@Valid @RequestBody PasswordChangeDto passwordChangeDto) {
+
+        String rMessage = userService.changePassword(passwordChangeDto);
+
+        responseMessage.setResponseMessage(rMessage);
+        return ResponseEntity.ok(responseMessage);
+
     }
 
 
