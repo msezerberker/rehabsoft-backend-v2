@@ -1,5 +1,6 @@
 package com.hacettepe.rehabsoft.service.implementations;
 
+import com.hacettepe.rehabsoft.dto.PasswordChangeDto;
 import com.hacettepe.rehabsoft.dto.RegistrationRequest;
 import com.hacettepe.rehabsoft.dto.UserDto;
 import com.hacettepe.rehabsoft.entity.*;
@@ -186,8 +187,25 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         }
     }
 
+    @Override
+    public String changePassword(PasswordChangeDto passdto) throws UsernameNotFoundException{
+        log.warn("change password aktif " + passdto.getUsername());
+        User currentUser = userRepository.findByUsername(passdto.getUsername());
 
 
+        String currentPassword = currentUser.getPassword();
+
+        if(!bCryptPasswordEncoder.matches(passdto.getOldPassword(), currentPassword)){
+            return "Mevcut şifrenizi yanlış girdiniz lütfen tekrar deneyin";
+        }
+        else{
+            String newEncodedPassword = bCryptPasswordEncoder.encode(passdto.getNewPassword());
+            currentUser.setPassword(newEncodedPassword);
+            userRepository.save(currentUser);
+            return "Sifre değiştirme işleminiz başarıyla gerçekleştirilmiştir.";
+        }
+
+    }
 
 
     @Override

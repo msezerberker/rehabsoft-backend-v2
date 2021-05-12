@@ -1,5 +1,6 @@
 package com.hacettepe.rehabsoft.service;
 
+import com.hacettepe.rehabsoft.dto.PasswordChangeDto;
 import com.hacettepe.rehabsoft.dto.RegistrationRequest;
 import com.hacettepe.rehabsoft.dto.UserDto;
 import com.hacettepe.rehabsoft.entity.User;
@@ -27,6 +28,8 @@ public interface UserService {
     String updateUser(UserDto user);
 
     String updateResetPasswordToken(String token, String email) throws UnsupportedEncodingException, MessagingException;
+
+    String changePassword(PasswordChangeDto passdto);
 
     Boolean resetTokenChecker(String token);
 
