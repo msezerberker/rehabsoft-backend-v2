@@ -9,10 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,7 +17,7 @@ import java.util.List;
 @CrossOrigin(origins = ApiPaths.LOCAL_CLIENT_BASE_PATH, maxAge = 3600)
 @RequestMapping(ApiPaths.NotificationPath.CTRL)
 @RestController
-@Api(value = "/api/users/notification")
+@Api(value = "/api/notification")
 @RequiredArgsConstructor
 public class NotificationController {
 
@@ -33,4 +30,16 @@ public class NotificationController {
         List<NotificationDto> data = notificationService.getAll();
         return ResponseEntity.ok(data);
     }
+
+
+    @RequestMapping(value = "/click/{id}",method = RequestMethod.GET)
+    public ResponseEntity<Boolean> clickNotification(@PathVariable Long id){
+        log.warn("Click Notification metodu basariyla calisti");
+        notificationService.clickNotification(id);
+        return ResponseEntity.ok(Boolean.TRUE);
+    }
+
+
+
+
 }

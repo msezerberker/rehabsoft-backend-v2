@@ -33,9 +33,18 @@ public class NotificationServiceImp implements NotificationService {
     public List<NotificationDto> getAll() {
         User user = userRepository.findByUsername(securityHelper.getUsername());
         List<NotificationDto> notificationDtoList = new ArrayList<>();
-        notificationRepository.findByUser(user).forEach(notification -> notificationDtoList.add(modelMapper.map(notification, NotificationDto.class)));
+        notificationRepository.findByUserOrderByCreationDateDesc(user).forEach(notification -> notificationDtoList.add(modelMapper.map(notification, NotificationDto.class)));
 
         return notificationDtoList;
+    }
+
+
+
+    @Override
+    public void clickNotification(Long notificationId) {
+        Notification notification = notificationRepository.getOne(notificationId);
+        notification.setStatus(1); //okundu olarak işaretlenir
+        notificationRepository.save(notification);
     }
 
     @Override
@@ -119,7 +128,6 @@ public class NotificationServiceImp implements NotificationService {
 
         notificationRepository.save(notification);
     }
-
 
 
 

@@ -36,7 +36,7 @@ public class VideoRequestController {
             responseMessage.setResponseMessage("islem basarili");
         }
         else{
-            responseMessage.setResponseMessage("Kayıt sırasında bir hata meydana geldi");
+            responseMessage.setResponseMessage("İslem sırasında bir hata meydana geldi");
         }
 
         return ResponseEntity.ok(responseMessage);

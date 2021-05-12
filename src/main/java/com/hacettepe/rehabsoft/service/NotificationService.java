@@ -28,4 +28,6 @@ public interface NotificationService {
     void createNotifiactionForNewVideoRequest(VideoRequest videoRequest);
 
     void createNotificationForMessage(Message message);
+
+    void clickNotification(Long notificationId);
 }
