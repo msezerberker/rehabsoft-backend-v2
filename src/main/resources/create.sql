@@ -1186,6 +1186,7 @@ CREATE TABLE public.notification
     notification_content varchar(255),
     notification_url varchar(255),
     notification_title varchar(100),
+    status bigint,
     users_id bigint,
     PRIMARY KEY ("id"),
     FOREIGN KEY (users_id)
