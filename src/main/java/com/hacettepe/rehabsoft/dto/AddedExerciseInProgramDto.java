@@ -27,7 +27,7 @@ public class AddedExerciseInProgramDto {
     @ApiModelProperty(required = true, value = "exercise")
     private ExerciseDto exercise;
 
-    @NotEmpty
+
     @ApiModelProperty(required = true, value = "scheduledExerciseCollection")
     private Collection<ScheduledExerciseDto> scheduledExerciseCollection;
 
