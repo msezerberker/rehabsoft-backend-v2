@@ -28,4 +28,6 @@ public class PatientDto {
 
     @NotNull(message = "Lütfen ailenizle ilgili gerekli bilgileri doldurunuz")
     private Collection<ParentDto> parentCollection;
+
+    private UserDto user;
 }

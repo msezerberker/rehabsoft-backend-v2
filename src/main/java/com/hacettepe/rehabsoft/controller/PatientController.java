@@ -1,8 +1,6 @@
 package com.hacettepe.rehabsoft.controller;
 
-import com.hacettepe.rehabsoft.dto.DoctorInfoDto;
-import com.hacettepe.rehabsoft.dto.PatientDetailsDto;
-import com.hacettepe.rehabsoft.dto.PatientDto;
+import com.hacettepe.rehabsoft.dto.*;
 import com.hacettepe.rehabsoft.helper.ResponseMessage;
 import com.hacettepe.rehabsoft.service.PatientService;
 import com.hacettepe.rehabsoft.util.ApiPaths;
@@ -60,6 +58,14 @@ public class PatientController {
         return ResponseEntity.ok(patientList);
     }
 
+    @RequestMapping(value = "/getByDoctor/{doctorUsername}",method = RequestMethod.GET)
+    public ResponseEntity<List<PatientDetailsDto>> listAllPatientUsersByDoctor(@PathVariable  String doctorUsername){
+        log.warn("listAllPatient metodu basariyla calisti");
+        List<PatientDetailsDto> patientList = patientService.getAllPatientUsersByDoctor(doctorUsername);
+
+        return ResponseEntity.ok(patientList);
+    }
+
 
 
     @RequestMapping(value = "/{tcKimlikNo}",method = RequestMethod.GET)
@@ -78,6 +84,28 @@ public class PatientController {
 
     }
 
+    @RequestMapping(value = "/getnewregistredpatient", method = RequestMethod.GET)
+    public ResponseEntity<List<PatientDto>> getNewRegistredPatient() {
+        log.warn("getNewRegistredPatient metodu calisti");
+        List<PatientDto> patients = patientService.findPatientNewRegistred();
+        return ResponseEntity.ok(patients);
+    }
+
+    @RequestMapping(value ="/assigndoctor/{tcKimlikNo}", method = RequestMethod.POST)
+    public ResponseEntity<ResponseMessage> assignDoctorToPatient(@RequestBody String doctorUserID, @PathVariable String tcKimlikNo){
+        log.warn("Hastaya doktor atama controller'ı çalışıyor");
+
+        boolean sonuc = patientService.setDoctorToPatient(tcKimlikNo,doctorUserID);
+
+        if(sonuc){
+            responseMessage.setResponseMessage("islem basarili");
+        }
+        else{
+            responseMessage.setResponseMessage("Doktor atama sırasında bir hata meydana geldi");
+        }
+
+        return ResponseEntity.ok(responseMessage);
+    }
 
 
 

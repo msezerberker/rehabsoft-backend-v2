@@ -28,32 +28,23 @@ public class OnlineMeetingServiceImp implements OnlineMeetingService {
     private final UserRepository userRepository;
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public boolean save(OnlineMeetingDto onlineMeetingDto) throws Exception {
-        try {
-            OnlineMeeting onlineMeeting = modelMapper.map(onlineMeetingDto, OnlineMeeting.class);
-            User doctorUser = userRepository.findByUsername(onlineMeeting.getDoctorUser().getUsername());
-            User patientUser = userRepository.findByUsername(onlineMeeting.getPatientUser().getUsername());
-            onlineMeeting.setDoctorUser(doctorUser);
-            onlineMeeting.setPatientUser(patientUser);
-            onlineMeetingRepository.save(onlineMeeting);
-        } catch (Exception e) {
-            log.error("Online Meeting saving is Failed=>", e);
-            return Boolean.FALSE;
-        }
+
+        OnlineMeeting onlineMeeting = modelMapper.map(onlineMeetingDto, OnlineMeeting.class);
+        User doctorUser = userRepository.findByUsername(onlineMeeting.getDoctorUser().getUsername());
+        User patientUser = userRepository.findByUsername(onlineMeeting.getPatientUser().getUsername());
+        onlineMeeting.setDoctorUser(doctorUser);
+        onlineMeeting.setPatientUser(patientUser);
+        onlineMeetingRepository.save(onlineMeeting);
         return true;
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional(rollbackFor = Exception.class, readOnly = true)
     public List<OnlineMeetingDto> getOnlineMeetingsByUsername(String username) throws Exception {
-        try {
-            List<OnlineMeeting> onlineMeetingList = onlineMeetingRepository.getByUsername(username);
-            return onlineMeetingList.stream().map(onlineMeeting->modelMapper.map(onlineMeeting, OnlineMeetingDto.class)).collect(Collectors.toList());
-        } catch (Exception e) {
-            log.error("Online Meeting saving is Failed=>", e);
-            return null;
-        }
+        List<OnlineMeeting> onlineMeetingList = onlineMeetingRepository.getByUsername(username);
+        return onlineMeetingList.stream().map(onlineMeeting->modelMapper.map(onlineMeeting, OnlineMeetingDto.class)).collect(Collectors.toList());
     }
 
     @Override

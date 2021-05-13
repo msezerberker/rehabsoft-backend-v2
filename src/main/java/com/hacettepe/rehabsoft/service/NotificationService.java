@@ -1,6 +1,7 @@
 package com.hacettepe.rehabsoft.service;
 
 import com.hacettepe.rehabsoft.dto.NotificationDto;
+import com.hacettepe.rehabsoft.entity.Message;
 import com.hacettepe.rehabsoft.entity.Patient;
 import com.hacettepe.rehabsoft.entity.User;
 import com.hacettepe.rehabsoft.entity.VideoRequest;
@@ -25,4 +26,8 @@ public interface NotificationService {
     void createNotifiactionForNewPatientToDoctor(Patient patient);
 
     void createNotifiactionForNewVideoRequest(VideoRequest videoRequest);
+
+    void createNotificationForMessage(Message message);
+
+    void clickNotification(Long notificationId);
 }

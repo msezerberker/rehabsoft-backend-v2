@@ -1,6 +1,5 @@
 package com.hacettepe.rehabsoft.controller;
 
-import com.hacettepe.rehabsoft.dto.GefDto;
 import com.hacettepe.rehabsoft.dto.GeneralEvaluationFormDto;
 import com.hacettepe.rehabsoft.helper.ResponseMessage;
 import com.hacettepe.rehabsoft.service.GeneralEvaluationFormService;
@@ -39,7 +38,7 @@ public class GeneralEvaluationFormController {
                                                            @RequestParam(value = "appliedSurgeryEpicrisisImages", required = false) MultipartFile[] epicrisisImages,
                                                            @RequestParam(value = "otherOrthesisImages", required = false) MultipartFile[] otherOrthesisImages,
                                                            @RequestParam("model") String gefd
-    ){
+    ) throws Exception {
         log.warn("GeneralEval. Controllerına girdi");
 
         if(generalEvaluationFormService.isGeneralEvaluationFormExist()){
