@@ -65,4 +65,8 @@ public class FileOperationHelper {
     public byte[] readFileAsByte(String filePath) {
         return googleDriveHelper.readFileAsByteArray(filePath);
     }
+
+    public Long getSizeOfFile(String filePath){
+        return googleDriveHelper.getSizeOfFile(filePath);
+    }
 }

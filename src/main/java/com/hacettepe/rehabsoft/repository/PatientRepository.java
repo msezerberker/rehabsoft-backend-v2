@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface PatientRepository extends JpaRepository<Patient,Long> {
 
+    List<Patient> getAllByOrderById();
     Patient getPatientByUser(User user);
     Patient getPatientByTcKimlikNo(String tcKimlikNo);
     //Patient getPatientByUserUsername(String username);
