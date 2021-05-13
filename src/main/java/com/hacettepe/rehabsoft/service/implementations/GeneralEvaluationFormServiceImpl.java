@@ -198,11 +198,12 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
         GeneralEvaluationFormDto tempFormDto =  objectMapper.readValue(gefd, GeneralEvaluationFormDto.class);
         GeneralEvaluationForm tempForm = modelMapper.map(tempFormDto, GeneralEvaluationForm.class);
         log.warn("GeneralEval: Mapleme başarılı: ");
+
+
         Patient patient = patientRepository.getPatientByUser(user);
         log.warn("Pateitn Forma set ediliyor..: "+patient.getTcKimlikNo() );
         patient.setGeneralEvaluationForm(tempForm);
         tempForm.setPatient(patient);
-
         // Bu fonksiyonlar, iclerinde tempFormu degistirdigi icin, bunlar once calismali start
         log.warn("Gen. Ev. Form- One-To-one Bitti. servisine girdi" );
         setManyToManyBidirectional(tempForm, epicrisisImages);
@@ -210,18 +211,21 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
         log.warn("Gen. Ev. Form- Many-to-Many Bitti. servisine girdi" );
         fillOtherOrthesisInfo(tempForm.getOtherOrthesisInfoCollection(),tempForm, otherOrthesisImages);
         setBidirectionalOneToOne(tempForm, botoxImage);
-
         // Bu fonksiyonlar, iclerinde tempFormu degistirdigi icin, bunlar once calismali end
+
         fillOrthesisInfoCollection(tempForm.getOrthesisInfoCollection(),tempForm);
         fillExpectationsAboutProgram(tempForm.getExpectationsAboutProgramCollection(),tempForm);
         fillUsedMedicine(tempForm.getUsedMedicineCollection(),tempForm);
         fillPhysiotherapyPast(tempForm.getPhysiotherapyPast(),tempForm);
         log.warn("Gen. Ev. Form- Many-to-One Bitti. servisine girdi" );
+
         log.warn("Son kayit islemi : ");
         generalEvaluationFormRepository.save(tempForm);
         notificationService.deleteGeneralEvaluationFormNotification(user);
-        notificationService.createNotifiactionForNewPatientToDoctor(patient);
+        //notificationService.createNotifiactionForNewPatientToDoctor(patient);
+        // Line the above changed because assign doctor page is completed
         return Boolean.TRUE;
+
     }
 
     public void fillPhysiotherapyPast(PhysiotherapyPast physiotherapyPast, GeneralEvaluationForm form ){

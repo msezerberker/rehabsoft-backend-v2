@@ -6,10 +6,9 @@ public class ApiPaths {
     // ****** Requestler icin ****** //
     private static final String BASE_PATH = "/api";
 
-    //    public static final String LOCAL_CLIENT_BASE_PATH = "http://localhost:4200";
-    //    public static final String LOCAL_CLIENT_BASE_PATH = "https://rehabsoft.netlify.app";
     public static final String LOCAL_CLIENT_BASE_PATH = "http://localhost:4200";
-    public static final String LOCAL_CLIENT_BASE_PATH1 = "http://localhost:4200";
+    //public static final String LOCAL_CLIENT_BASE_PATH = "https://rehabsoft.netlify.app";
+
 
     public static final class AdminPath {
         public static final String CTRL = BASE_PATH + "/admin";
@@ -29,6 +28,10 @@ public class ApiPaths {
 
     public static final class PatientFormPath {
         public static final String CTRL = BASE_PATH + "/patient";
+    }
+
+    public static final class PasswordPath {
+        public static final String CTRL = BASE_PATH + "/password";
     }
 
 

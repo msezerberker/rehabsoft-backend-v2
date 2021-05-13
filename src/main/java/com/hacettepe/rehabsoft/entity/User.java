@@ -32,6 +32,9 @@ public class User extends BaseEntity{
     @Column(name = "email", unique=true)
     private String email;
 
+    @Column(name = "reset_password_token")
+    private String resetPasswordToken;
+
 
     @ManyToOne
     @JoinColumn(name = "role_id")

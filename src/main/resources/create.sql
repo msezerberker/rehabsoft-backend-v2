@@ -370,6 +370,7 @@ CREATE TABLE public."users"
     user_password character varying(100),
     role_id bigint,
     email character varying(320),
+    reset_password_token character varying(320),
     firstname character varying(100),
     surname character varying(100),
     PRIMARY KEY ("id"),
@@ -966,8 +967,9 @@ CREATE TABLE public.physiotherapy_central
 
 
 -- INSERT INTO doctor("version") VALUES (1);
+-- Insert doctor into patient removed,assign doctor to patient use case activated
 
-CREATE OR REPLACE FUNCTION add_doctor_procedure()
+/*CREATE OR REPLACE FUNCTION add_doctor_procedure()
     RETURNS trigger AS
 $BODY$
 BEGIN
@@ -981,7 +983,7 @@ CREATE TRIGGER add_doctor
     BEFORE INSERT
     ON PATIENT
     FOR EACH ROW
-EXECUTE PROCEDURE add_doctor_procedure();
+EXECUTE PROCEDURE add_doctor_procedure(); */
 
 
 
@@ -1184,6 +1186,7 @@ CREATE TABLE public.notification
     notification_content varchar(255),
     notification_url varchar(255),
     notification_title varchar(100),
+    status bigint,
     users_id bigint,
     PRIMARY KEY ("id"),
     FOREIGN KEY (users_id)
