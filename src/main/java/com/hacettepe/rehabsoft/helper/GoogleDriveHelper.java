@@ -68,6 +68,9 @@ public class GoogleDriveHelper {
         storage.delete(bucket.getName(), filePath);
     }
 
+    public Long getSizeOfFile(String filePath){
+        return storage.get(bucket.getName(), filePath).getSize();
+    }
 }
 
 

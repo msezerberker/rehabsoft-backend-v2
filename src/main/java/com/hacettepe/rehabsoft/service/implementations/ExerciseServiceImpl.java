@@ -39,7 +39,7 @@ public class ExerciseServiceImpl implements ExerciseService {
 
     @Override
     public List<ExerciseDto> getAll(){
-        List<Exercise> exercises = exerciseRepository.findAll();
+        List<Exercise> exercises = exerciseRepository.findAllByOrderByIdDesc();
         return  Arrays.asList(modelMapper.map(exercises, ExerciseDto[].class));
     }
 
@@ -66,7 +66,7 @@ public class ExerciseServiceImpl implements ExerciseService {
         tempExercise = exerciseRepository.save(tempExercise);
         exerciseDto.setId(tempExercise.getId());
         fillExerciseVideoCollection( tempExercise, exerciseMediaList, exerciseVideoListToSave );
-            return "Egzersiz başarıyla kaydedildi!";
+        return "Egzersiz başarıyla kaydedildi!";
     }
 
     @Override
@@ -88,10 +88,7 @@ public class ExerciseServiceImpl implements ExerciseService {
 
     @Override
     public Boolean isExerciseNameExists(String name) {
-        if(exerciseRepository.getByExerciseName(name) ==null){
-            return false;
-        }
-        return true;
+        return exerciseRepository.getByExerciseName(name) != null;
     }
 
     @Override
@@ -220,7 +217,5 @@ public class ExerciseServiceImpl implements ExerciseService {
             }
         }
     }
-
-
 
 }

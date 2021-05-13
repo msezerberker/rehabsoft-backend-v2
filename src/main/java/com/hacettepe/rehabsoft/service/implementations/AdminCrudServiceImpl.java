@@ -1,9 +1,9 @@
 package com.hacettepe.rehabsoft.service.implementations;
 
 
-import com.hacettepe.rehabsoft.dto.*;
-import com.hacettepe.rehabsoft.entity.Patient;
-import com.hacettepe.rehabsoft.entity.Role;
+import com.hacettepe.rehabsoft.dto.DoctorInfoDto;
+import com.hacettepe.rehabsoft.dto.RegistrationRequest;
+import com.hacettepe.rehabsoft.dto.UserCrudDto;
 import com.hacettepe.rehabsoft.entity.User;
 import com.hacettepe.rehabsoft.repository.AdminRepository;
 import com.hacettepe.rehabsoft.repository.DoctorRepository;
@@ -13,16 +13,13 @@ import com.hacettepe.rehabsoft.service.AdminCrudService;
 import com.hacettepe.rehabsoft.service.AdminService;
 import com.hacettepe.rehabsoft.service.DoctorService;
 import com.hacettepe.rehabsoft.service.UserService;
-import com.hacettepe.rehabsoft.util.Constants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.ListIterator;
 
 
 @Service

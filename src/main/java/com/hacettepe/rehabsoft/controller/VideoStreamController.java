@@ -12,7 +12,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @CrossOrigin(origins = ApiPaths.LOCAL_CLIENT_BASE_PATH, allowCredentials = "true")
 @RestController
-@RequestMapping("/video")
+@RequestMapping(ApiPaths.VideoStreamPath.CTRL)
 public class VideoStreamController {
 
     private final VideoStreamService videoStreamService;

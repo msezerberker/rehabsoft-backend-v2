@@ -91,7 +91,7 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
                 tempForm.getOtherOrthesisInfoCollection().remove(otherOrthesisInfo);
                 OtherOrthesisInfo persistedOrthesis = otherOrthesisInfoRepository.save(otherOrthesisInfo);
                 String directoryAndImage = fileOperationHelper.createURLWithDirectory(
-                        ApiPaths.SavingOtherOrthesisImagePath.CTRL+securityHelper.getUsername()+"/",
+                        ApiPaths.SavingOtherOrthesisImagePath.CTRL+securityHelper.getUsername(),
                         persistedOrthesis.getId()+"-" + newFileName.toString(),
                         fileType+"");
                 String savedUrl = fileOperationHelper.saveFileByDirectory(multipartFile, directoryAndImage);
@@ -125,7 +125,7 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
 
                 String directoryAndImage =
                         fileOperationHelper.createURLWithDirectory(
-                                ApiPaths.SavingBotoxImagePath.CTRL+securityHelper.getUsername()+"/",
+                                ApiPaths.SavingBotoxImagePath.CTRL+securityHelper.getUsername(),
                                 persistedBotoxTreatment.getId()+"",
                                 botoxImage.getContentType().split("/")[1]);
 
@@ -276,7 +276,7 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
                 AppliedSurgery persistedAppliedSurgery = appliedSurgeryRepository.save(appliedSurgery);
 
                 String directoryAndImage = fileOperationHelper.createURLWithDirectory(
-                        ApiPaths.SavingAppliedSurgeryImagePath.CTRL+securityHelper.getUsername()+"/",
+                        ApiPaths.SavingAppliedSurgeryImagePath.CTRL+securityHelper.getUsername(),
                         persistedAppliedSurgery.getId()+"-" + newFileName.toString(),
                         fileType+"");
 
@@ -297,9 +297,8 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
 
         Patient patientByUser = patientRepository.getPatientByUser(userRepository.findByUsername(securityHelper.getUsername()));
         if(patientByUser != null){
-            if(patientByUser.getGeneralEvaluationForm() != null ){//already saved in DB
-                return true;
-            }
+            //already saved in DB
+            return patientByUser.getGeneralEvaluationForm() != null;
         }
 
         return false;

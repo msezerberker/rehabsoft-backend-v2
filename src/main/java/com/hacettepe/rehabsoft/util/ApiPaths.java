@@ -33,11 +33,11 @@ public class ApiPaths {
 
 
     public static final class SavingBotoxImagePath {
-        public static final String CTRL = "/static/generalevaluationform/botoximage/";
+        public static final String CTRL = "static/generalevaluationform/botoximage/";
     }
 
     public static final class SavingAppliedSurgeryImagePath {
-        public static final String CTRL = "/static/generalevaluationform/appliedsurgeryimage/";
+        public static final String CTRL = "static/generalevaluationform/appliedsurgeryimage/";
     }
 
 
@@ -46,7 +46,7 @@ public class ApiPaths {
     }
 
     public static final class SavingOtherOrthesisImagePath {
-        public static final String CTRL = "/static/generalevaluationform/otherorthesisimage/";
+        public static final String CTRL = "static/generalevaluationform/otherorthesisimage/";
     }
 
     public static final class SavingExerciseMediaPath {
@@ -54,7 +54,7 @@ public class ApiPaths {
     }
 
     public static final class SavingResponseVideoRequestPath {
-        public static final String CTRL = "/static/responsevideorequest/";
+        public static final String CTRL = "static/responsevideorequest/";
     }
 
     public static final class Profile {
@@ -85,5 +85,8 @@ public class ApiPaths {
     }
     public static final class FormDynamicPath {
         public static final String CTRL = BASE_PATH + "/form-dynamic";
+    }
+    public static final class VideoStreamPath {
+        public static final String CTRL = BASE_PATH + "/video";
     }
 }

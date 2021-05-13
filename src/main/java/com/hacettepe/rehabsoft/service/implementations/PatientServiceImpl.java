@@ -91,7 +91,7 @@ public class PatientServiceImpl implements PatientService {
     public List<PatientDetailsDto> getAllPatientUsers(){
 
 
-        List<Patient> patientList = patientRepository.findAll();
+        List<Patient> patientList = patientRepository.getAllByOrderById();
         //gefd doldurulmamıssa sil
         ListIterator<Patient> iter = patientList.listIterator();
         while(iter.hasNext()){
