@@ -66,4 +66,10 @@ public class DoctorServiceImpl implements DoctorService {
 
         return doctorsDto;
     }
+
+    @Override
+    public DoctorDto getDoctorByUsername(String username) {
+        Doctor doctor = doctorRepository.getDoctorByUser(userRepository.findByUsername(username));
+        return modelMapper.map(doctor,DoctorDto.class);
+    }
 }

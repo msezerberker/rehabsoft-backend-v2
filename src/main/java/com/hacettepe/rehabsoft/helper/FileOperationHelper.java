@@ -7,6 +7,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -38,6 +41,11 @@ public class FileOperationHelper {
         }
         return fileType;
     }
+    // pop file type. append popped string to second parameter which is newFileName
+    public static String popFileTypeFromFileName(String filename){
+        List<String> listToGetFileType =  new LinkedList<>(Arrays.asList(Objects.requireNonNull(filename).split("\\.")));
+        return listToGetFileType.remove(listToGetFileType.size()-1);
+    }
 
     // This function is used to save any file by giving location url and its name added in url.
     public String saveFileByDirectory(MultipartFile image, String directory) throws Exception{
@@ -68,5 +76,13 @@ public class FileOperationHelper {
 
     public Long getSizeOfFile(String filePath){
         return googleDriveHelper.getSizeOfFile(filePath);
+    }
+
+    //This function is used to convert BufferedImage to byte array
+    public static byte[] convertToByteArray(BufferedImage bufferedImage, String url) throws IOException {
+        String type = popFileTypeFromFileName(url);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(bufferedImage, type, baos);
+        return baos.toByteArray();
     }
 }
