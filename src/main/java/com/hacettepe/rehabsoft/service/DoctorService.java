@@ -8,4 +8,6 @@ public interface DoctorService {
 
     String save(String username);
     List<DoctorDto> getAll();
+
+    DoctorDto getDoctorByUsername(String username);
 }

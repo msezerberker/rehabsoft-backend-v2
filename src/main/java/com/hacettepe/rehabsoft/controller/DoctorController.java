@@ -1,6 +1,7 @@
 package com.hacettepe.rehabsoft.controller;
 
 import com.hacettepe.rehabsoft.dto.DoctorDto;
+import com.hacettepe.rehabsoft.dto.PatientDetailsDto;
 import com.hacettepe.rehabsoft.dto.PatientDto;
 import com.hacettepe.rehabsoft.dto.VideoRequestDto;
 import com.hacettepe.rehabsoft.entity.Doctor;
@@ -42,6 +43,13 @@ public class DoctorController {
     public ResponseEntity<List<DoctorDto>> getAllDoctors(){
         log.warn("getAllDoctors metodu calisti");
         List<DoctorDto> doctors = doctorService.getAll();
+        return ResponseEntity.ok(doctors);
+    }
+
+    @RequestMapping(value = "/getByUsername/{username}", method = RequestMethod.GET)
+    public ResponseEntity<DoctorDto> getDoctorByUsername(@PathVariable String username){
+        log.warn("getDoctorByUsername metodu calisti");
+        DoctorDto doctors = doctorService.getDoctorByUsername(username);
         return ResponseEntity.ok(doctors);
     }
 

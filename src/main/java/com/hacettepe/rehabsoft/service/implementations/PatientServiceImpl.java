@@ -192,4 +192,15 @@ public class PatientServiceImpl implements PatientService {
 
         return patientDetailsDtoList;
     }
+
+    @Override
+    public PatientDto get(String tcKimlikNo) {
+        return modelMapper.map(patientRepository.getPatientByTcKimlikNo(tcKimlikNo), PatientDto.class);
+    }
+
+    @Override
+    public List<PatientDto> getPatientsByDoctor(String doctorUsername) {
+        List<Patient> patientList = patientRepository.getAllByDoctor(doctorRepository.getDoctorByUser(userRepository.findByUsername(doctorUsername)));
+        return Arrays.asList(modelMapper.map(patientList, PatientDto[].class));
+    }
 }

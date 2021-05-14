@@ -107,6 +107,19 @@ public class PatientController {
         return ResponseEntity.ok(responseMessage);
     }
 
+    @RequestMapping(value = "/get/{tcKimlikNo}",method = RequestMethod.GET)
+    public ResponseEntity<PatientDto> get(@PathVariable String tcKimlikNo){
+        log.warn("get metodu basariyla calisti");
+        PatientDto patientDto= patientService.get(tcKimlikNo);
+        return ResponseEntity.ok(patientDto);
+    }
 
+    @RequestMapping(value = "/getPatientByDoctor/{doctorUsername}",method = RequestMethod.GET)
+    public ResponseEntity<List<PatientDto>> getPatientByDoctor(@PathVariable String doctorUsername){
+        log.warn("get metodu basariyla calisti");
+        log.warn("listAllPatient metodu basariyla calisti");
+        List<PatientDto> patientList = patientService.getPatientsByDoctor(doctorUsername);
+        return ResponseEntity.ok(patientList);
+    }
 
 }

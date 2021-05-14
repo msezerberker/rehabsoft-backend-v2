@@ -19,6 +19,8 @@ import java.util.Collection;
 @ApiModel(value = "Data Transfer Object for Patient-Form")
 public class PatientDto {
 
+    private Long id;
+
     @NotBlank(message = "Lütfen Kimlik Numaranızı giriniz")
     private String tcKimlikNo;
     @NotBlank(message = "Lütfen adınızı giriniz")
