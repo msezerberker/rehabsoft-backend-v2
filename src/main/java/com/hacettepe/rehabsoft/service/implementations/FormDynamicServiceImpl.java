@@ -3,7 +3,6 @@ package com.hacettepe.rehabsoft.service.implementations;
 import com.hacettepe.rehabsoft.dto.AssignedFormDto;
 import com.hacettepe.rehabsoft.dto.FormTemplateDto;
 import com.hacettepe.rehabsoft.entity.*;
-import com.hacettepe.rehabsoft.helper.SecurityHelper;
 import com.hacettepe.rehabsoft.repository.*;
 import com.hacettepe.rehabsoft.service.FormDynamicService;
 import lombok.RequiredArgsConstructor;
@@ -12,10 +11,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
+
 
 @RequiredArgsConstructor
 @Slf4j
@@ -40,11 +39,9 @@ public class FormDynamicServiceImpl implements FormDynamicService {
     @Autowired
     FormDynamicRepository formDynamicRepository;
 
-    private final SecurityHelper securityHelper;
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
     private final PatientRepository patientRepository;
-    private final DoctorRepository doctorRepository;
 
 
     @Override
@@ -53,9 +50,10 @@ public class FormDynamicServiceImpl implements FormDynamicService {
         List<AssignedForm> assignedFormList = assignedFormRepository.findAllByPatientOrderByCreationDateDesc(patientRepository.getPatientByTcKimlikNo(tcKimlikNo));
         List<AssignedFormDto> assignedFormDtoList =  Arrays.asList(modelMapper.map(assignedFormList, AssignedFormDto[].class));
 
-        if(assignedFormDtoList==null){
+        if( isAssignedFormDtoListEmpty(assignedFormDtoList)){
             log.warn("Belirtilen hastaya ait form-anket kaydı bulunmuyor");
-            return null;}
+            return Collections.emptyList();
+        }
 
         return assignedFormDtoList;
     }
@@ -91,9 +89,9 @@ public class FormDynamicServiceImpl implements FormDynamicService {
         List<AssignedForm> assignedFormList = assignedFormRepository.findAllByPatientAndIsAnsweredOrderByCreationDateDesc(patientRepository.getPatientByTcKimlikNo(tcKimlikNo),false);
         List<AssignedFormDto> assignedFormDtoList =  Arrays.asList(modelMapper.map(assignedFormList, AssignedFormDto[].class));
 
-        if(assignedFormDtoList==null){
+        if(isAssignedFormDtoListEmpty(assignedFormDtoList)){
             log.warn("Cevap bekleyen form-anket talebiniz bulunmuyor");
-            return null;
+            return Collections.emptyList();
         }
 
         return assignedFormDtoList;
@@ -105,9 +103,9 @@ public class FormDynamicServiceImpl implements FormDynamicService {
         List<AssignedForm> assignedFormList = assignedFormRepository.findAllByPatientAndIsAnsweredOrderByCreationDateDesc(patientRepository.getPatientByTcKimlikNo(tcKimlikNo),true);
         List<AssignedFormDto> assignedFormDtoList =  Arrays.asList(modelMapper.map(assignedFormList, AssignedFormDto[].class));
 
-        if(assignedFormDtoList==null){
+        if(isAssignedFormDtoListEmpty(assignedFormDtoList)){
             log.warn("Cevapladığınız form-anket talebiniz bulunmuyor");
-            return null;
+            return Collections.emptyList();
         }
 
         return assignedFormDtoList;
@@ -151,9 +149,9 @@ public class FormDynamicServiceImpl implements FormDynamicService {
     public List<FormTemplateDto> getFormTemplatesbyDoctor(String userName){
         List<FormTemplate> formTemplates = formTemplateRepository.findByUserOrderByCreationDateDesc(userRepository.findByUsername(userName));
         List<FormTemplateDto> formTemplateDtoList = Arrays.asList(modelMapper.map(formTemplates,FormTemplateDto[].class));
-        if(formTemplateDtoList==null){
+        if(formTemplateDtoList==null || formTemplateDtoList.isEmpty()){
             log.warn("Henüz bir form örneği oluşturulmadı");
-            return null;
+            return Collections.emptyList();
         }
         return formTemplateDtoList;
     }
@@ -209,5 +207,9 @@ public class FormDynamicServiceImpl implements FormDynamicService {
         assignedForm.setFormDynamic(formTemplateRepository.findById(lTemplateID).get().getFormDynamic());
         assignedFormRepository.save(assignedForm);
         return true;
+    }
+
+    public boolean isAssignedFormDtoListEmpty(List<AssignedFormDto> assignedFormDtoList){
+        return assignedFormDtoList == null || assignedFormDtoList.isEmpty();
     }
 }
