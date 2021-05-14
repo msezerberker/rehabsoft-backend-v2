@@ -13,9 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,7 +40,9 @@ public class OnlineMeetingServiceImp implements OnlineMeetingService {
     @Override
     @Transactional(rollbackFor = Exception.class, readOnly = true)
     public List<OnlineMeetingDto> getOnlineMeetingsByUsername(String username) throws Exception {
-        List<OnlineMeeting> onlineMeetingList = onlineMeetingRepository.getByUsername(username);
+        List<OnlineMeeting> onlineMeetingList = onlineMeetingRepository.getByUsername(username)
+                .stream()
+                .filter(onlineMeeting -> onlineMeeting.getMeetingDate().isAfter(LocalDateTime.now().minusDays(1))).collect(Collectors.toList());
         return onlineMeetingList.stream().map(onlineMeeting->modelMapper.map(onlineMeeting, OnlineMeetingDto.class)).collect(Collectors.toList());
     }
 
@@ -51,6 +50,11 @@ public class OnlineMeetingServiceImp implements OnlineMeetingService {
     public Boolean isUsernameHasOnlineMeetingInCurrentDay(String username) {
         final List<OnlineMeeting> onlineMeetings = onlineMeetingRepository.getByUsername(username);
         return onlineMeetings.isEmpty() && isMeetingTimeInCurrentDay(onlineMeetings);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        onlineMeetingRepository.deleteById(id);
     }
 
     private boolean isMeetingTimeInCurrentDay(List<OnlineMeeting> onlineMeetings) {

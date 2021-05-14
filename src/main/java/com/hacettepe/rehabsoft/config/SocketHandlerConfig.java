@@ -2,7 +2,6 @@ package com.hacettepe.rehabsoft.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hacettepe.rehabsoft.dto.OnlineMeetingDto;
-import com.hacettepe.rehabsoft.pojo.TextMessagePayloadPOJO;
 import com.hacettepe.rehabsoft.service.OnlineMeetingService;
 import com.hacettepe.rehabsoft.util.ApiPaths;
 import io.swagger.annotations.Api;

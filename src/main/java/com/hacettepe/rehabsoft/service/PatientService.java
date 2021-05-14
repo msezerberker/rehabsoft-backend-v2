@@ -26,4 +26,7 @@ public interface PatientService {
     List<PatientDetailsDto> getAllPatientUsersByDoctor(String docUsername);
 
 
+    PatientDto get(String tcKimlikNo);
+
+    List<PatientDto> getPatientsByDoctor(String doctorUsername);
 }
