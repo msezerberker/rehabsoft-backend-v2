@@ -28,7 +28,7 @@ public class PhysiotherapyProgram extends BaseEntity {
     private Patient patient;
 
     @Column(name = "is_active")
-    private Boolean isProgramActive;
+    private Boolean isActive;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "start_date")
@@ -39,6 +39,6 @@ public class PhysiotherapyProgram extends BaseEntity {
     private LocalDateTime finishDate;
 
     @OneToMany(mappedBy = "physiotherapyProgram", cascade = CascadeType.REMOVE)
-    private Collection<AddedExerciseInProgram> exerciseInProgramsList;
+    private Collection<ScheduledExercise> scheduledExerciseCollection;
 
 }

@@ -92,7 +92,10 @@ public class ApiPaths {
     public static final class VideoStreamPath {
         public static final String CTRL = BASE_PATH + "/video";
     }
-    public static final class ExerciseProgramAssignPath {
-        public static final String CTRL = BASE_PATH + "/assign-exercise-program";
+    public static final class PhysiotherapyProgramPath {
+        public static final String CTRL = BASE_PATH + "/physiotherapy-program";
+    }
+    public static final class ScheduledExercisePath {
+        public static final String CTRL = BASE_PATH + "/scheduled-exercise";
     }
 }

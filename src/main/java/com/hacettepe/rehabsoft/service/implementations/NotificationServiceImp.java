@@ -78,6 +78,16 @@ public class NotificationServiceImp implements NotificationService {
     }
 
     @Override
+    public void createNotification(User user, String notificationMessage, String notificationUrl) {
+        log.warn("createNotification'a giriyor");
+        Notification notification = new Notification();
+        notification.setUser(user);
+        notification.setNotificationContent(notificationMessage);
+        notification.setNotificationUrl(notificationUrl);
+        notificationRepository.save(notification);
+    }
+
+    @Override
     public void deleteGeneralEvaluationFormNotification(User user) {
         log.warn("deleteGeneralEvaluationFormNotification'a giriyor");
         notificationRepository.deleteByNotificationContentAndUser("Lütfen kaydı tamamlamak için değerlendirme formunu doldurunuz.", user);

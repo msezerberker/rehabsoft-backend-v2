@@ -1,5 +1,6 @@
 package com.hacettepe.rehabsoft.dto;
 
+import com.hacettepe.rehabsoft.entity.Exercise;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -15,18 +16,19 @@ import java.time.LocalDateTime;
 @ApiModel(value = "Data Transfer Object for Scheduled Exercise")
 public class ScheduledExerciseDto {
 
-    @ApiModelProperty(required = true,value = "ID")
+    @ApiModelProperty(required = true,value = "id")
     private Long id;
 
     @NotEmpty
-    @ApiModelProperty(required = true,value = "addedExerciseInProgram")
-    private AddedExerciseInProgramDto addedExerciseInProgram;
-
-    @NotEmpty
-    @ApiModelProperty(required = true,value = "scheduled_date")
-    private LocalDateTime scheduled_date;
+    @ApiModelProperty(required = true,value = "scheduledDate")
+    private LocalDateTime scheduledDate;
 
     @NotNull
     @ApiModelProperty(required = true,value = "isApplied")
-    private boolean isApplied;
+    private Boolean isApplied;
+
+    @NotNull
+    @ApiModelProperty(required = true,value = "exercise")
+    private ExerciseDto exercise;
+
 }
