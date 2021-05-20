@@ -999,14 +999,6 @@ CREATE SEQUENCE public.physiotherapy_program_seq
 ALTER SEQUENCE public.physiotherapy_program_seq
     OWNER TO postgres;
 
-CREATE SEQUENCE public.added_exercise_in_program_seq
-    INCREMENT 1
-    START 1
-    MINVALUE 1
-    MAXVALUE 9223372036854775807
-    CACHE 1;
-ALTER SEQUENCE public.added_exercise_in_program_seq
-    OWNER TO postgres;
 
 CREATE SEQUENCE public.scheduled_exercise_seq
     INCREMENT 1
@@ -1041,12 +1033,14 @@ CREATE TABLE public.physiotherapy_program
 );
 
 
-CREATE TABLE public.added_exercise_in_program
+CREATE TABLE public.scheduled_exercise
 (
-    "id" bigint NOT NULL default nextval('added_exercise_in_program_seq'),
+    "id" bigint NOT NULL default nextval('scheduled_exercise_seq'),
     creation_date timestamp without time zone,
     last_modified_date timestamp without time zone,
     "version" bigint,
+    scheduled_date  timestamp without time zone,
+    is_applied boolean,
     physiotherapy_program_id bigint,
     exercise_id bigint,
     PRIMARY KEY ("id"),
@@ -1056,22 +1050,6 @@ CREATE TABLE public.added_exercise_in_program
         ON DELETE CASCADE,
     FOREIGN KEY (exercise_id)
         REFERENCES public."exercise" ("id") MATCH SIMPLE
-        ON UPDATE CASCADE
-        ON DELETE CASCADE
-);
-
-CREATE TABLE public.scheduled_exercise
-(
-    "id" bigint NOT NULL default nextval('scheduled_exercise_seq'),
-    creation_date timestamp without time zone,
-    last_modified_date timestamp without time zone,
-    "version" bigint,
-    added_exercise_in_program_id bigint,
-    scheduled_date  timestamp without time zone,
-    is_applied boolean,
-    PRIMARY KEY ("id"),
-    FOREIGN KEY (added_exercise_in_program_id)
-        REFERENCES public."added_exercise_in_program" ("id") MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );

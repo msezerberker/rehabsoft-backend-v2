@@ -30,4 +30,7 @@ public interface NotificationService {
     void createNotificationForMessage(Message message);
 
     void clickNotification(Long notificationId);
+
+    void createNotification(User user, String notificationMessage, String notificationUrl);
+
 }

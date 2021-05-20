@@ -1,6 +1,5 @@
 package com.hacettepe.rehabsoft.dto;
 
-import com.hacettepe.rehabsoft.entity.AddedExerciseInProgram;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -38,8 +37,8 @@ public class PhysiotherapyProgramDto {
     private PatientDto patient;
 
     @NotNull
-    @ApiModelProperty(required = true,value = "isProgramActive")
-    private Boolean isProgramActive;
+    @ApiModelProperty(required = true,value = "isActive")
+    private Boolean isActive;
 
     @NotEmpty
     @ApiModelProperty(required = true,value = "startDate")
@@ -49,6 +48,6 @@ public class PhysiotherapyProgramDto {
     @ApiModelProperty(required = true,value = "finishDate")
     private LocalDateTime finishDate;
 
-    @ApiModelProperty(required = true,value = "exerciseInProgramsList")
-    private Collection<AddedExerciseInProgramDto> exerciseInProgramsList;
+    @ApiModelProperty(required = true,value = "scheduledExerciseCollection")
+    private Collection<ScheduledExerciseDto> scheduledExerciseCollection;
 }

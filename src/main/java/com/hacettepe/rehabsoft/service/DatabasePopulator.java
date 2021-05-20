@@ -64,9 +64,9 @@ public class DatabasePopulator {
 
                 // password = admin
                 adminUser.setUsername("admin");
-                doctorUser.setEmail("admin@admin.com");
-                doctorUser.setFirstName("Oktay");
-                doctorUser.setSurname("UGURLU");
+                adminUser.setEmail("admin@admin.com");
+                adminUser.setFirstName("Oktay");
+                adminUser.setSurname("UGURLU");
                 adminUser.setPassword("$2y$12$pKfesPuyNERALXIiOF0wXuroQiTBy/Je3RWE4WBnpVSaSiw9p5rPC");
                 adminUser.setRole(adminRole);
                 User userFetched1 = userRepository.save(adminUser);

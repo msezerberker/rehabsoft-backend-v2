@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -16,17 +17,20 @@ import java.time.LocalDateTime;
 @SequenceGenerator(name = "idgen", sequenceName = "scheduled_exercise_seq", initialValue = 1, allocationSize = 1)
 public class ScheduledExercise extends BaseEntity  {
 
-    @ManyToOne
-    @JoinColumn(name = "added_exercise_in_program_id")
-    private AddedExerciseInProgram addedExerciseInProgram;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "scheduled_date")
-    private LocalDateTime scheduled_date;
+    private LocalDateTime scheduledDate;
 
     @Column(name = "is_applied")
-    private boolean isApplied;
+    private Boolean isApplied;
 
+    @ManyToOne
+    @JoinColumn(name = "physiotherapy_program_id")
+    private PhysiotherapyProgram physiotherapyProgram;
 
+    @ManyToOne
+    @JoinColumn(name = "exercise_id")
+    private Exercise exercise;
 
 }
