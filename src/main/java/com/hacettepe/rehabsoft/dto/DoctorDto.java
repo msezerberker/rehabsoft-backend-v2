@@ -25,5 +25,5 @@ public class DoctorDto {
 
     private UserDto user;
 
-    private Collection<VideoRequestDto> videoRequestCollection;
+//    private Collection<VideoRequestDto> videoRequestCollection;
 }
