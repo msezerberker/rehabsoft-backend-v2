@@ -1,5 +1,6 @@
 package com.hacettepe.rehabsoft.controller;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import com.hacettepe.rehabsoft.dto.NotificationDto;
 import com.hacettepe.rehabsoft.dto.UserDto;
 import com.hacettepe.rehabsoft.service.NotificationService;
@@ -25,7 +26,7 @@ public class NotificationController {
 
     @PreAuthorize("hasRole('ROLE_USER')" + "|| hasRole('ROLE_DOCTOR')")
     @RequestMapping(value = "/all",method = RequestMethod.GET)
-    public ResponseEntity<List<NotificationDto>> listNotifications(){
+    public ResponseEntity<List<NotificationDto>> listNotifications() throws FirebaseMessagingException {
         log.warn("listNotifications metodu basariyla calisti");
         List<NotificationDto> data = notificationService.getAll();
         return ResponseEntity.ok(data);

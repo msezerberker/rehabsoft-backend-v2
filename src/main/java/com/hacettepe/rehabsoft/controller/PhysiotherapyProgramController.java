@@ -1,6 +1,7 @@
 package com.hacettepe.rehabsoft.controller;
 
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import com.hacettepe.rehabsoft.dto.PhysiotherapyProgramDto;
 import com.hacettepe.rehabsoft.helper.ResponseMessage;
 import com.hacettepe.rehabsoft.service.PhysiotherapyProgramService;
@@ -34,7 +35,7 @@ public class PhysiotherapyProgramController {
     }
 
     @RequestMapping(value = "/assign-new", method = RequestMethod.POST)
-    public ResponseEntity<ResponseMessage> assignDynamicForm(@RequestBody PhysiotherapyProgramDto physiotherapyProgramDto) {
+    public ResponseEntity<ResponseMessage> assignDynamicForm(@RequestBody PhysiotherapyProgramDto physiotherapyProgramDto) throws FirebaseMessagingException {
         log.warn("Hastaya programatama controller'ı çalışıyor");
 
         boolean sonuc = physiotherapyProgramService.assignProgram(physiotherapyProgramDto);

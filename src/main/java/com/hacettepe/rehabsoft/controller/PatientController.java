@@ -1,5 +1,6 @@
 package com.hacettepe.rehabsoft.controller;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import com.hacettepe.rehabsoft.dto.*;
 import com.hacettepe.rehabsoft.helper.ResponseMessage;
 import com.hacettepe.rehabsoft.service.PatientService;
@@ -92,7 +93,7 @@ public class PatientController {
     }
 
     @RequestMapping(value ="/assigndoctor/{tcKimlikNo}", method = RequestMethod.POST)
-    public ResponseEntity<ResponseMessage> assignDoctorToPatient(@RequestBody String doctorUserID, @PathVariable String tcKimlikNo){
+    public ResponseEntity<ResponseMessage> assignDoctorToPatient(@RequestBody String doctorUserID, @PathVariable String tcKimlikNo) throws FirebaseMessagingException {
         log.warn("Hastaya doktor atama controller'ı çalışıyor");
 
         boolean sonuc = patientService.setDoctorToPatient(tcKimlikNo,doctorUserID);

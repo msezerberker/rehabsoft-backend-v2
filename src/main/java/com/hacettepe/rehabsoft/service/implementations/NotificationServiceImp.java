@@ -1,5 +1,6 @@
 package com.hacettepe.rehabsoft.service.implementations;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import com.hacettepe.rehabsoft.dto.NotificationDto;
 import com.hacettepe.rehabsoft.entity.*;
 import com.hacettepe.rehabsoft.helper.NotificationServiceHelper;
@@ -7,6 +8,7 @@ import com.hacettepe.rehabsoft.helper.SecurityHelper;
 import com.hacettepe.rehabsoft.repository.NotificationRepository;
 import com.hacettepe.rehabsoft.repository.RoleRepository;
 import com.hacettepe.rehabsoft.repository.UserRepository;
+import com.hacettepe.rehabsoft.service.FirebaseNotificationService;
 import com.hacettepe.rehabsoft.service.NotificationService;
 import com.hacettepe.rehabsoft.util.NotificationPaths;
 import lombok.RequiredArgsConstructor;
@@ -28,17 +30,15 @@ public class NotificationServiceImp implements NotificationService {
     private final SecurityHelper securityHelper;
     private final ModelMapper modelMapper;
     private final RoleRepository roleRepository;
+    private final FirebaseNotificationService firebaseNotificationService;
 
     @Override
-    public List<NotificationDto> getAll() {
+    public List<NotificationDto> getAll() throws FirebaseMessagingException {
         User user = userRepository.findByUsername(securityHelper.getUsername());
         List<NotificationDto> notificationDtoList = new ArrayList<>();
         notificationRepository.findByUserOrderByCreationDateDesc(user).forEach(notification -> notificationDtoList.add(modelMapper.map(notification, NotificationDto.class)));
-
         return notificationDtoList;
     }
-
-
 
     @Override
     public void clickNotification(Long notificationId) {
@@ -53,37 +53,21 @@ public class NotificationServiceImp implements NotificationService {
     }
 
     @Override
-    public String save(NotificationDto notificationDto) throws Exception {
-        return null;
-    }
-
-    @Override
     public Boolean delete(Long id) {
         return null;
     }
 
-    @Override
-    public String updateExercise(NotificationDto notificationDto) throws Exception {
-        return null;
-    }
 
     @Override
-    public void createNotificationForGeneralEvaluationForm(User user) {
-        log.warn("createNotificationForGeneralEvaluationForm'a giriyor");
-        Notification notification = new Notification();
-        notification.setUser(user);
-        notification.setNotificationContent("Lütfen kaydı tamamlamak için değerlendirme formunu doldurunuz.");
-        notification.setNotificationUrl(NotificationPaths.BASE_PATH+"/user/general-evaluation-form");
-        notificationRepository.save(notification);
-    }
-
-    @Override
-    public void createNotification(User user, String notificationMessage, String notificationUrl) {
+    public void createNotification(User user, String notificationContent, String notificationUrl, boolean isNotificationSend) throws FirebaseMessagingException {
         log.warn("createNotification'a giriyor");
         Notification notification = new Notification();
         notification.setUser(user);
-        notification.setNotificationContent(notificationMessage);
+        notification.setNotificationContent(notificationContent);
         notification.setNotificationUrl(notificationUrl);
+        if(isNotificationSend){
+            firebaseNotificationService.sendNotification(modelMapper.map(notification, NotificationDto.class), user.getFirebaseTokenCollection());
+        }
         notificationRepository.save(notification);
     }
 
@@ -94,27 +78,7 @@ public class NotificationServiceImp implements NotificationService {
     }
 
     @Override
-    public void createNotifiactionForNewPatientToDoctor(Patient patient) {
-        log.warn("createNotifiactionForNewPatientToDoctor'a giriyor");
-        Notification notification = new Notification();
-        notification.setUser(patient.getDoctor().getUser());
-        notification.setNotificationContent("Sisteme "+patient.getUser().getFirstName()+" "+patient.getUser().getSurname()+" isimli yeni hasta kaydoldu. Hastanın detaylarını görmek için tıklayın");
-        notification.setNotificationUrl(NotificationPaths.BASE_PATH+"/doctor/patient-info/"+patient.getTcKimlikNo());
-        notificationRepository.save(notification);
-    }
-
-    @Override
-    public void createNotifiactionForNewVideoRequest(VideoRequest videoRequest) {
-        log.warn("createNotifiactionForNewPatientToDoctor'a giriyor");
-        Notification notification = new Notification();
-        notification.setUser(videoRequest.getPatient().getUser());
-        notification.setNotificationContent("Doktorunuz sizden yeni bir video talep etti. Detayları görmek için tıklayın");
-        notification.setNotificationUrl(NotificationPaths.BASE_PATH+"/user/user-video-submit");
-        notificationRepository.save(notification);
-    }
-
-    @Override
-    public void createNotificationForMessage(Message message) {
+    public void createNotificationForMessage(Message message) throws FirebaseMessagingException {
 
 
         log.warn("Message notify'a giriyor");
@@ -132,13 +96,10 @@ public class NotificationServiceImp implements NotificationService {
             notification.setNotificationContent( message.getSenderUser().getFirstName() + " "+ message.getSenderUser().getSurname() + " isimli fizyoterapistinizden bir yeni mesajınız var" );
             notification.setNotificationUrl(NotificationPaths.BASE_PATH+"/user/message");
         }
-        else{
-            //nothing
-        }
+
+        firebaseNotificationService.sendNotification(modelMapper.map(notification, NotificationDto.class), message.getReceiverUser().getFirebaseTokenCollection());
 
         notificationRepository.save(notification);
     }
-
-
 
 }

@@ -1,6 +1,7 @@
 package com.hacettepe.rehabsoft.service.implementations;
 
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import com.hacettepe.rehabsoft.dto.*;
 import com.hacettepe.rehabsoft.entity.Doctor;
 import com.hacettepe.rehabsoft.entity.Parent;
@@ -10,8 +11,11 @@ import com.hacettepe.rehabsoft.helper.SecurityHelper;
 import com.hacettepe.rehabsoft.repository.DoctorRepository;
 import com.hacettepe.rehabsoft.repository.PatientRepository;
 import com.hacettepe.rehabsoft.repository.UserRepository;
+import com.hacettepe.rehabsoft.service.FirebaseNotificationService;
+import com.hacettepe.rehabsoft.service.NotificationService;
 import com.hacettepe.rehabsoft.service.ParentService;
 import com.hacettepe.rehabsoft.service.PatientService;
+import com.hacettepe.rehabsoft.util.NotificationPaths;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -43,6 +47,8 @@ public class PatientServiceImpl implements PatientService {
     private PatientRepository patientRepository;
     @Autowired
     private DoctorRepository doctorRepository;
+    @Autowired
+    private NotificationService notificationService;
 
 
 
@@ -170,13 +176,16 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     @Transactional
-    public Boolean setDoctorToPatient(String patientTC, String doctorUserID) {
+    public Boolean setDoctorToPatient(String patientTC, String doctorUserID) throws FirebaseMessagingException {
 
         Patient patient = patientRepository.getPatientByTcKimlikNo(patientTC);
         long lid = Integer.parseInt(doctorUserID);
         patient.setDoctor(doctorRepository.getDoctorByUser(userRepository.findById(lid).get()));
         patientRepository.save(patient);
-
+        notificationService.createNotification(patient.getDoctor().getUser(),
+                "Sisteme "+patient.getUser().getFirstName()+" "+patient.getUser().getSurname()+" isimli yeni hasta kaydoldu. Hastanın detaylarını görmek için tıklayın",
+                NotificationPaths.BASE_PATH+"/doctor/patient-info/"+patient.getTcKimlikNo(),
+                true);
         return true;
     }
 

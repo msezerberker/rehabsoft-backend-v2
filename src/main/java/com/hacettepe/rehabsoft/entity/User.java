@@ -36,6 +36,10 @@ public class User extends BaseEntity{
     private String resetPasswordToken;
 
 
+    @OneToMany(mappedBy = "user")
+    Collection<FirebaseToken> firebaseTokenCollection;
+
+
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;

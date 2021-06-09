@@ -8,7 +8,7 @@ public class ApiPaths {
 
     public static final String LOCAL_CLIENT_BASE_PATH = "http://localhost:4200";
     //public static final String LOCAL_CLIENT_BASE_PATH = "https://rehabsoft.netlify.app";
-
+    //public static final String LOCAL_CLIENT_BASE_PATH = "https://localhost:4200";
 
     public static final class AdminPath {
         public static final String CTRL = BASE_PATH + "/admin";
@@ -97,5 +97,9 @@ public class ApiPaths {
     }
     public static final class ScheduledExercisePath {
         public static final String CTRL = BASE_PATH + "/scheduled-exercise";
+    }
+
+    public static class FirebaseMessagingPath {
+        public static final String CTRL = BASE_PATH + "/firebase-messaging";
     }
 }
