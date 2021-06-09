@@ -26,7 +26,7 @@ public class GoogleDriveHelper {
 
     public GoogleDriveHelper() throws IOException {
         Credentials credentials = GoogleCredentials
-                .fromStream(new FileInputStream(Objects.requireNonNull(getClass().getClassLoader().getResource("key_credentials.json")).getFile()));
+                .fromStream(new FileInputStream(new File(getClass().getResource("/key_credentials.json").toURI())));
         StorageOptions options = StorageOptions.newBuilder()
                 .setProjectId("hacettepe-rehabsoft")
                 .setCredentials(credentials).build();
