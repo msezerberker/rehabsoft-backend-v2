@@ -24,9 +24,10 @@ public class GoogleDriveHelper {
     private final Bucket bucket;
     private final Storage storage;
 
-    public GoogleDriveHelper() throws IOException {
+    public GoogleDriveHelper() throws IOException, URISyntaxException {
+        InputStream in = getClass().getResourceAsStream("/key_credentials.json");
         Credentials credentials = GoogleCredentials
-                .fromStream(new FileInputStream(new File(getClass().getResource("/key_credentials.json").toURI())));
+                .fromStream(in);
         StorageOptions options = StorageOptions.newBuilder()
                 .setProjectId("hacettepe-rehabsoft")
                 .setCredentials(credentials).build();
