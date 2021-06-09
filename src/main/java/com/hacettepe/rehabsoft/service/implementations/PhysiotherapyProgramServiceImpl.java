@@ -1,5 +1,6 @@
 package com.hacettepe.rehabsoft.service.implementations;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import com.hacettepe.rehabsoft.dto.PhysiotherapyProgramDto;
 import com.hacettepe.rehabsoft.entity.Patient;
 import com.hacettepe.rehabsoft.entity.PhysiotherapyProgram;
@@ -54,7 +55,7 @@ public class PhysiotherapyProgramServiceImpl implements PhysiotherapyProgramServ
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean assignProgram(PhysiotherapyProgramDto physiotherapyProgramDto) {
+    public boolean assignProgram(PhysiotherapyProgramDto physiotherapyProgramDto) throws FirebaseMessagingException {
         PhysiotherapyProgram physiotherapyProgram = modelMapper.map(physiotherapyProgramDto, PhysiotherapyProgram.class);
         Patient patient = patientRepository.findById(physiotherapyProgram.getPatient().getId()).get();
         physiotherapyProgram.setDoctor(doctorRepository.findById(physiotherapyProgram.getDoctor().getId()).get());
@@ -71,7 +72,10 @@ public class PhysiotherapyProgramServiceImpl implements PhysiotherapyProgramServ
         physiotherapyProgram.setScheduledExerciseCollection(scheduledExercises);
         physiotherapyProgramRepository.save(physiotherapyProgram);
 
-        notificationService.createNotification(patient.getUser(), "Doktorunuz tarafından bir program atandı!", NotificationPaths.BASE_PATH+"/user/physiotherapy-program");
+        notificationService.createNotification(patient.getUser(),
+                "Doktorunuz tarafından bir program atandı!",
+                NotificationPaths.BASE_PATH+"/user/physiotherapy-program",
+                true);
         return true;
     }
 

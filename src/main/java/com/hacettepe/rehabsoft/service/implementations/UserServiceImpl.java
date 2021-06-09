@@ -9,6 +9,7 @@ import com.hacettepe.rehabsoft.repository.UserRepository;
 import com.hacettepe.rehabsoft.service.NotificationService;
 import com.hacettepe.rehabsoft.service.UserService;
 import com.hacettepe.rehabsoft.util.ApiPaths;
+import com.hacettepe.rehabsoft.util.NotificationPaths;
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -160,7 +161,10 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             //System.out.println(role.getName());
             user.setRole(role);
             User userFromDatabase = userRepository.save(user);
-            notificationService.createNotificationForGeneralEvaluationForm(userFromDatabase);
+            notificationService.createNotification(userFromDatabase,
+                    "Lütfen kaydı tamamlamak için değerlendirme formunu doldurunuz.",
+                    NotificationPaths.BASE_PATH+"/user/general-evaluation-form",
+                    false);
             return Boolean.TRUE;
 
         } catch (Exception e) {

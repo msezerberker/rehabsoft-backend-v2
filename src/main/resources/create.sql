@@ -381,7 +381,6 @@ CREATE TABLE public."users"
 );
 
 
-
 CREATE TABLE public.admins
 (
     "id" bigint NOT NULL default nextval('admins_seq'),
@@ -1246,4 +1245,29 @@ CREATE TABLE public.online_meeting
         ON DELETE CASCADE
 );
 
+
 ---******************** version 0.5 ****************************---
+
+
+CREATE SEQUENCE public.firebase_token_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    CACHE 1;
+ALTER SEQUENCE public.firebase_token_seq
+    OWNER TO postgres;
+CREATE TABLE public.firebase_token
+(
+    "id" bigint NOT NULL default nextval('firebase_token_seq'),
+    creation_date timestamp without time zone,
+    last_modified_date timestamp without time zone,
+    "version" bigint,
+    firebase_token_content character varying(255),
+    user_id bigint,
+    PRIMARY KEY ("id"),
+    FOREIGN KEY (user_id)
+        REFERENCES public."users" ("id") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);
