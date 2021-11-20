@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "hacettepe-rehabsoft-2fbd8",
+  "private_key_id": "df76eb5bb848839405cf6c2439d86d704d46c4d9",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDj+kebLdtXxY87\nEJuJDTI4Zw40Ug6D5T97vLAaUOYw/k/WmI+kXnbYJ2uCKZEc83IrGB/9Tq/zz5Md\n/Nf8O3Qz7vcA0QNt7v8XQUAXv47BHa+zV9OI7Ms9hewYbzyTvbwnvzdwMmL3MMAG\nORj0UCi/pd5Vo4X93ngnZ4XNSPj1EysvxW7Z4ETj/sbjMrndrFOFY4qmawhZDS/i\nHaFKXaBbaYNcKpTzDFIwTrV8MFJTKDd1QHOm7QpV0vAp4qpHrkRMGsfN6FrgLf/8\n1btdpoSUMnOKUJCvxPU5rjsMLRLMGLPV0w38BGHwZSWsAjJhqmBJJlclr1LrtW0y\nI0SE47txAgMBAAECggEACmw7oFpbHBrt5rUma0BlcqMxiM5UmA6f1aQlh/p5X7WM\nyGKetJTWCaFZvrBwUDrIFjTK552UmUi88OLJrCA6upIbDFhB+CF0W6eRytQo7mbR\nTNl/1BOBYj1wcxiI1DdZNhb9rZ08HZGGwfIT1D2i80odzVwFyPrGEwUeXqmOqkOh\nP2cALzOiTmNbASKwqC5bq5d/ZF2oWtJPmSH2MmEIXSyXz+wIgKJ7y+R0FAohMF6b\n9DXsVFdTwPUrknPKf5u4y64Amb4FA9mIGQysQTmIv8PhvvYwrykC2PxT/2Nt8Amv\nwq4+3GIs/9Aq1bHQtFPg7ezecVufmnJ6lmkcayUYvQKBgQDzZHtbeXel/rhimjbd\nbiwBaMekFUs7QqieM62OAR8cwmjAR68hEBW3RFbj16l3hc10r+IK7GO9VXh0QHaa\n1C1vaQE4f2Cb7mKeWOTiXMxhTVxdBHQOuMXBGpB+7owT7ENnqhM8D2Xkt5Ty3Zb5\n0Wh5r5iLhQpJ7kIvz7HOK4zdvQKBgQDvyWNxqfIHc3nr26WFK2IAkDzkgbKyUzvB\nxITaE4ENGIwjLXGnpiGQ6hwXO/kXCZtpTybIvaQ6SXmwQTk6SWJAkkpt0I9T/BCM\nt3ZM7teemvZXNuYV+zWg2CoajSJuT/vvB/iBiRQFpj9zQudU1PympK2njWo7+Gxs\nR33CSIyNxQKBgHUedP2fhaOq3q8T5jLHQQWsleSvGnR5rwnxdCJRB9ee9SkRVYRj\naQ+3Itigfju1dxgfSnZXKeeBqWTHYEtArlxd+uhk4ugl3e60d+81GGP6Bef8rJwo\n7X/ueHmb8Gvl1MmdXYQZJL7aWCJF3tB3o/5qMM1yR3Er5U18c+LxsedBAoGBAMJR\nm+si4+ax6B4BNBPFYng+a3pquNvWo9iVX2wy3iQ0vmxLiY1pDk6XygfyLBxFRtKC\nuFV5ibtKi/kQAkZ/7cWSSArSNzTCUs8WZiJWdBouTm/DJ5asq3sbcpNtyHdJDktZ\nVEP1SGqDnWvUzg9rQwvw7GGaMntDCOp+zSVDEdRZAoGAAsoYp1mLlvKdqLaeTGue\n4k/QRxB7xPNrp/xZnLUw9OcYbqWwRpDFZKzbEMsaIFXS9mtwvXeOE+hr5n7vgufS\nLB2diVHF6Olgv07fnXgFXl0m6LkRAg1dwQ6+G7ZWSeWQQM2Cfg3HUQzr1z2q3WVW\niG+p8iM9bX6iUbN8NYE2/48=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-rijpm@hacettepe-rehabsoft-2fbd8.iam.gserviceaccount.com",
+  "client_id": "103772873527352686513",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-rijpm%40hacettepe-rehabsoft-2fbd8.iam.gserviceaccount.com"
+}

@@ -1,21 +1,14 @@
 package com.hacettepe.rehabsoft.helper;
 
 import com.google.api.gax.paging.Page;
-import com.google.auth.Credentials;
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.ReadChannel;
 import com.google.cloud.storage.*;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 @Component
 public class GoogleDriveHelper {
 
@@ -23,19 +16,22 @@ public class GoogleDriveHelper {
     //private String GOOGLE_CREDENTIALS_LOCATION;
     private final String BUCKET_NAME = "spring-bucket-rehabsoft_css";
 
-    private final Bucket bucket;
-    private final Storage storage;
+//    private final Bucket bucket;
+//    private final Storage storage;
+
+    private  Bucket bucket;
+    private  Storage storage;
 
     public GoogleDriveHelper() throws IOException, URISyntaxException {
-        InputStream in = getClass().getResourceAsStream("/key_credentials2.json");
-        Credentials credentials = GoogleCredentials
-                .fromStream(in);
-        StorageOptions options = StorageOptions.newBuilder()
-                .setProjectId("focus-antler-316416 ya" +
-                        "")
-                .setCredentials(credentials).build();
-        storage = options.getService();
-        bucket = storage.get(BUCKET_NAME);
+//        InputStream in = getClass().getResourceAsStream("/key_credentials2.json");
+//        Credentials credentials = GoogleCredentials
+//                .fromStream(in);
+//        StorageOptions options = StorageOptions.newBuilder()
+//                .setProjectId("focus-antler-316416 ya" +
+//                        "")
+//                .setCredentials(credentials).build();
+//        storage = options.getService();
+//        bucket = storage.get(BUCKET_NAME);
     }
 
     public void saveFile(MultipartFile image, String directoryPath) throws IOException {

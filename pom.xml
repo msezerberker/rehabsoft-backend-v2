@@ -222,12 +222,23 @@
 			<artifactId>google-api-services-storage</artifactId>
 			<version>v1-rev171-1.25.0</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.google.http-client/google-http-client -->
+		<dependency>
+			<groupId>com.google.http-client</groupId>
+			<artifactId>google-http-client</artifactId>
+			<version>1.40.1</version>
+		</dependency>
+
+
+
 
 		<dependency>
 			<groupId>com.google.firebase</groupId>
 			<artifactId>firebase-admin</artifactId>
 			<version>7.0.0</version>
 		</dependency>
+
+
 
 	</dependencies>
 

@@ -6,8 +6,8 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.FirebaseMessaging;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 
 @Configuration
@@ -15,13 +15,27 @@ public class FirebaseConfig {
 
     @Bean
     FirebaseMessaging firebaseMessaging() throws IOException {
-        GoogleCredentials googleCredentials = GoogleCredentials
-                .fromStream(new ClassPathResource("hacettepe-rehabsoft-firebase.json").getInputStream());
-        FirebaseOptions firebaseOptions = FirebaseOptions
-                .builder()
-                .setCredentials(googleCredentials)
+
+        FileInputStream serviceAccount =
+                new FileInputStream("src/main/resources/hacettepe-rehabsoft-firebase.json");
+
+        FirebaseOptions options = new FirebaseOptions.Builder()
+                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                 .build();
-        FirebaseApp app = FirebaseApp.initializeApp(firebaseOptions, "my-app");
+
+        FirebaseApp.initializeApp(options);
+
+//        GoogleCredentials googleCredentials = GoogleCredentials
+//                .fromStream(
+//                        new ClassPathResource("hacettepe-rehabsoft-firebase.json")
+//                        .getInputStream());
+//        FirebaseOptions firebaseOptions = FirebaseOptions
+//                .builder()
+//                .setCredentials(googleCredentials)
+//                .build();
+        FirebaseApp app = FirebaseApp.initializeApp(options, "my-app");
         return FirebaseMessaging.getInstance(app);
     }
+
+
 }

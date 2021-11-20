@@ -3,32 +3,34 @@ package com.hacettepe.rehabsoft.service.implementations;
 import com.hacettepe.rehabsoft.dto.PasswordChangeDto;
 import com.hacettepe.rehabsoft.dto.RegistrationRequest;
 import com.hacettepe.rehabsoft.dto.UserDto;
-import com.hacettepe.rehabsoft.entity.*;
+import com.hacettepe.rehabsoft.entity.Role;
+import com.hacettepe.rehabsoft.entity.User;
 import com.hacettepe.rehabsoft.repository.RoleRepository;
 import com.hacettepe.rehabsoft.repository.UserRepository;
 import com.hacettepe.rehabsoft.service.NotificationService;
 import com.hacettepe.rehabsoft.service.UserService;
 import com.hacettepe.rehabsoft.util.ApiPaths;
 import com.hacettepe.rehabsoft.util.NotificationPaths;
-import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.io.UnsupportedEncodingException;
-import java.util.*;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 @Slf4j
@@ -252,7 +254,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
 
-        helper.setFrom("rehabsoft.cs@gmail.com", "RehabSoft Support");
+        helper.setFrom("rehabsoft.cs2@gmail.com", "RehabSoft Support");
         helper.setTo(recipientEmail);
 
         String subject = "Sifre sifirlama linkiniz";
